@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>曾詠振｜Yung-cheng tseng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Buda:wght@300&family=Cinzel:wght@400..900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+
+<body>
+    <!-- 導航選單 -->
+    <nav class="navigation">
+        <div class="nav-container">
+            <!-- 左側：Logo（絕對靠左） -->
+            <a href="#" class="logo" onclick="showPage('home'); return false;">Yung-cheng tseng</a>
+
+            <!-- 中間：導覽連結（絕對居中） -->
+            <div class="nav-menu-center">
+                <ul class="nav-menu">
+                    <li><a href="#" class="nav-link" onclick="showPage('bio'); return false;">
+                            <div class="roll-text text-en">
+                                <span>BIO</span>
+                                <span>BIO</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>BIO</span>
+                                <span>BIO</span>
+                            </div>
+                        </a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('calligraphy'); return false;">
+                            <div class="roll-text text-en">
+                                <span>Calligraphy</span>
+                                <span>Calligraphy</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>書法</span>
+                                <span>書法</span>
+                            </div>
+                        </a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('painting'); return false;">
+                            <div class="roll-text text-en">
+                                <span>Painting</span>
+                                <span>Painting</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>繪畫</span>
+                                <span>繪畫</span>
+                            </div>
+                        </a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('exhibition'); return false;">
+                            <div class="roll-text text-en">
+                                <span>Exhibition</span>
+                                <span>Exhibition</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>展演</span>
+                                <span>展演</span>
+                            </div>
+                        </a></li>
+                </ul>
+            </div>
+
+            <!-- 右側：語言切換器（絕對靠右） -->
+            <div class="language-switcher">
+                <button class="lang-btn active" onclick="switchLanguage('zh')">CH</button>
+                <span class="lang-separator">|</span>
+                <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主內容區域 -->
+    <div id="main-content">
+        <main class="main-content">
+            <!-- 首頁 -->
+            <div id="home" class="page active">
+                <section class="hero">
+                    <div class="hero-slideshow"></div>
+                    <div class="copyright">©2025 by Yung-Cheng Tseng . All Rights Reserved.</div>
+                </section>
+            </div>
+            <!-- 藝術家介紹頁面 -->
+            <div id="bio" class="page">
+                <div class="page-container">
+                    <h1 class="page-title"></h1>
+                    <div class="page-content">
+                        <div class="bio-section">
+                            <div class="bio-image-wrapper">
+                                <img src="./images/bio/bio-1.jpg" class="bio-image" alt="藝術家照片" loading="eager"
+                                    onerror="console.error('Bio image failed to load:', this.src); (function(img){var p=img.nextElementSibling;if(p){p.style.display='flex';img.style.display='none';}})(this);"
+                                    onload="console.log('Bio image loaded successfully:', this.src); this.style.display='block'; (function(img){var p=img.nextElementSibling;if(p){p.style.display='none';}})(this);">
+                                <div class="bio-image-placeholder" style="display: none;">
+                                    <p>藝術家照片</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bio-text">
+                            <p>曾詠振 Yung-Cheng Tseng</p>
+                            <p data-lang-zh="1996 生於高雄" data-lang-en="Born in Kaohsiung, 1996">1996 生於高雄</p>
+                            <p data-lang-zh="大學就讀書畫藝術學系，奠定書法、水墨、篆刻功底，學習東方藝術史與美學。亦接觸西方藝術史、美學與當代藝術創作、展覽。近年以書法創作為主軸，偶爾畫畫，亦著力於篆刻。"
+                                data-lang-en="Studied Calligraphy and Painting at university, laying the foundation for calligraphy, ink wash painting, and seal carving, and studying Eastern art history and aesthetics. Also engaged with Western art history, aesthetics, and contemporary art creation and exhibitions. In recent years, focused on calligraphy creation, occasionally painting, and also working on seal carving.">
+                                大學就讀書畫藝術學系，奠定書法、水墨、篆刻功底，學習東方藝術史與美學。亦接觸西方藝術史、美學與當代藝術創作、展覽。近年以書法創作為主軸，偶爾畫畫，亦著力於篆刻。</p>
+
+                            <p data-lang-zh="學經歷" data-lang-en="Education & Experience">學經歷</p>
+                            <ul>
+                                <li data-lang-zh="2018 - 2021   任職於國立臺灣藝術大學有章藝術博物館"
+                                    data-lang-en="2018 - 2021   Worked at National Taiwan University of Arts, You Chang Art Museum">
+                                    2018 - 2021 任職於國立臺灣藝術大學有章藝術博物館</li>
+                                <li data-lang-zh="2017 - 2021   國立臺灣藝術大學美術學院多媒體工作坊"
+                                    data-lang-en="2017 - 2021   National Taiwan University of Arts, College of Fine Arts Multimedia Workshop">
+                                    2017 - 2021 國立臺灣藝術大學美術學院多媒體工作坊</li>
+                                <li data-lang-zh="2015 - 2019   國立臺灣藝術大學書畫藝術學系"
+                                    data-lang-en="2015 - 2019   National Taiwan University of Arts, Department of Calligraphy and Painting">
+                                    2015 - 2019 國立臺灣藝術大學書畫藝術學系</li>
+                            </ul>
+
+                            <p data-lang-zh="聯展" data-lang-en="Group Exhibitions">聯展</p>
+                            <ul>
+                                <li data-lang-zh="2023   時間的浮橋，蕙風堂宣紙圖書部展廳，臺北市"
+                                    data-lang-en="2023   Bridge of Time, Huifengtang Xuan Paper Book Department Gallery, Taipei">
+                                    2023 時間的浮橋，蕙風堂宣紙圖書部展廳，臺北市</li>
+                                <li data-lang-zh="2023   一個象徵式的輕觸，臺灣藝術大學北側藝術聚落，新北市"
+                                    data-lang-en="2023   A Symbolic Touch, NTUA North Art Village, New Taipei City">2023
+                                    一個象徵式的輕觸，臺灣藝術大學北側藝術聚落，新北市</li>
+                                <li data-lang-zh="2020   美術研究所評鑑展，臺灣藝術大學北側藝術聚落，新北市"
+                                    data-lang-en="2020   Graduate Institute of Fine Arts Evaluation Exhibition, NTUA North Art Village, New Taipei City">
+                                    2020 美術研究所評鑑展，臺灣藝術大學北側藝術聚落，新北市</li>
+                                <li data-lang-zh="2019   叢生，首屆兩岸藝術院校，中國美術學院象山中心校區，杭州"
+                                    data-lang-en="2019   Congsheng, First Cross-Strait Art Academy Exhibition, China Academy of Art Xiangshan Campus, Hangzhou">
+                                    2019 叢生，首屆兩岸藝術院校，中國美術學院象山中心校區，杭州</li>
+                                <li data-lang-zh="2019   限時動態—超領域國際展，臺灣藝術大學有章藝術博物館，新北市"
+                                    data-lang-en="2019   Stories—Transdisciplinary International Exhibition, NTUA You Chang Art Museum, New Taipei City">
+                                    2019 限時動態—超領域國際展，臺灣藝術大學有章藝術博物館，新北市</li>
+                                <li data-lang-zh="2019   異質書寫，臺灣藝術大學日間部書畫系畢業展，國父紀念館逸仙畫廊，臺北市"
+                                    data-lang-en="2019   Heterogeneous Writing, NTUA Daytime Calligraphy and Painting Department Graduation Exhibition, Sun Yat-sen Memorial Hall Yixian Gallery, Taipei">
+                                    2019 異質書寫，臺灣藝術大學日間部書畫系畢業展，國父紀念館逸仙畫廊，臺北市</li>
+                                <li data-lang-zh="2018   心木異托邦的藝術力，中心新村，台北市"
+                                    data-lang-en="2018   The Art Power of Heartwood Heterotopia, Central New Village, Taipei">
+                                    2018 心木異托邦的藝術力，中心新村，台北市</li>
+                                <li data-lang-zh="2018   我在這，臺灣藝術大學，北側藝術聚落，新北市"
+                                    data-lang-en="2018   I Am Here, NTUA North Art Village, New Taipei City">2018
+                                    我在這，臺灣藝術大學，北側藝術聚落，新北市</li>
+                                <li data-lang-zh="2018   時時，臺灣藝術大學日間部書畫系班展，剝皮寮歷史街區，新北市"
+                                    data-lang-en="2018   Time to Time, NTUA Daytime Calligraphy and Painting Department Class Exhibition, Bopiliao Historic District, New Taipei City">
+                                    2018 時時，臺灣藝術大學日間部書畫系班展，剝皮寮歷史街區，新北市</li>
+                                <li data-lang-zh="2018   人因風景，有章藝術博物館，新北市"
+                                    data-lang-en="2018   Human Landscape, You Chang Art Museum, New Taipei City">2018
+                                    人因風景，有章藝術博物館，新北市</li>
+                                <li data-lang-zh="2017   實到0空間進行式，臺灣藝術大學，新北市"
+                                    data-lang-en="2017   Reality to Zero Space in Progress, NTUA, New Taipei City">2017
+                                    實到0空間進行式，臺灣藝術大學，新北市</li>
+                                <li data-lang-zh="2017   原創基地節青春曝光，松菸文創園區，臺北市"
+                                    data-lang-en="2017   Original Base Festival Youth Exposure, Songshan Cultural and Creative Park, Taipei">
+                                    2017 原創基地節青春曝光，松菸文創園區，臺北市</li>
+                            </ul>
+
+                            <p data-lang-zh="策展" data-lang-en="Curatorial Work">策展</p>
+                            <ul>
+                                <li data-lang-zh="2023   時間的浮橋，蕙風堂宣紙圖書部展廳，臺北市"
+                                    data-lang-en="2023   Bridge of Time, Huifengtang Xuan Paper Book Department Gallery, Taipei">
+                                    2023 時間的浮橋，蕙風堂宣紙圖書部展廳，臺北市</li>
+                                <li data-lang-zh="2019   限時動態—超領域國際展，臺灣藝術大學有章藝術博物館，新北市（接待與協助藝術家 Gary Hill 執行作品現地製作，全英文討論與調整）"
+                                    data-lang-en="2019   Stories—Transdisciplinary International Exhibition, NTUA You Chang Art Museum, New Taipei City (Hosted and assisted artist Gary Hill in on-site production, full English discussion and adjustment)">
+                                    2019 限時動態—超領域國際展，臺灣藝術大學有章藝術博物館，新北市（接待與協助藝術家 Gary Hill 執行作品現地製作，全英文討論與調整）</li>
+                                <li data-lang-zh="2019   異質書寫，臺灣藝術大學日間部書畫系畢業展，國父紀念館逸仙畫廊，臺北市"
+                                    data-lang-en="2019   Heterogeneous Writing, NTUA Daytime Calligraphy and Painting Department Graduation Exhibition, Sun Yat-sen Memorial Hall Yixian Gallery, Taipei">
+                                    2019 異質書寫，臺灣藝術大學日間部書畫系畢業展，國父紀念館逸仙畫廊，臺北市</li>
+                                <li data-lang-zh="2018   心木異托邦的藝術力，中心新村，臺北市"
+                                    data-lang-en="2018   The Art Power of Heartwood Heterotopia, Central New Village, Taipei">
+                                    2018 心木異托邦的藝術力，中心新村，臺北市</li>
+                                <li data-lang-zh="2018   我在這，臺灣藝術大學北側藝術聚落，新北市"
+                                    data-lang-en="2018   I Am Here, NTUA North Art Village, New Taipei City">2018
+                                    我在這，臺灣藝術大學北側藝術聚落，新北市</li>
+                                <li data-lang-zh="2018   時時，臺灣藝術大學日間部書畫系班展，剝皮寮歷史街區，新北市"
+                                    data-lang-en="2018   Time to Time, NTUA Daytime Calligraphy and Painting Department Class Exhibition, Bopiliao Historic District, New Taipei City">
+                                    2018 時時，臺灣藝術大學日間部書畫系班展，剝皮寮歷史街區，新北市</li>
+                                <li data-lang-zh="2017   實到0空間進行式，臺灣藝術大學，新北市"
+                                    data-lang-en="2017   Reality to Zero Space in Progress, NTUA, New Taipei City">2017
+                                    實到0空間進行式，臺灣藝術大學，新北市</li>
+                            </ul>
+
+                            <p data-lang-zh="獲獎" data-lang-en="Awards">獲獎</p>
+                            <ul>
+                                <li data-lang-zh="2025   新北市美展，一般組書法類入選"
+                                    data-lang-en="2025   New Taipei City Art Exhibition, Calligraphy Category, Selected">
+                                    2025 新北市美展，一般組書法類入選</li>
+                                <li data-lang-zh="2025   南投縣玉山美術獎，書法篆刻類入選"
+                                    data-lang-en="2025   Nantou County Yushan Art Award, Calligraphy and Seal Carving Category, Selected">
+                                    2025 南投縣玉山美術獎，書法篆刻類入選</li>
+                                <li data-lang-zh="2025   雲林文化藝術獎，書法類入選"
+                                    data-lang-en="2025   Yunlin Cultural and Art Award, Calligraphy Category, Selected">
+                                    2025 雲林文化藝術獎，書法類入選</li>
+                                <li data-lang-zh="2023   新北市美展，一般組書法類優選"
+                                    data-lang-en="2023   New Taipei City Art Exhibition, Calligraphy Category, Excellence Award">
+                                    2023 新北市美展，一般組書法類優選</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="copyright">©2025 by Yung-Cheng Tseng . All Rights Reserved.</div>
+            </div>
+    </div>
+
+    <!-- 書法頁面 -->
+    <div id="calligraphy" class="page">
+        <div class="page-container">
+            <h1 class="page-title"></h1>
+            <div class="page-content">
+                <div class="artwork-list">
+                    <!-- 作品 1 -->
+                    <div class="artwork-group">
+                        <div class="artwork-main">
+                            <div class="artwork-main-image">
+                                <div class="image-gallery">
+                                    <button class="gallery-nav gallery-prev" onclick="changeImage(this, -1)">‹</button>
+                                    <div class="gallery-container">
+                                        <img src="images/calligraphy/calligraphy-01-full.jpg" alt="書法作品 1"
+                                            class="gallery-image active" data-gallery="artwork-1">
+                                        <img src="images/calligraphy/calligraphy-01-detail-1.jpg" alt="局部圖 1"
+                                            class="gallery-image" data-gallery="artwork-1">
+                                        <img src="images/calligraphy/calligraphy-01-detail-2.jpg" alt="局部圖 2"
+                                            class="gallery-image" data-gallery="artwork-1">
+                                        <img src="images/calligraphy/calligraphy-01-detail-3.jpg" alt="局部圖 3"
+                                            class="gallery-image" data-gallery="artwork-1">
+                                    </div>
+                                    <button class="gallery-nav gallery-next" onclick="changeImage(this, 1)">›</button>
+                                </div>
+                            </div>
+                            <div class="artwork-main-info">
+                                <h2 data-lang-zh="《十一月四日風雨大作》">《十一月四日風雨大作》</h2>
+                                <p class="artwork-meta" data-lang-zh="2024｜180x90cm｜墨、紙">2024｜180x90cm｜墨、紙</p>
+                                <p class="artwork-description" data-lang-zh="釋文：
+                                    風捲江湖雨暗村，四山聲作海濤翻，
+                                    溪柴火軟蠻氈暖，我與狸奴不出門，
+                                    僵臥孤村不自哀，尚思爲國戍輪臺，
+                                    夜闌臥聽風吹雨，鐵馬冰河入夢來。">釋文：
+                                    風捲江湖雨暗村，四山聲作海濤翻，
+                                    溪柴火軟蠻氈暖，我與狸奴不出門，
+                                    僵臥孤村不自哀，尚思爲國戍輪臺，
+                                    夜闌臥聽風吹雨，鐵馬冰河入夢來。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 作品 2 -->
+                    <div class="artwork-group">
+                        <div class="artwork-main">
+                            <div class="artwork-main-image">
+                                <div class="image-gallery">
+                                    <button class="gallery-nav gallery-prev" onclick="changeImage(this, -1)">‹</button>
+                                    <div class="gallery-container">
+                                        <img src="images/calligraphy/calligraphy-02-full.jpg" alt="書法作品 2"
+                                            class="gallery-image active" data-gallery="artwork-2">
+                                        <img src="images/calligraphy/calligraphy-02-detail-1.jpg" alt="局部圖 1"
+                                            class="gallery-image" data-gallery="artwork-2">
+                                        <img src="images/calligraphy/calligraphy-02-detail-2.jpg" alt="局部圖 2"
+                                            class="gallery-image" data-gallery="artwork-2">
+                                        <img src="images/calligraphy/calligraphy-02-detail-3.jpg" alt="局部圖 3"
+                                            class="gallery-image" data-gallery="artwork-2">
+                                        <img src="images/calligraphy/calligraphy-02-detail-4.jpg" alt="局部圖 4"
+                                            class="gallery-image" data-gallery="artwork-2">
+                                        <img src="images/calligraphy/calligraphy-02-detail-5.jpg" alt="局部圖 5"
+                                            class="gallery-image" data-gallery="artwork-2">
+                                    </div>
+                                    <button class="gallery-nav gallery-next" onclick="changeImage(this, 1)">›</button>
+                                </div>
+                            </div>
+                            <div class="artwork-main-info">
+                                <h2 data-lang-zh="《晝睡起偶賦》">《晝睡起偶賦》</h2>
+                                <p class="artwork-meta" data-lang-zh="2024｜180x90cm｜墨、紙">2024｜180x90cm｜墨、紙</p>
+                                <p class="artwork-description" data-lang-zh="釋文：
+                                    蝴蝶與蒙莊，頹然寓一床，
+                                    日隨香篆過，夢逐雨聲長，
+                                    酒喜新篘綠，橙如故歲黃，
+                                    昏昏還隱幾，誰識老龜堂。">釋文：
+                                    蝴蝶與蒙莊，頹然寓一床，
+                                    日隨香篆過，夢逐雨聲長，
+                                    酒喜新篘綠，橙如故歲黃，
+                                    昏昏還隱幾，誰識老龜堂。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 作品 3 -->
+                    <div class="artwork-group">
+                        <div class="artwork-main">
+                            <div class="artwork-main-image">
+                                <div class="image-gallery">
+                                    <button class="gallery-nav gallery-prev" onclick="changeImage(this, -1)">‹</button>
+                                    <div class="gallery-container">
+                                        <img src="images/calligraphy/calligraphy-03-full.jpg" alt="書法作品 3"
+                                            class="gallery-image active" data-gallery="artwork-3">
+                                        <img src="images/calligraphy/calligraphy-03-detail-1.jpg" alt="局部圖 1"
+                                            class="gallery-image" data-gallery="artwork-3">
+                                        <img src="images/calligraphy/calligraphy-03-detail-2.jpg" alt="局部圖 2"
+                                            class="gallery-image" data-gallery="artwork-3">
+                                    </div>
+                                    <button class="gallery-nav gallery-next" onclick="changeImage(this, 1)">›</button>
+                                </div>
+                            </div>
+                            <div class="artwork-main-info">
+                                <h2 data-lang-zh="《和子由柳湖久涸,忽有水,開元寺山茶舊無花,今歲盛開》二首其一">《和子由柳湖久涸,忽有水,開元寺山茶舊無花,今歲盛開》二首其一</h2>
+                                <p class="artwork-meta" data-lang-zh="2023｜180x180cm｜墨、紙">2023｜180x180cm｜墨、紙</p>
+                                <p class="artwork-description" data-lang-zh="釋文：
+                                        長明燈下石欄竿，長共松枝耐歲寒，
+                                        葉厚有稜犀甲健，花深少態鶴頭丹，
+                                        久陪方丈曼陀雨，羞對先生苜蓿盤，
+                                        雪裏盛開知有意，明年歸後更誰看。">釋文：
+                                    長明燈下石欄竿，長共松枝耐歲寒，
+                                    葉厚有稜犀甲健，花深少態鶴頭丹，
+                                    久陪方丈曼陀雨，羞對先生苜蓿盤，
+                                    雪裏盛開知有意，明年歸後更誰看。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">©2025 by Yung-Cheng Tseng . All Rights Reserved.</div>
+        </div>
+    </div>
+
+    <!-- 繪畫頁面 -->
+    <div id="painting" class="page">
+        <div class="page-container">
+            <div class="page-content">
+                <div class="painting-viewport">
+                    <div class="painting-track">
+                        <div class="painting-item">
+                            <div class="image-wrapper">
+                                <img src="images/painting/painting-01-full.jpg" alt="作品名 01">
+                            </div>
+                            <div class="caption">《絹上水墨-披麻》2019｜16x24.5cm｜生絹畫箋、墨汁</div>
+                        </div>
+                        <div class="painting-item">
+                            <div class="image-wrapper">
+                                <img src="images/painting/painting-01-detail-1.jpg" alt="作品名 02">
+                            </div>
+                            <div class="caption">《絹上水墨-斧劈》2019｜16x24.5cm｜生絹畫箋、墨汁</div>
+                        </div>
+                        <div class="painting-item">
+                            <div class="image-wrapper">
+                                <img src="images/painting/painting-01-detail-2.jpg" alt="作品名 03">
+                            </div>
+                            <div class="caption">《絹上水墨-折帶》2019｜16x24.5cm｜生絹畫箋、墨汁</div>
+                        </div>
+                        <div class="painting-item">
+                            <div class="image-wrapper">
+                                <img src="images/painting/painting-01-detail-3.jpg" alt="作品名 04">
+                            </div>
+                            <div class="caption">《絹上水墨-捲雲》2019｜16x24.5cm｜生絹畫箋、墨汁</div>
+                        </div>
+                        <div class="painting-item">
+                            <div class="image-wrapper">
+                                <img src="images/painting/painting-01-detail-4.jpg" alt="作品名 05">
+                            </div>
+                            <div class="caption">《絹上水墨-披麻》2018｜32x49cm｜生絹畫箋、墨汁</div>
+                        </div>
+                        <div class="painting-item">
+                            <div class="image-wrapper">
+                                <img src="images/painting/painting-01-detail-6.jpg" alt="作品名 07">
+                            </div>
+                            <div class="caption">《布上水墨-雨點》​2018｜93x145cm｜墨、布</div>
+                        </div>
+                        <div class="painting-item small-size">
+                            <div class="image-wrapper">
+                                <img src="images/painting/painting-01-detail-5.jpg" alt="作品名 06">
+                            </div>
+                            <div class="caption">《布上水墨-雨點2018》｜局部｜墨、布</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="copyright">©2025 by Yung-Cheng Tseng . All Rights Reserved.</div>
+        </div>
+    </div>
+
+    <!-- 展演頁面 -->
+    <div id="exhibition" class="page">
+        <div id="exhibitions-section">
+            <!-- The Unfurling Scroll Timeline -->
+            <div class="timeline-container">
+                <!-- The Unified SVG: Dot + Line -->
+                <svg id="hero-path" class="timeline-svg" aria-hidden="true">
+                    <path id="narrative-line" d="M 0 0" />
+                    <path id="branch-left" class="timeline-branch" d="M 0 0" />
+                    <path id="branch-right" class="timeline-branch" d="M 0 0" />
+                    <circle id="timeline-origin-dot" cx="0" cy="0" r="4.5" />
+                </svg>
+
+                <!-- Exhibition Sections - 可擴展的展覽區塊 -->
+                <div id="exhibition-sections"></div>
+            </div>
+
+            <div class="page-container">
+                <div class="page-content">
+                    <div class="artwork-list">
+                        <!-- 其他展演內容 -->
+                    </div>
+                    <div class="copyright">©2025 by Yung-Cheng Tseng . All Rights Reserved.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+    </div>
+
+    <div id="custom-cursor"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.1F2.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
