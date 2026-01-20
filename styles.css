@@ -935,19 +935,25 @@ img {
         /* 增加30%: 4rem * 1.3 = 5.2rem */
     }
 
-    /* 手機版書法頁面版權說明往下移動50%：避免擋到作品 */
+    /* --- 手機版書法頁面版權說明強制修正間距 --- */
+    /* 針對書法頁版權說明增加上方距離 */
     #calligraphy .page-container {
         padding-bottom: 5rem;
         /* 增加底部 padding，為版權說明留出空間 */
     }
 
+    /* 書法頁面版權說明：強制往下推，避免擋到作品 */
     #calligraphy .page-container .copyright {
-        position: relative;
+        position: relative !important;
         /* 改為相對定位，讓它跟隨內容流動 */
-        bottom: auto;
-        margin-top: 2rem;
-        /* 在作品下方增加間距 */
-        text-align: right;
+        bottom: auto !important;
+        margin-top: 3rem !important;
+        /* 強制往下推 3rem (約 48px)，確保與作品有足夠間距 */
+        margin-bottom: 0 !important;
+        display: block !important;
+        text-align: right !important;
+        line-height: 1.8 !important;
+        /* 拉開行高，讓文字不要黏在一起 */
     }
 
     /* 書法頁照片：絕對服從相框 */
