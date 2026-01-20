@@ -494,12 +494,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 使用 requestAnimationFrame 平滑更新游標位置
         function updateCursor() {
-            // 使用更快的緩動效果讓游標跟隨更順暢（從 0.15 改為 0.25，反應更快）
-            cursorX += (mouseX - cursorX) * 0.25;
-            cursorY += (mouseY - cursorY) * 0.25;
+            // 使用緩動效果讓游標跟隨更順暢
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
 
-            // 使用 transform 代替 left/top，性能更好
-            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%) scale(${cursor.classList.contains('hovered') ? 5 : 1})`;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
 
             rafId = requestAnimationFrame(updateCursor);
         }

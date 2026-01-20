@@ -57,22 +57,18 @@ a {
     /* 關鍵：讓點擊穿透 */
     z-index: 999999;
     /* 最高層級，蓋過所有圖片與導覽列 */
-    transform: translate(-50%, -50%) scale(1);
-    /* 使用 scale 來控制大小變化，性能更好 */
-    will-change: transform, background-color, border;
-    /* 優化性能：只改變 transform 和背景 */
-    transition: background-color 0.08s ease,
-        border 0.08s ease;
-    /* 移除 transform 的 transition，因為我們在 JS 中直接控制 */
+    transform: translate(-50%, -50%);
+    /* 移除 transform 的 transition，改用 will-change 優化性能 */
+    will-change: width, height, background-color, left, top;
+    transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
     mix-blend-mode: difference;
     /* 選用：讓鼠標在白色背景上變成黑色，永遠看得到 */
-    border: 0 solid transparent;
-    /* 預設無邊框，避免 layout shift */
 }
 
 /* 3. 互動狀態：空心大圓 */
 #custom-cursor.hovered {
-    /* scale 在 JS 中控制，這裡只控制背景和邊框 */
+    width: 50px;
+    height: 50px;
     background-color: transparent;
     border: 1px solid white;
 }
@@ -509,14 +505,10 @@ body.lang-zh .text-zh {
     height: 100%;
     object-fit: cover;
     border-radius: 0;
-    display: block !important;
-    /* 強制顯示圖片 */
-    opacity: 1 !important;
+    display: block;
+    /* 確保圖片顯示 */
+    opacity: 1;
     /* 確保不透明 */
-    visibility: visible !important;
-    /* 確保可見 */
-    max-width: 100%;
-    max-height: 100%;
 }
 
 .bio-image-placeholder {
@@ -1246,12 +1238,6 @@ img {
         font-size: 7pt;
         bottom: 15px;
         right: 15px;
-    }
-
-    /* 手機版書法頁面：版權說明往下移動50% */
-    #calligraphy .page-container .copyright {
-        bottom: 22.5px;
-        /* 往下移動50%: 15px * 1.5 = 22.5px */
     }
 }
 
