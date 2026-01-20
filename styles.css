@@ -935,47 +935,61 @@ img {
         /* 增加30%: 4rem * 1.3 = 5.2rem */
     }
 
-    /* --- 手機版文字間距修正 (安全版) --- */
-    /* 1. 針對書法頁面 (或是所有作品頁) 的文字段落 */
-    /* 增加段落間的距離，讓文字不要擠在一起 */
-    #calligraphy .artwork-main-info p,
-    #calligraphy .artwork-meta,
+    /* --- 手機版文字堆疊與間距修正 (精確鎖定版) --- */
+    /* 1. 針對書法頁面的釋文 (artwork-description) */
     #calligraphy .artwork-description {
+        margin-bottom: 40px !important;
+        /* 拉開與下方版權的距離 (原本太近) */
+        line-height: 1.8 !important;
+        /* 讓文字行距呼吸 */
+        display: block !important;
+        /* 確保它是獨立區塊 */
+        position: relative !important;
+        /* 確保佔據實體空間 */
+        height: auto !important;
+        /* 確保包裹它們的父容器不會卡死高度 */
+        opacity: 1 !important;
+        /* 防止被意外隱藏 */
+    }
+
+    /* 2. 針對書法頁面的其他文字段落 */
+    #calligraphy .artwork-main-info p,
+    #calligraphy .artwork-meta {
         margin-bottom: 25px !important;
-        /* 每一段文字下面都推開 25px */
+        /* 每一段文字下面都推開 */
         line-height: 1.8 !important;
         /* 增加行距 */
     }
 
-    /* 2. 專門針對「最後一段」文字 (通常是作品描述) */
-    /* 我們用 padding 而不是 margin，這樣不會破壞外部容器的計算 */
-    #calligraphy .artwork-main-info p:last-child,
-    #calligraphy .artwork-description:last-child {
-        padding-bottom: 20px !important;
-        /* 在最後一段文字下方增加緩衝區 */
-        display: block !important;
-        /* 確保它獨佔一行 */
-    }
-
-    /* 3. 書法頁面版權說明：強制往下推，避免擋到作品 */
-    #calligraphy .page-container {
-        padding-bottom: 5rem;
-        /* 增加底部 padding，為版權說明留出空間 */
-    }
-
+    /* 3. 針對書法頁面的版權 (copyright) */
     #calligraphy .page-container .copyright {
+        margin-top: 40px !important;
+        /* 再次強制與上方拉開距離 (雙重保險) */
+        padding-top: 20px !important;
+        /* 內部留白 */
+        padding-bottom: 80px !important;
+        /* 底部加高，避免被手機瀏覽器下方工具列擋住 */
+        display: block !important;
+        /* 獨佔一行 */
         position: relative !important;
         /* 改為相對定位，讓它跟隨內容流動 */
         bottom: auto !important;
-        margin-top: 40px !important;
-        /* 與上一段文字拉開距離 (從 3rem 增加到 40px) */
-        padding-top: 0 !important;
-        padding-bottom: 80px !important;
-        /* 在底部增加緩衝區，避免被手機選單擋住 */
-        display: block !important;
+        clear: both !important;
+        /* 清除左右浮動干擾 */
         text-align: right !important;
         line-height: 1.8 !important;
-        /* 拉開行高，讓文字不要黏在一起 */
+        height: auto !important;
+        /* 確保包裹它們的父容器不會卡死高度 */
+        opacity: 1 !important;
+        /* 防止被意外隱藏 */
+    }
+
+    /* 4. 確保書法頁面容器有足夠空間 */
+    #calligraphy .page-container {
+        padding-bottom: 5rem;
+        /* 增加底部 padding，為版權說明留出空間 */
+        min-height: auto !important;
+        /* 注意：這裡只開 "min-height"，不會破壞 GSAP 的固定高度計算 */
     }
 
     /* 書法頁照片：絕對服從相框 */
