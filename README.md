@@ -1,6 +1,6 @@
-# 藝術作品網站
+# ArtWorks by yung-cheng Tseng 
 
-這是一個純 HTML/CSS/JavaScript 的靜態網站，展示藝術作品，包含書法、繪畫、影像和篆刻等作品分類。
+HTML/CSS/JavaScript
 
 ## ✨ 特色
 
