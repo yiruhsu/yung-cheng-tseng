@@ -1785,8 +1785,10 @@ img {
     }
 
     #painting .caption {
-        font-size: 0.672rem;
-        /* 放大20%: 0.56rem * 1.2 = 0.672rem */
+        font-size: 0.75rem;
+        /* 手機版調整為 0.75rem */
+        bottom: -35px;
+        /* 確保照片與文字距離保持一致 */
     }
 
     .main-content {
@@ -2699,27 +2701,30 @@ body,
     }
 
     .seal-detail-description {
-        font-size: 13.52px;
-        /* 手機版再放大30%：10.4px * 1.3 = 13.52px */
+        font-size: 13.8px;
+        /* 手機版調整為 13.8px */
     }
 
     .seal-detail-description p {
-        font-size: 13.52px;
-        /* 手機版再放大30%：10.4px * 1.3 = 13.52px */
+        font-size: 13.8px;
+        /* 手機版調整為 13.8px */
         margin: 0 0 3em 0;
-        /* 保持間距不變 */
+        /* 保持間距不變，確保照片與文字距離與版權說明保持一致 */
     }
 
-    /* 手機版：書法作品說明文字放大30% */
+    /* 手機版：書法作品說明文字調整 */
     #calligraphy .artwork-description {
-        font-size: 2.028rem;
-        /* 手機版再放大30%：1.56rem * 1.3 = 2.028rem */
+        font-size: 2.8rem;
+        /* 手機版調整為 2.8rem */
     }
 
     .calligraphy-scope-wrapper .artwork-description {
-        font-size: calc(0.552rem * 1.69 + 2px) !important;
-        /* 手機版再放大30%：原本的 calc(0.552rem * 1.3 + 2px) * 1.3 = calc(0.552rem * 1.69 + 2px) */
+        font-size: 2.8rem !important;
+        /* 手機版調整為 2.8rem */
         line-height: 1.6 !important;
+        margin-bottom: 0 !important;
+        margin-top: 1rem !important;
+        /* 確保間距保持一致 */
     }
 
     /* 確保所有頁面的版權資訊在手機版都有適當的樣式 */
