@@ -1422,7 +1422,8 @@ img {
         border: none;
         color: #533c1d;
         font-family: 'Times New Roman', Times, serif;
-        font-size: 12px;
+        font-size: 10.8px;
+        /* 手機版縮小10%：12px * 0.9 = 10.8px */
         letter-spacing: 0.1em;
         padding: 0.5rem 0;
         cursor: pointer;
@@ -1614,7 +1615,8 @@ img {
 
     .mobile-nav-link .roll-text span {
         height: 40px;
-        font-size: 1rem;
+        font-size: 0.8rem;
+        /* 手機版縮小20%：1rem * 0.8 = 0.8rem */
         display: flex;
         align-items: center;
         justify-content: flex-end;
@@ -2550,6 +2552,8 @@ body,
         width: 104px;
         /* 手機版縮小立方體：130px * 0.8 = 104px（縮小20%） */
         height: 104px;
+        margin-top: 30px;
+        /* 往下移動30px，避免與 Click 文字重疊 */
     }
 
     .cube-face {
@@ -2636,18 +2640,31 @@ body,
     }
 
     .seal-detail-meta {
-        font-size: 8px;
-        /* 手機版縮小為 8px */
+        font-size: 10.4px;
+        /* 手機版放大30%：8px * 1.3 = 10.4px */
     }
 
     .seal-detail-description {
-        font-size: 8px;
-        /* 手機版縮小為 8px */
+        font-size: 10.4px;
+        /* 手機版放大30%：8px * 1.3 = 10.4px */
     }
 
     .seal-detail-description p {
-        font-size: 8px;
-        /* 手機版縮小為 8px */
+        font-size: 10.4px;
+        /* 手機版放大30%：8px * 1.3 = 10.4px */
         margin: 0 0 3em 0;
+        /* 保持間距不變 */
+    }
+
+    /* 手機版：書法作品說明文字放大30% */
+    #calligraphy .artwork-description {
+        font-size: 1.56rem;
+        /* 手機版放大30%：1.2rem * 1.3 = 1.56rem */
+    }
+
+    .calligraphy-scope-wrapper .artwork-description {
+        font-size: calc(0.552rem * 1.3 + 2px) !important;
+        /* 手機版放大30%：原本的 calc(0.552rem + 2px) * 1.3 */
+        line-height: 1.6 !important;
     }
 }
