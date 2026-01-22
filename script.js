@@ -516,6 +516,85 @@ function initKeyboardNavigation() {
     });
 }
 
+// 手機版漢堡選單功能
+function initMobileMenu() {
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const menuOverlay = document.getElementById('mobile-menu-overlay');
+    const menuText = menuToggle?.querySelector('.menu-text');
+    const body = document.body;
+
+    if (!menuToggle || !menuOverlay || !menuText) return;
+
+    menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMobileMenu();
+    });
+
+    // 點擊遮罩外部關閉選單
+    menuOverlay.addEventListener('click', (e) => {
+        if (e.target === menuOverlay) {
+            toggleMobileMenu();
+        }
+    });
+}
+
+// 切換手機版漢堡選單
+function toggleMobileMenu() {
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const menuOverlay = document.getElementById('mobile-menu-overlay');
+    const menuText = menuToggle?.querySelector('.menu-text');
+    const body = document.body;
+
+    if (!menuToggle || !menuOverlay || !menuText) return;
+
+    const isActive = menuOverlay.classList.contains('active');
+
+    if (isActive) {
+        // 關閉選單
+        menuOverlay.classList.remove('active');
+        menuText.textContent = 'MENU';
+        menuToggle.classList.remove('menu-open');
+        // 恢復原來的顏色（根據頁面狀態）
+        menuToggle.style.color = '';
+        body.style.overflow = '';
+    } else {
+        // 打開選單
+        menuOverlay.classList.add('active');
+        menuText.textContent = 'CLOSE';
+        menuToggle.classList.add('menu-open');
+        // 選單打開時，CLOSE 按鈕變為深棕色
+        menuToggle.style.color = '#24190b';
+        body.style.overflow = 'hidden'; // 防止背景滾動
+    }
+}
+
+// 處理手機版選單項目點擊（包含動畫效果）
+function handleMobileNavClick(pageId, linkElement) {
+    // 獲取所有選單項目
+    const allLinks = document.querySelectorAll('.mobile-nav-link');
+    
+    // 添加點擊動畫類（點擊的項目變深色）
+    linkElement.classList.add('clicking');
+    
+    // 其他選單項目變淡色
+    allLinks.forEach(link => {
+        if (link !== linkElement) {
+            link.classList.add('fading');
+        }
+    });
+
+    // 1.2秒後切換頁面並關閉選單
+    setTimeout(() => {
+        showPage(pageId);
+        toggleMobileMenu();
+        // 移除所有動畫類
+        linkElement.classList.remove('clicking');
+        allLinks.forEach(link => {
+            link.classList.remove('fading');
+        });
+    }, 1200);
+}
+
 // 觸控板左右滑動切換頁面功能
 function initTrackpadSwipeNavigation() {
     const pageOrder = ['home', 'bio', 'calligraphy', 'sealcarving', 'painting', 'exhibition'];
@@ -609,6 +688,7 @@ document.addEventListener('DOMContentLoaded', function () {
     hideSingleImageArrows(); // 隱藏單張圖片的箭頭
     initKeyboardNavigation(); // 初始化鍵盤導航
     initTrackpadSwipeNavigation(); // 初始化觸控板滑動導航
+    initMobileMenu(); // 初始化手機版漢堡選單
 
     // 添加滾動監聽事件
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -2287,8 +2367,8 @@ function initSealCarvingDice() {
 
     // 滑鼠互動：優雅的慢速跟隨 + 動態光影
     sceneContainer.addEventListener('mousemove', (e) => {
-        // 如果正在右鍵拖移，不執行滑鼠跟隨
-        if (isRightClickDragging) return;
+        // 如果正在右鍵拖移或觸控拖移，不執行滑鼠跟隨
+        if (isRightClickDragging || isTouchDragging) return;
 
         // 計算滑鼠在視窗中的相對位置 (-1 到 1)
         const xPos = (e.clientX / window.innerWidth) * 2 - 1;
@@ -2398,6 +2478,95 @@ function initSealCarvingDice() {
         }
     });
 
+    // --- 手機版觸控事件：支援滑動翻轉骰子 ---
+    let isTouchDragging = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartRotX = 0;
+    let touchStartRotY = 0;
+    let hasMoved = false; // 追蹤是否發生了拖移
+    const touchDragSensitivity = 1.5; // 觸控拖移敏感度
+    const touchMoveThreshold = 10; // 拖移閾值（像素），超過此值才視為拖移
+
+    // 觸控開始
+    sceneContainer.addEventListener('touchstart', (e) => {
+        if (!cube) return;
+        const touch = e.touches[0];
+        if (isMouseOverCube(touch.clientX, touch.clientY)) {
+            e.preventDefault(); // 阻止預設行為（如滾動）
+            isTouchDragging = true;
+            hasMoved = false; // 重置移動標記
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            touchStartRotX = cubeState.rx;
+            touchStartRotY = cubeState.ry;
+
+            // 停止當前的 GSAP 動畫
+            gsap.killTweensOf(cubeState);
+        }
+    }, { passive: false });
+
+    // 觸控移動（拖移時）
+    sceneContainer.addEventListener('touchmove', (e) => {
+        if (!isTouchDragging) return;
+        e.preventDefault(); // 阻止滾動
+
+        const touch = e.touches[0];
+        // 計算拖移距離
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        const moveDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+        // 如果移動距離超過閾值，標記為拖移
+        if (moveDistance > touchMoveThreshold) {
+            hasMoved = true;
+        }
+
+        // 根據拖移方向更新旋轉角度
+        const newRotY = touchStartRotY + deltaX * touchDragSensitivity;
+        const newRotX = touchStartRotX - deltaY * touchDragSensitivity;
+
+        // 更新狀態
+        cubeState.rx = newRotX;
+        cubeState.ry = newRotY;
+
+        // 立即更新骰子旋轉和光影
+        cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg)`;
+        updateLighting(cubeState.rx, cubeState.ry);
+    }, { passive: false });
+
+    // 觸控結束
+    sceneContainer.addEventListener('touchend', (e) => {
+        if (isTouchDragging) {
+            const touch = e.changedTouches[0];
+            
+            // 如果沒有發生拖移（只是輕觸），觸發點擊事件
+            if (!hasMoved && cube && isMouseOverCube(touch.clientX, touch.clientY)) {
+                // 延遲觸發點擊，確保觸控事件完全結束
+                setTimeout(() => {
+                    const clickEvent = new MouseEvent('click', {
+                        bubbles: true,
+                        cancelable: true,
+                        view: window
+                    });
+                    cube.dispatchEvent(clickEvent);
+                }, 50);
+            }
+            
+            isTouchDragging = false;
+            hasMoved = false;
+            e.preventDefault();
+        }
+    }, { passive: false });
+
+    // 觸控取消（如被系統中斷）
+    sceneContainer.addEventListener('touchcancel', (e) => {
+        if (isTouchDragging) {
+            isTouchDragging = false;
+            hasMoved = false;
+        }
+    }, { passive: false });
+
     // 點擊骰子或周圍區域時，觸發新頁面動畫
     const detailView = document.getElementById('seal-carving-detail-view');
     const sealCarvingSection = document.getElementById('seal-carving-section');
@@ -2461,22 +2630,23 @@ function initSealCarvingDice() {
                     display: 'none',
                     pointerEvents: 'none'
                 })
-                // 3. 設置新頁面初始狀態並顯示
+                // 3. 移除 hidden class（必須在設置 display 之前）
+                .call(() => {
+                    detailView.classList.remove('hidden');
+                })
+                // 4. 設置新頁面初始狀態並顯示
                 .set(detailView, {
                     display: 'flex',
                     x: '100%',
                     opacity: 0
                 })
-                // 4. 從右邊滑入
+                // 5. 從右邊滑入
                 .to(detailView, {
                     x: '0%',
                     opacity: 1,
                     duration: 1.5,
                     ease: 'power3.out'
                 }, '-=0.3');
-
-            // 移除 hidden class
-            detailView.classList.remove('hidden');
         }
 
         // 返回骰子頁面的函數

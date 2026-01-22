@@ -88,6 +88,80 @@
                 <span class="lang-separator">|</span>
                 <button class="lang-btn" onclick="switchLanguage('en')">EN</button>
             </div>
+
+            <!-- 手機版：語言切換器（MENU 左側） -->
+            <div class="mobile-language-switcher">
+                <button class="lang-btn active" onclick="switchLanguage('zh'); return false;">CH</button>
+                <span class="lang-separator">|</span>
+                <button class="lang-btn" onclick="switchLanguage('en'); return false;">EN</button>
+            </div>
+
+            <!-- 手機版：漢堡選單按鈕 -->
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                <span class="menu-text">MENU</span>
+            </button>
+        </div>
+
+        <!-- 手機版：漢堡選單展開內容 -->
+        <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+            <div class="mobile-menu-content">
+                <ul class="mobile-nav-menu">
+                    <li><a href="#" class="mobile-nav-link" onclick="handleMobileNavClick('bio', this); return false;">
+                            <div class="roll-text text-en">
+                                <span>BIO</span>
+                                <span>BIO</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>BIO</span>
+                                <span>BIO</span>
+                            </div>
+                        </a></li>
+                    <li><a href="#" class="mobile-nav-link"
+                            onclick="handleMobileNavClick('calligraphy', this); return false;">
+                            <div class="roll-text text-en">
+                                <span>Calligraphy</span>
+                                <span>Calligraphy</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>書法</span>
+                                <span>書法</span>
+                            </div>
+                        </a></li>
+                    <li><a href="#" class="mobile-nav-link"
+                            onclick="handleMobileNavClick('sealcarving', this); return false;">
+                            <div class="roll-text text-en">
+                                <span>Seal Carving</span>
+                                <span>Seal Carving</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>篆刻</span>
+                                <span>篆刻</span>
+                            </div>
+                        </a></li>
+                    <li><a href="#" class="mobile-nav-link"
+                            onclick="handleMobileNavClick('painting', this); return false;">
+                            <div class="roll-text text-en">
+                                <span>Painting</span>
+                                <span>Painting</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>繪畫</span>
+                                <span>繪畫</span>
+                            </div>
+                        </a></li>
+                    <li><a href="#" class="mobile-nav-link"
+                            onclick="handleMobileNavClick('exhibition', this); return false;">
+                            <div class="roll-text text-en">
+                                <span>Exhibition</span>
+                                <span>Exhibition</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>展演</span>
+                                <span>展演</span>
+                            </div>
+                        </a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 

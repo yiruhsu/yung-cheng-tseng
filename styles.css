@@ -240,10 +240,12 @@ body.page-light .nav-link:hover {
     font-family: 'Times New Roman', Times, serif;
 }
 
-/* Hover 動畫 - 向上滾動 */
-.nav-link:hover .roll-text {
-    transform: translateY(-40px);
-    /* 與單個文字高度一致 */
+/* Hover 動畫 - 向上滾動（只在桌面版和平板版） */
+@media (min-width: 769px) {
+    .nav-link:hover .roll-text {
+        transform: translateY(-40px);
+        /* 與單個文字高度一致 */
+    }
 }
 
 .nav-link:hover {
@@ -290,6 +292,16 @@ body.lang-zh .text-zh {
     margin-right: 0;
 }
 
+/* 手機版漢堡選單按鈕（桌面版隱藏） */
+.mobile-menu-toggle {
+    display: none;
+}
+
+/* 手機版漢堡選單遮罩（桌面版隱藏） */
+.mobile-menu-overlay {
+    display: none;
+}
+
 .lang-btn {
     background: transparent;
     border: none;
@@ -328,7 +340,7 @@ body.lang-zh .text-zh {
 
 /* bio、書法、繪畫、展演頁面：語言切換改為深棕色 */
 body.page-light .lang-btn {
-    color: rgba(36, 25, 11, 0.4);
+    color: #24190b66;
 }
 
 body.page-light .lang-btn:hover:not(.active) {
@@ -1343,6 +1355,8 @@ img {
     .nav-container {
         padding: 0 1.5rem;
         /* 從 2rem 稍微減少，但仍保持適當間距 */
+        justify-content: space-between;
+        /* 保持 space-between，讓 logo 在左，語言切換和 MENU 在右 */
     }
 }
 
@@ -1351,71 +1365,297 @@ img {
 
     /* 網站標題 */
     .logo {
-        font-size: 1.0rem;
-        line-height: 32px;
-        /* 等比例調整 */
+        font-size: 0.9rem;
+        line-height: 1.2;
+        margin-left: 15px;
+        /* 往右移 15px */
+        white-space: nowrap;
+        /* 保持一行，不換行 */
+        overflow: visible;
+        /* 確保完整顯示，不被截斷 */
+        text-overflow: clip;
+        /* 不使用省略號 */
+        max-width: none;
+        /* 移除寬度限制，確保完整顯示 */
+        flex-shrink: 0;
+        /* 防止被壓縮 */
     }
 
-    /* --- 手機版導覽列專用：緊湊模式 --- */
-    /* 1. 導覽列容器：改用彈性佈局，允許自動換行但盡量擠在一起 */
+    /* --- 手機版導覽列：漢堡選單模式 --- */
     .nav-container {
         display: flex !important;
-        flex-wrap: wrap !important;
-        /* 關鍵：空間不足時自動換行，不會破版 */
-        justify-content: center !important;
-        /* 讓內容維持置中 */
-        gap: 12px !important;
-        /* 縮小項目之間的距離 (原先可能很大) */
-        width: 100% !important;
-        padding: 0 10px !important;
-        /* 左右留一點點緩衝 */
-        height: auto !important;
-        /* 允許高度自動調整 */
-        flex-direction: row !important;
-        /* 確保水平排列 */
-        position: relative !important;
-        /* 覆蓋原本的 position: relative */
+        justify-content: space-between !important;
         align-items: center !important;
+        width: 100% !important;
+        padding: 0 1rem !important;
+        height: 50px !important;
+        position: relative !important;
     }
 
-    /* 手機版：導覽連結居中容器 */
-    .nav-menu-center {
-        position: static !important;
-        transform: none !important;
-        width: 100% !important;
-        left: auto !important;
+    /* 隱藏原有的導覽選單和語言切換器 */
+    .nav-menu-center,
+    .language-switcher {
+        display: none !important;
+        /* 手機版隱藏桌面版語言切換器 */
     }
 
-    .nav-menu {
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 0 !important;
-        width: 100% !important;
+    /* 手機版：語言切換器（MENU 左側） */
+    .mobile-language-switcher {
         display: flex !important;
+        align-items: center;
+        gap: 0.4rem;
+        margin-right: 4px;
+        /* MENU 按鈕左側的間距 4px */
+        margin-left: auto;
+        /* 自動左邊距，確保靠右對齊 */
+        flex-shrink: 0;
+        /* 防止被壓縮 */
     }
 
-    .nav-menu li {
-        flex: 1 1 auto !important;
-        min-width: 100px !important;
-        /* 拉長容器長度，確保 "Calligraphy" 完整顯示 */
+    /* 漢堡選單按鈕 */
+    .mobile-menu-toggle {
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        /* 改為靠右對齊 */
+        background: transparent;
+        border: none;
+        color: #533c1d;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        padding: 0.5rem 0;
+        cursor: pointer;
+        z-index: 10001;
+        position: relative;
+        margin-right: 0;
+        margin-left: 0;
+        width: auto;
+        /* 改為 auto，移除左側空白區塊 */
+        padding-left: 0;
+        /* 移除左側 padding */
+        padding-right: 1.5rem;
+        /* 與 nav-container 的 padding-right 一致，確保與 CLOSE 按鈕對齊 */
     }
 
-    /* 2. 選單文字：大幅縮減字距與大小 */
-    .nav-link {
-        font-size: 0.75rem !important;
-        /* 約 15px，確保手機閱讀舒適的極限 */
-        letter-spacing: 0.1em !important;
-        /* 縮小為 0.1em */
-        margin: 0 !important;
-        /* 移除多餘外距 */
-        line-height: 0.8 !important;
-        /* 縮小為 0.8 */
-        white-space: nowrap !important;
-        /* 確保單字本身不會斷開 */
-        padding: 0 5% !important;
-        /* 減少左右 padding，為文字留出更多空間 */
-        height: 32px !important;
-        /* 等比例調整 */
+    /* 手機版 MENU/CLOSE 按鈕顏色 */
+    .mobile-menu-toggle {
+        color: #523b1d !important;
+    }
+
+    /* 首頁的 menu 固定是白色 */
+    body:not(.page-light) .mobile-menu-toggle {
+        color: #ffffff !important;
+    }
+
+    /* 選單打開時，CLOSE 按鈕顏色（從首頁點擊時轉為深棕色） */
+    .mobile-menu-overlay.active~.nav-container .mobile-menu-toggle,
+    .mobile-menu-overlay.active+* .mobile-menu-toggle {
+        color: #24190b !important;
+    }
+
+    /* 更精確的選擇器：當選單打開時，CLOSE 按鈕變為深棕色 */
+    body .mobile-menu-overlay.active~* .mobile-menu-toggle,
+    .nav-container:has(~ .mobile-menu-overlay.active) .mobile-menu-toggle {
+        color: #24190b !important;
+    }
+
+    /* 手機版漢堡選單遮罩（手機版顯示） */
+    .mobile-menu-overlay {
+        display: block !important;
+    }
+
+    .menu-text {
+        display: block;
+    }
+
+    /* 漢堡選單遮罩 */
+    .mobile-menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: #fffaf2;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .mobile-menu-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* 漢堡選單內容 */
+    .mobile-menu-content {
+        width: 100%;
+        min-height: 100vh;
+        padding: 107px 2rem 2rem 2rem;
+        /* CLOSE 按鈕位置 top: 52px + 按鈕高度約 25px + 30px 間距 = 107px */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-start;
+    }
+
+    /* 確保 CLOSE 按鈕與 MENU 按鈕位置相同（xy 軸一致） */
+    .mobile-menu-toggle.menu-open {
+        position: fixed;
+        top: 52px;
+        /* 與 MENU 按鈕位置相同：navigation padding-top 2rem (32px) + nav-container 高度 40px 的一半 (20px) = 52px */
+        right: 1.5rem;
+        /* 與 MENU 按鈕位置相同：nav-container 的 padding-right 1.5rem */
+        z-index: 10001;
+        width: auto;
+        padding-right: 0;
+        justify-content: flex-end;
+        /* 確保文字靠右 */
+        margin-bottom: 0;
+        /* 確保沒有額外的 margin */
+    }
+
+    /* 選單打開時，CLOSE 按鈕顏色為深棕色 */
+    .mobile-menu-toggle.menu-open {
+        color: #24190b !important;
+    }
+
+    .mobile-nav-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        /* 間距由 mobile-menu-content 的 padding-top 控制 */
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0;
+    }
+
+    .mobile-nav-menu li {
+        width: 100%;
+        opacity: 0;
+        transform: translateX(20px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .mobile-menu-overlay:not(.active) .mobile-nav-menu li {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+
+    .mobile-menu-overlay.active .mobile-nav-menu li {
+        animation: slideInFromRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(3) {
+        animation-delay: 0.3s;
+    }
+
+    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(4) {
+        animation-delay: 0.4s;
+    }
+
+    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(5) {
+        animation-delay: 0.5s;
+    }
+
+    @keyframes slideInFromRight {
+        from {
+            opacity: 0;
+            transform: translateX(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .mobile-nav-link {
+        display: block;
+        padding: 1.8rem 0;
+        /* 增加20%間距：1.5rem * 1.2 = 1.8rem */
+        color: #523b1d;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 1rem;
+        text-decoration: none;
+        text-align: right;
+        width: 100%;
+        position: relative;
+        overflow: visible;
+        /* 改為 visible，確保沒有隱藏的文字 */
+        transition: color 0.3s ease;
+        padding-right: 0;
+        /* 確保與 CLOSE 按鈕對齊 */
+    }
+
+    .mobile-nav-link .roll-text {
+        height: 40px;
+        text-align: right;
+        transition: none !important;
+        /* 移除手機版的滾動效果 */
+        transform: none !important;
+        /* 強制移除任何 transform */
+        overflow: visible;
+        /* 確保沒有隱藏的文字 */
+    }
+
+    .mobile-nav-link .roll-text span {
+        height: 40px;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        text-align: right;
+        width: 100%;
+    }
+
+    /* 手機版：只顯示第一個 span，隱藏第二個 span */
+    .mobile-nav-link .roll-text span:nth-child(2) {
+        display: none !important;
+    }
+
+    /* 手機版移除 hover 滾動效果 */
+    .mobile-nav-link:hover .roll-text {
+        transform: none !important;
+    }
+
+    .mobile-nav-link:active .roll-text {
+        transform: none !important;
+    }
+
+    /* 點擊時的深色狀態 */
+    .mobile-nav-link.clicking {
+        color: #24190b !important;
+        transition: color 0.2s ease;
+    }
+
+    /* 點擊時的深色狀態 - 文字內容 */
+    .mobile-nav-link.clicking .roll-text span {
+        color: #24190b !important;
+    }
+
+    /* 其他分頁變淡色 */
+    .mobile-nav-link.fading {
+        color: #a9a9a9 !important;
+        transition: color 0.2s ease;
+    }
+
+    /* 其他分頁變淡色 - 文字內容 */
+    .mobile-nav-link.fading .roll-text span {
+        color: #a9a9a9 !important;
     }
 
     .text-zh span {
@@ -1439,10 +1679,8 @@ img {
         /* 從 40px 縮小到 32px */
     }
 
-    .nav-link:hover .roll-text {
-        transform: translateY(-32px);
-        /* 從 -40px 調整到 -32px */
-    }
+    /* 手機版移除原有的導覽選單滾動效果（因為已經隱藏） */
+    /* .nav-link:hover .roll-text 已移除，因為手機版使用漢堡選單 */
 
     /* 語言切換按鈕縮小到跟導覽列大小一樣 */
     .language-switcher {
@@ -1453,6 +1691,42 @@ img {
         /* 從 0.5rem 縮小到 0.4rem */
         margin-right: 0;
         /* 手機版不需要 margin */
+    }
+
+    /* 手機版導覽列中的語言切換按鈕（MENU 左側） */
+    .mobile-language-switcher .lang-btn {
+        font-size: 0.441rem;
+        /* 放大20%：0.3675rem * 1.2 = 0.441rem */
+        color: #523b1d;
+        /* 與其他選單項目顏色一致 */
+        padding: 0.2rem 0.4rem;
+        height: auto;
+        line-height: 1.2;
+    }
+
+    .mobile-language-switcher .lang-btn.active {
+        color: #24190b;
+        /* 活動狀態：深棕色 */
+    }
+
+    .mobile-language-switcher .lang-separator {
+        font-size: 0.441rem;
+        /* 放大20%：與按鈕字型一致 */
+        color: #523b1d;
+        /* 與其他選單項目顏色一致 */
+    }
+
+    /* 首頁的語言切換按鈕顏色 */
+    body:not(.page-light) .mobile-language-switcher .lang-btn {
+        color: #ffffff !important;
+    }
+
+    body:not(.page-light) .mobile-language-switcher .lang-btn.active {
+        color: #ffffff !important;
+    }
+
+    body:not(.page-light) .mobile-language-switcher .lang-separator {
+        color: rgba(255, 255, 255, 0.4) !important;
     }
 
     /* 手機版：Bio 頁面版權資訊偏移調整 */
@@ -1470,6 +1744,7 @@ img {
         /* 與導覽列高度一致 */
         line-height: 32px;
     }
+
 
     /* 繪畫頁面：照片放大30%（整個容器） */
     #painting .painting-item {
@@ -2168,7 +2443,8 @@ body,
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 6rem;
-    align-items: flex-start;
+    align-items: start;
+    /* 確保照片和文字從頂部對齊 */
     padding: 0 2rem 3rem 2rem;
     overflow: visible;
     margin-bottom: 2rem;
@@ -2180,12 +2456,18 @@ body,
     overflow: visible;
     background: transparent;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    /* 從頂部對齊 */
     justify-content: center;
     transform: scale(1.8);
-    transform-origin: center;
+    transform-origin: top center;
+    /* 從頂部中心點縮放，確保與文字頂部對齊 */
     position: relative;
     z-index: 1;
+    align-self: start;
+    /* 確保 grid 項目從頂部對齊 */
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .seal-detail-image {
@@ -2204,12 +2486,19 @@ body,
     color: #24190b;
     position: relative;
     z-index: 2;
+    align-self: start;
+    /* 確保與照片頂部對齊 */
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .seal-detail-title {
     font-size: 1.2rem;
     font-weight: 600;
     margin: 0;
+    padding: 0;
+    line-height: 1.2;
+    /* 減少 line-height，確保與圖片頂部對齊 */
     color: #24190b;
     font-family: 'Times New Roman', Times, serif;
 }
@@ -2258,15 +2547,15 @@ body,
     }
 
     .cube {
-        width: 130px;
-        /* 手機版縮小立方體 */
-        height: 130px;
+        width: 104px;
+        /* 手機版縮小立方體：130px * 0.8 = 104px（縮小20%） */
+        height: 104px;
     }
 
     .cube-face {
-        width: 130px;
-        height: 130px;
-        /* 等比例縮小 */
+        width: 104px;
+        height: 104px;
+        /* 等比例縮小：130px * 0.8 = 104px */
         border-radius: 3px;
         /* 保持圓角 */
         background-size: 90%;
@@ -2277,28 +2566,30 @@ body,
 
     /* 調整立方體各面的 translateZ 值 (寬度的一半) */
     .face-front {
-        transform: rotateY(0deg) translateZ(65px);
-        /* 130px / 2 = 65px */
+        transform: rotateY(0deg) translateZ(52px);
+        /* 104px / 2 = 52px */
     }
 
     .face-back {
-        transform: rotateY(180deg) translateZ(65px);
+        transform: rotateY(180deg) translateZ(52px);
     }
 
     .face-right {
-        transform: rotateY(90deg) translateZ(65px);
+        transform: rotateY(90deg) translateZ(52px);
     }
 
     .face-left {
-        transform: rotateY(-90deg) translateZ(65px);
+        transform: rotateY(-90deg) translateZ(52px);
     }
 
     .face-top {
-        transform: rotateX(90deg) translateZ(65px);
+        transform: rotateX(90deg) translateZ(52px);
+        /* 104px / 2 = 52px */
     }
 
     .face-bottom {
-        transform: rotateX(-90deg) translateZ(65px);
+        transform: rotateX(-90deg) translateZ(52px);
+        /* 104px / 2 = 52px */
     }
 
     .cube-shadow {
@@ -2316,7 +2607,8 @@ body,
 
     /* 手機版：新頁面改為垂直堆疊 */
     .seal-detail-view {
-        padding: 100px 0 2.6rem 0;
+        padding: 60px 0 2.6rem 0;
+        /* 往上移動40%：100px * 0.6 = 60px，減少與 logo/menu 的距離 */
     }
 
     .seal-detail-container {
@@ -2326,8 +2618,17 @@ body,
         margin-bottom: 1.5rem;
     }
 
+    /* 手機版：作品說明往下移動，避免與照片重疊 */
+    .seal-detail-info {
+        margin-top: 100vw;
+    }
+
     .seal-detail-image-wrapper {
         aspect-ratio: 1;
+        transform: scale(2.34) !important;
+        /* 手機版放大：桌面版 1.8 * 1.3 = 2.34（在桌面版基礎上再放大30%），使用 !important 確保覆蓋桌面版 */
+        transform-origin: top center !important;
+        /* 從頂部中心點縮放，確保與文字頂部對齊 */
     }
 
     .seal-detail-title {
@@ -2335,15 +2636,18 @@ body,
     }
 
     .seal-detail-meta {
-        font-size: 0.88rem;
+        font-size: 8px;
+        /* 手機版縮小為 8px */
     }
 
     .seal-detail-description {
-        font-size: 0.88rem;
+        font-size: 8px;
+        /* 手機版縮小為 8px */
     }
 
     .seal-detail-description p {
-        font-size: 0.88rem;
+        font-size: 8px;
+        /* 手機版縮小為 8px */
         margin: 0 0 3em 0;
     }
 }
