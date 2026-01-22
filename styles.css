@@ -2215,7 +2215,7 @@ body,
 }
 
 .seal-detail-meta {
-    font-size: 0.72rem;
+    font-size: 0.88rem;
     color: #24190b;
     opacity: 0.8;
     margin: 0;
@@ -2223,7 +2223,7 @@ body,
 }
 
 .seal-detail-description {
-    font-size: 0.72rem;
+    font-size: 0.88rem;
     line-height: 1.8;
     color: #24190b;
     margin: 0;
@@ -2232,7 +2232,7 @@ body,
 
 .seal-detail-description p {
     margin: 0 0 3em 0;
-    font-size: 0.72rem;
+    font-size: 0.88rem;
     line-height: 1.8;
     color: #24190b;
     font-family: 'Times New Roman', Times, serif;
@@ -2335,15 +2335,15 @@ body,
     }
 
     .seal-detail-meta {
-        font-size: 0.648rem;
+        font-size: 0.88rem;
     }
 
     .seal-detail-description {
-        font-size: 0.648rem;
+        font-size: 0.88rem;
     }
 
     .seal-detail-description p {
-        font-size: 0.648rem;
+        font-size: 0.88rem;
         margin: 0 0 3em 0;
     }
 }
