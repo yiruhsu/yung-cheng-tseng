@@ -514,18 +514,50 @@ function initKeyboardNavigation() {
 // 觸控板左右滑動切換頁面功能
 function initTrackpadSwipeNavigation() {
     const pageOrder = ['home', 'bio', 'calligraphy', 'painting', 'exhibition'];
-    let isThrottled = false; // 簡單的冷卻鎖
+    let lastSwipeTime = 0;
+    const cooldownTime = 1000; // 1秒冷卻時間
+    const minSwipeDistance = 50; // 最小滑動距離閾值
+    let accumulatedDeltaX = 0; // 累積的橫向滑動距離
+    let swipeTimeout = null; // 用於重置累積值的計時器
 
     // 使用 wheel 事件監聽觸控板滑動
-    const handleWheel = (e) => {
-        // 1. 水平滑動鎖定：如果垂直捲動幅度大於水平，則視為捲動網頁，不觸發切換
-        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) return;
+    document.addEventListener('wheel', (e) => {
+        // 水平鎖定：確保是水平滑動而非垂直滑動
+        // 如果垂直滑動幅度大於或等於水平滑動，則忽略
+        if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) {
+            // 垂直滑動，重置累積值
+            accumulatedDeltaX = 0;
+            if (swipeTimeout) {
+                clearTimeout(swipeTimeout);
+                swipeTimeout = null;
+            }
+            return;
+        }
 
-        // 2. 閾值檢查：滑動幅度太小不觸發 (防誤觸)
-        if (Math.abs(e.deltaX) < 30) return;
+        // 檢查冷卻時間
+        const currentTime = Date.now();
+        if (currentTime - lastSwipeTime < cooldownTime) {
+            return;
+        }
 
-        // 3. 冷卻檢查
-        if (isThrottled) return;
+        // 累積橫向滑動距離
+        accumulatedDeltaX += e.deltaX;
+
+        // 清除之前的重置計時器
+        if (swipeTimeout) {
+            clearTimeout(swipeTimeout);
+        }
+
+        // 設置重置計時器：如果 200ms 內沒有新的滑動事件，重置累積值
+        swipeTimeout = setTimeout(() => {
+            accumulatedDeltaX = 0;
+            swipeTimeout = null;
+        }, 200);
+
+        // 檢查是否達到最小滑動距離
+        if (Math.abs(accumulatedDeltaX) < minSwipeDistance) {
+            return;
+        }
 
         // 獲取當前頁面
         const currentPage = document.querySelector('.page.active');
@@ -536,35 +568,28 @@ function initTrackpadSwipeNavigation() {
 
         if (currentIndex === -1) return;
 
-        // 4. 執行切換
-        if (e.deltaX > 0) {
-            // --- 往左滑 (Swipe Left) -> 上一頁 (Previous) ---
-            console.log("Swipe Left detected: Go to Prev");
-            const prevIndex = (currentIndex - 1 + pageOrder.length) % pageOrder.length;
-            showPage(pageOrder[prevIndex]);
-            
-            // 鎖定 1 秒
-            isThrottled = true;
-            setTimeout(() => isThrottled = false, 1000);
-            
-        } else if (e.deltaX < 0) {
-            // --- 往右滑 (Swipe Right) -> 下一頁 (Next) ---
-            console.log("Swipe Right detected: Go to Next");
-            const nextIndex = (currentIndex + 1) % pageOrder.length;
-            showPage(pageOrder[nextIndex]);
-            
-            // 鎖定 1 秒
-            isThrottled = true;
-            setTimeout(() => isThrottled = false, 1000);
+        // 判斷滑動方向並切換頁面
+        let nextIndex;
+        if (accumulatedDeltaX > 0) {
+            // deltaX > 0：手指向左滑（畫面右移），切換至下一頁 (Next)
+            nextIndex = (currentIndex + 1) % pageOrder.length;
+        } else {
+            // deltaX < 0：手指向右滑（畫面左移），切換至上一頁 (Prev)
+            nextIndex = (currentIndex - 1 + pageOrder.length) % pageOrder.length;
         }
-    };
 
-    window.addEventListener("wheel", handleWheel, { passive: false });
-    
-    // 返回清理函數（如果需要）
-    return () => {
-        window.removeEventListener("wheel", handleWheel);
-    };
+        // 執行頁面切換
+        e.preventDefault();
+        showPage(pageOrder[nextIndex]);
+
+        // 更新冷卻時間和重置累積值
+        lastSwipeTime = currentTime;
+        accumulatedDeltaX = 0;
+        if (swipeTimeout) {
+            clearTimeout(swipeTimeout);
+            swipeTimeout = null;
+        }
+    }, { passive: false }); // 使用 passive: false 以便可以 preventDefault
 }
 
 // 頁面載入時執行
