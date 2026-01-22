@@ -1910,29 +1910,54 @@ body,
 /* --- 3D Cube 場景設定 --- */
 .scene-container {
     width: 100%;
-    height: 70vh; /* 展示區高度 */
+    height: 70vh;
+    /* 展示區高度 */
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1200px; /* 透視感，數字越小越誇張，1200是標準 */
+    perspective: 1200px;
+    /* 透視感，數字越小越誇張，1200是標準 */
     position: relative;
     z-index: 10;
     /* 確保骰子在頁面 xy 軸正中央 */
     margin: 0 auto;
 }
 
+/* Click 文字 */
+.cube-click-text {
+    position: absolute;
+    top: 80px;
+    /* 從 scene-container 頂部往下 80px */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-family: 'Times New Roman', Times, serif;
+    color: #868687;
+    z-index: 1;
+    /* 低於骰子的 z-index，不擋到骰子 */
+    pointer-events: none;
+    /* 不阻擋點擊事件 */
+    white-space: nowrap;
+}
+
 /* 立方體本體 */
 .cube {
-    width: 180px; /* 立方體大小 */
+    width: 180px;
+    /* 立方體大小 */
     height: 180px;
     position: relative;
-    transform-style: preserve-3d; /* 關鍵：保留 3D 空間 */
-    transform: rotateX(-20deg) rotateY(-20deg); /* 初始角度 */
-    cursor: grab; /* 提示可拖曳 */
+    transform-style: preserve-3d;
+    /* 關鍵：保留 3D 空間 */
+    transform: rotateX(-20deg) rotateY(-20deg);
+    /* 初始角度 */
+    cursor: grab;
+    /* 提示可拖曳 */
     /* 允許 GSAP 覆蓋 transform */
     will-change: transform;
     /* 確保骰子在頁面正中央 */
     margin: 0 auto;
+    z-index: 2;
+    /* 確保骰子在文字上方 */
 }
 
 .cube:active {
@@ -1942,20 +1967,25 @@ body,
 /* 每一面的通用樣式 - 修改版 */
 .cube-face {
     position: absolute;
-    width: 180px; /* 立方體大小 */
+    width: 180px;
+    /* 立方體大小 */
     height: 180px;
-    background-color: transparent; /* 改成透明色 */
+    background-color: transparent;
+    /* 改成透明色 */
     /* border: 1px solid #eee; <-- 移除這個舊邊框，讓光影來定義邊界 */
-    border-radius: 3px; /* 圓角 */
-    background-size: 90%; /* 照片顯示為 90% 大小 */
+    border-radius: 3px;
+    /* 圓角 */
+    background-size: 90%;
+    /* 照片顯示為 90% 大小 */
     background-position: center;
     background-repeat: no-repeat;
     /* opacity: 0.95; <-- 移除這個整體透明度，改用疊加層控制 */
     /* box-shadow: inset... <-- 移除舊的內陰影 */
-    
+
     /* 關鍵：確保子元素(疊加層)不會超出範圍，且能維持 3D 效果 */
-    transform-style: preserve-3d; 
-    backface-visibility: hidden; /* 優化效能，背面不渲染 */
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    /* 優化效能，背面不渲染 */
 }
 
 /* --- 3D 建構邏輯 (Transform) --- */
@@ -2000,14 +2030,17 @@ body,
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* 讓點擊穿透 */
+    pointer-events: none;
+    /* 讓點擊穿透 */
     z-index: 2;
-    border-radius: 3px; /* 繼承父元素的圓角 */
-    
+    border-radius: 3px;
+    /* 繼承父元素的圓角 */
+
     /* 核心修改：背景色改用黑色，透明度由 JS 計算的變數控制 */
     background-color: #000;
-    opacity: var(--shade, 0); /* 預設為 0 (全亮) */
-    
+    opacity: var(--shade, 0);
+    /* 預設為 0 (全亮) */
+
     /* 讓光影變化跟隨動畫一樣絲滑，稍快於骰子轉動 */
     transition: opacity 0.1s linear;
 }
@@ -2027,7 +2060,8 @@ body,
     border-radius: 50%;
     filter: blur(20px);
     position: absolute;
-    bottom: 15%; /* 在立方體下方 */
+    bottom: 15%;
+    /* 在立方體下方 */
     left: 50%;
     transform: translateX(-50%);
     opacity: 0.5;
@@ -2037,10 +2071,13 @@ body,
 
 /* 呼吸動畫 */
 @keyframes breathe {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateX(-50%) scale(1);
         opacity: 0.5;
     }
+
     50% {
         transform: translateX(-50%) scale(0.85);
         opacity: 0.3;
@@ -2105,6 +2142,106 @@ body,
     opacity: 0.8;
 }
 
+/* =========================================
+   篆刻頁面：新頁面樣式（從右邊滑入）
+   ========================================= */
+.seal-detail-view {
+    width: 100%;
+    min-height: 70vh;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 120px 0 8rem 0;
+    position: relative;
+    overflow: visible;
+    will-change: transform, opacity;
+    margin-bottom: 0;
+}
+
+.seal-detail-view.hidden {
+    display: none !important;
+}
+
+.seal-detail-container {
+    max-width: 1200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: flex-start;
+    padding: 0 2rem 3rem 2rem;
+    overflow: visible;
+    margin-bottom: 2rem;
+}
+
+.seal-detail-image-wrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: visible;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(1.8);
+    transform-origin: center;
+    position: relative;
+    z-index: 1;
+}
+
+.seal-detail-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0;
+    transform: scale(1);
+    transform-origin: center;
+}
+
+.seal-detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: #24190b;
+    position: relative;
+    z-index: 2;
+}
+
+.seal-detail-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    color: #24190b;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.seal-detail-meta {
+    font-size: 0.72rem;
+    color: #24190b;
+    opacity: 0.8;
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.seal-detail-description {
+    font-size: 0.72rem;
+    line-height: 1.8;
+    color: #24190b;
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.seal-detail-description p {
+    margin: 0 0 3em 0;
+    font-size: 0.72rem;
+    line-height: 1.8;
+    color: #24190b;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.seal-detail-description p:last-child {
+    margin-bottom: 0;
+}
+
 /* 響應式設計：手機版調整 */
 @media (max-width: 768px) {
     .scene-container {
@@ -2114,8 +2251,15 @@ body,
         /* 手機版調整透視感 */
     }
 
+    .cube-click-text {
+        top: 100px;
+        /* 從導覽列往下 100px（相對於 scene-container） */
+        font-size: 12px;
+    }
+
     .cube {
-        width: 130px; /* 手機版縮小立方體 */
+        width: 130px;
+        /* 手機版縮小立方體 */
         height: 130px;
     }
 
@@ -2123,14 +2267,18 @@ body,
         width: 130px;
         height: 130px;
         /* 等比例縮小 */
-        border-radius: 3px; /* 保持圓角 */
-        background-size: 90%; /* 照片顯示為 90% 大小 */
-        background-color: transparent; /* 手機版也保持透明 */
+        border-radius: 3px;
+        /* 保持圓角 */
+        background-size: 90%;
+        /* 照片顯示為 90% 大小 */
+        background-color: transparent;
+        /* 手機版也保持透明 */
     }
 
     /* 調整立方體各面的 translateZ 值 (寬度的一半) */
     .face-front {
-        transform: rotateY(0deg) translateZ(65px); /* 130px / 2 = 65px */
+        transform: rotateY(0deg) translateZ(65px);
+        /* 130px / 2 = 65px */
     }
 
     .face-back {
@@ -2154,7 +2302,8 @@ body,
     }
 
     .cube-shadow {
-        width: 100px; /* 等比例縮小 */
+        width: 100px;
+        /* 等比例縮小 */
         height: 20px;
         bottom: 10%;
     }
@@ -2163,5 +2312,38 @@ body,
         top: 15px;
         right: 15px;
         font-size: 1.5rem;
+    }
+
+    /* 手機版：新頁面改為垂直堆疊 */
+    .seal-detail-view {
+        padding: 100px 0 2.6rem 0;
+    }
+
+    .seal-detail-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 0 1rem 2rem 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .seal-detail-image-wrapper {
+        aspect-ratio: 1;
+    }
+
+    .seal-detail-title {
+        font-size: 0.9rem;
+    }
+
+    .seal-detail-meta {
+        font-size: 0.648rem;
+    }
+
+    .seal-detail-description {
+        font-size: 0.648rem;
+    }
+
+    .seal-detail-description p {
+        font-size: 0.648rem;
+        margin: 0 0 3em 0;
     }
 }

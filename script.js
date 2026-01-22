@@ -2273,7 +2273,7 @@ function initSealCarvingDice() {
 
     // 初始漂浮動畫 (讓它自己動一點點)
     // 修改為使用 cubeState 並同步更新光影
-    gsap.to(cubeState, {
+    let floatAnimation = gsap.to(cubeState, {
         rx: -20 + 10, // 初始角度 + 偏移
         duration: 3,
         yoyo: true,
@@ -2347,7 +2347,7 @@ function initSealCarvingDice() {
             dragStartY = e.clientY;
             dragStartRotX = cubeState.rx;
             dragStartRotY = cubeState.ry;
-            
+
             // 停止當前的 GSAP 動畫
             gsap.killTweensOf(cubeState);
         }
@@ -2398,45 +2398,245 @@ function initSealCarvingDice() {
         }
     });
 
-    // 點擊放大圖片邏輯
-    const faces = document.querySelectorAll('.cube-face');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const closeBtn = document.getElementById('close-lightbox');
+    // 點擊骰子或周圍區域時，觸發新頁面動畫
+    const detailView = document.getElementById('seal-carving-detail-view');
+    const sealCarvingSection = document.getElementById('seal-carving-section');
+    const cubeShadow = document.querySelector('.cube-shadow');
 
-    if (!lightbox || !lightboxImg) return;
-
-    faces.forEach(face => {
-        face.addEventListener('click', (e) => {
-            e.stopPropagation();
-
-            // 抓取該面的背景圖
-            const style = window.getComputedStyle(face);
-            const bgImage = style.backgroundImage;
-
-            // 清理字串，取出網址
-            // 格式通常是: url("...")
-            const url = bgImage.slice(5, -2);
-
-            if (url && url !== 'none') {
-                lightboxImg.src = url;
-                lightbox.classList.add('active');
+    if (cube && detailView && sealCarvingSection) {
+        // 統一的點擊處理函數
+        function triggerDetailView(e) {
+            // 如果新頁面已經顯示，不重複觸發
+            if (!detailView.classList.contains('hidden')) {
+                return;
             }
-        });
-    });
 
-    // 關閉 Lightbox
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            lightbox.classList.remove('active');
-        });
-    }
+            // 確保骰子容器是顯示的且可點擊
+            if (sealCarvingSection.style.display === 'none') {
+                sealCarvingSection.style.display = 'block';
+            }
+            sealCarvingSection.style.pointerEvents = 'auto';
+            cube.style.pointerEvents = 'auto';
+            cube.style.visibility = 'visible';
 
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox || e.target.classList.contains('lightbox-overlay')) {
-            lightbox.classList.remove('active');
+            // 停止所有骰子動畫
+            gsap.killTweensOf(cubeState);
+            gsap.killTweensOf(cube);
+            if (cubeShadow) {
+                gsap.killTweensOf(cubeShadow);
+            }
+            if (floatAnimation) {
+                floatAnimation.kill();
+            }
+
+            // 創建動畫時間軸
+            const tl = gsap.timeline();
+
+            // 1. 骰子縮小動畫（保持立方體形狀，只縮放）
+            // 保存當前旋轉狀態
+            const currentRotX = cubeState.rx;
+            const currentRotY = cubeState.ry;
+
+            // 使用 GSAP 的 scale，並在動畫過程中保持旋轉和位移
+            tl.to(cube, {
+                scale: 0,
+                duration: 1.8,
+                ease: 'power2.inOut',
+                transformOrigin: 'center center',
+                onUpdate: () => {
+                    // 在動畫過程中保持旋轉和位移
+                    const currentScale = gsap.getProperty(cube, 'scale');
+                    cube.style.transform = `rotateX(${currentRotX}deg) rotateY(${currentRotY}deg) translateY(30px) scale(${currentScale})`;
+                    updateLighting(currentRotX, currentRotY);
+                }
+            })
+                .to(cubeShadow || '.cube-shadow', {
+                    opacity: 0,
+                    scale: 0,
+                    duration: 1.5,
+                    ease: 'power2.inOut'
+                }, '-=1.2')
+                // 2. 隱藏骰子容器
+                .set(sealCarvingSection, {
+                    display: 'none',
+                    pointerEvents: 'none'
+                })
+                // 3. 設置新頁面初始狀態並顯示
+                .set(detailView, {
+                    display: 'flex',
+                    x: '100%',
+                    opacity: 0
+                })
+                // 4. 從右邊滑入
+                .to(detailView, {
+                    x: '0%',
+                    opacity: 1,
+                    duration: 1.5,
+                    ease: 'power3.out'
+                }, '-=0.3');
+
+            // 移除 hidden class
+            detailView.classList.remove('hidden');
         }
-    });
+
+        // 返回骰子頁面的函數
+        function returnToCube() {
+            // 如果新頁面已經隱藏，不重複觸發
+            if (detailView.classList.contains('hidden')) {
+                return;
+            }
+
+            // 創建動畫時間軸
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    // 恢復骰子初始狀態
+                    cubeState.rx = -20;
+                    cubeState.ry = -20;
+
+                    // 確保骰子容器可見且可點擊
+                    sealCarvingSection.style.display = 'block';
+                    sealCarvingSection.style.visibility = 'visible';
+                    sealCarvingSection.style.pointerEvents = 'auto';
+                    sealCarvingSection.style.opacity = '1';
+
+                    // 確保骰子的 scale 和 transform 正確設置
+                    gsap.set(cube, {
+                        scale: 1,
+                        clearProps: 'transform',
+                        visibility: 'visible',
+                        opacity: 1
+                    });
+
+                    // 設置初始 transform（包含旋轉和位移）
+                    cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg) translateY(30px)`;
+                    cube.style.pointerEvents = 'auto';
+                    cube.style.visibility = 'visible';
+                    cube.style.opacity = '1';
+                    updateLighting(cubeState.rx, cubeState.ry);
+
+                    // 恢復陰影
+                    if (cubeShadow) {
+                        gsap.set(cubeShadow, {
+                            opacity: 0.5,
+                            scale: 1,
+                            visibility: 'visible'
+                        });
+                    }
+
+                    // 重新啟動漂浮動畫
+                    floatAnimation = gsap.to(cubeState, {
+                        rx: -20 + 10,
+                        duration: 3,
+                        yoyo: true,
+                        repeat: -1,
+                        ease: "sine.inOut",
+                        onUpdate: () => {
+                            cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg) translateY(30px)`;
+                            updateLighting(cubeState.rx, cubeState.ry);
+                        }
+                    });
+
+                    // 確保新頁面已隱藏
+                    detailView.classList.add('hidden');
+                    detailView.style.display = 'none';
+                }
+            });
+
+            // 1. 新頁面滑出（向右滑出）
+            tl.to(detailView, {
+                x: '100%',
+                opacity: 0,
+                duration: 1.5,
+                ease: 'power3.in'
+            })
+                // 2. 隱藏新頁面
+                .set(detailView, {
+                    display: 'none'
+                })
+                .set(() => {
+                    // 添加 hidden class，確保狀態正確
+                    detailView.classList.add('hidden');
+                })
+                // 3. 顯示骰子容器
+                .set(sealCarvingSection, {
+                    display: 'block',
+                    pointerEvents: 'auto',
+                    visibility: 'visible',
+                    opacity: '1'
+                })
+                // 4. 設置骰子初始狀態（縮小狀態）
+                .set(() => {
+                    cubeState.rx = -20;
+                    cubeState.ry = -20;
+                    // 先清除所有 transform，然後設置初始狀態
+                    gsap.set(cube, {
+                        scale: 0,
+                        clearProps: 'transform',
+                        visibility: 'visible',
+                        opacity: 1
+                    });
+                    // 設置初始 transform（包含旋轉和位移，但 scale 為 0）
+                    cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg) translateY(30px) scale(0)`;
+                    cube.style.pointerEvents = 'auto';
+                    cube.style.visibility = 'visible';
+                    cube.style.opacity = '1';
+                    updateLighting(cubeState.rx, cubeState.ry);
+                })
+                // 5. 骰子出現動畫（保持立方體形狀，只放大）
+                .to(cube, {
+                    scale: 1,
+                    duration: 1.8,
+                    ease: 'power2.out',
+                    transformOrigin: 'center center',
+                    onUpdate: () => {
+                        // 在動畫過程中保持旋轉和位移
+                        const currentScale = gsap.getProperty(cube, 'scale');
+                        cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg) translateY(30px) scale(${currentScale})`;
+                        updateLighting(cubeState.rx, cubeState.ry);
+                    }
+                }, '-=0.3')
+                .fromTo(cubeShadow || '.cube-shadow', {
+                    opacity: 0,
+                    scale: 0
+                }, {
+                    opacity: 0.5,
+                    scale: 1,
+                    duration: 1.5,
+                    ease: 'power2.out'
+                }, '-=1.2');
+
+            // 添加 hidden class
+            detailView.classList.add('hidden');
+        }
+
+        // 點擊骰子本身（包括所有面）
+        cube.addEventListener('click', (e) => {
+            e.stopPropagation();
+            triggerDetailView(e);
+        });
+
+        // 點擊骰子容器周圍區域
+        sceneContainer.addEventListener('click', (e) => {
+            // 如果點擊的是骰子本身，不重複觸發（已經在上面處理）
+            if (e.target.closest('#cube')) {
+                return;
+            }
+
+            // 點擊容器區域時觸發
+            triggerDetailView(e);
+        });
+
+        // 在新頁面上添加點擊事件，返回骰子頁面
+        if (detailView) {
+            // 添加 clickable class，讓滑鼠 hover 時變成大圓形
+            detailView.classList.add('clickable');
+
+            detailView.addEventListener('click', (e) => {
+                // 點擊新頁面時返回骰子
+                returnToCube();
+            });
+        }
+    }
 }
 
 // 在 DOM 載入時初始化篆刻頁面（如果頁面已存在）
