@@ -68,6 +68,14 @@ function initNavScrollSpy() {
 function showPage(pageId) {
     destroyPaintingHorizontal();
 
+    // 控制頁面背景色：bio、書法、繪畫、展演頁面使用米白底
+    const lightPages = ['bio', 'calligraphy', 'painting', 'exhibition'];
+    if (lightPages.includes(pageId)) {
+        document.body.classList.add('page-light');
+    } else {
+        document.body.classList.remove('page-light');
+    }
+
     // 移除滑鼠白色圓點停留在原地的狀態
     const cursor = document.getElementById('custom-cursor');
     if (cursor) {
@@ -157,6 +165,12 @@ function initHeroSlideshow() {
 
     container.innerHTML = '';
 
+    // Safari性能優化：預先載入所有圖片
+    heroImages.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+    });
+
     heroImages.forEach((src, index) => {
         const slide = document.createElement('div');
         slide.className = `hero-slide${index === 0 ? ' active' : ''}`;
@@ -173,7 +187,7 @@ function initHeroSlideshow() {
         slides[currentIndex].classList.remove('active');
         currentIndex = (currentIndex + 1) % slides.length;
         slides[currentIndex].classList.add('active');
-    }, 5000); // 每 6 秒切換一次
+    }, 5000); // 每 5 秒切換一次
 }
 
 // 語言切換功能
@@ -463,6 +477,121 @@ const observer = new MutationObserver((mutations) => {
 
 observer.observe(document.body, { childList: true, subtree: true, attributes: true });
 
+// 鍵盤左右切換頁面功能
+function initKeyboardNavigation() {
+    const pageOrder = ['home', 'bio', 'calligraphy', 'painting', 'exhibition'];
+
+    document.addEventListener('keydown', (e) => {
+        // 只處理左右箭頭鍵，且不在輸入框中時
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        const currentPage = document.querySelector('.page.active');
+        if (!currentPage) return;
+
+        const currentPageId = currentPage.id;
+        const currentIndex = pageOrder.indexOf(currentPageId);
+
+        if (currentIndex === -1) return;
+
+        let nextIndex;
+        if (e.key === 'ArrowLeft') {
+            // 左鍵：上一頁（循環）
+            nextIndex = currentIndex === 0 ? pageOrder.length - 1 : currentIndex - 1;
+        } else if (e.key === 'ArrowRight') {
+            // 右鍵：下一頁（循環）
+            nextIndex = (currentIndex + 1) % pageOrder.length;
+        } else {
+            return;
+        }
+
+        e.preventDefault();
+        showPage(pageOrder[nextIndex]);
+    });
+}
+
+// 觸控板左右滑動切換頁面功能
+function initTrackpadSwipeNavigation() {
+    const pageOrder = ['home', 'bio', 'calligraphy', 'painting', 'exhibition'];
+    let lastSwipeTime = 0;
+    const cooldownTime = 1000; // 1秒冷卻時間
+    const minSwipeDistance = 50; // 最小滑動距離閾值
+    let accumulatedDeltaX = 0; // 累積的橫向滑動距離
+    let swipeTimeout = null; // 用於重置累積值的計時器
+
+    // 使用 wheel 事件監聽觸控板滑動
+    document.addEventListener('wheel', (e) => {
+        // 水平鎖定：確保是水平滑動而非垂直滑動
+        // 如果垂直滑動幅度大於或等於水平滑動，則忽略
+        if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) {
+            // 垂直滑動，重置累積值
+            accumulatedDeltaX = 0;
+            if (swipeTimeout) {
+                clearTimeout(swipeTimeout);
+                swipeTimeout = null;
+            }
+            return;
+        }
+
+        // 檢查冷卻時間
+        const currentTime = Date.now();
+        if (currentTime - lastSwipeTime < cooldownTime) {
+            return;
+        }
+
+        // 累積橫向滑動距離
+        accumulatedDeltaX += e.deltaX;
+
+        // 清除之前的重置計時器
+        if (swipeTimeout) {
+            clearTimeout(swipeTimeout);
+        }
+
+        // 設置重置計時器：如果 200ms 內沒有新的滑動事件，重置累積值
+        swipeTimeout = setTimeout(() => {
+            accumulatedDeltaX = 0;
+            swipeTimeout = null;
+        }, 200);
+
+        // 檢查是否達到最小滑動距離
+        if (Math.abs(accumulatedDeltaX) < minSwipeDistance) {
+            return;
+        }
+
+        // 獲取當前頁面
+        const currentPage = document.querySelector('.page.active');
+        if (!currentPage) return;
+
+        const currentPageId = currentPage.id;
+        const currentIndex = pageOrder.indexOf(currentPageId);
+
+        if (currentIndex === -1) return;
+
+        // 判斷滑動方向並切換頁面
+        let nextIndex;
+        if (accumulatedDeltaX > 0) {
+            // deltaX > 0：手指向左滑（畫面右移），切換至下一頁 (Next)
+            nextIndex = (currentIndex + 1) % pageOrder.length;
+        } else {
+            // deltaX < 0：手指向右滑（畫面左移），切換至上一頁 (Prev)
+            nextIndex = (currentIndex - 1 + pageOrder.length) % pageOrder.length;
+        }
+
+        // 執行頁面切換
+        e.preventDefault();
+        showPage(pageOrder[nextIndex]);
+
+        // 更新冷卻時間和重置累積值
+        lastSwipeTime = currentTime;
+        accumulatedDeltaX = 0;
+        if (swipeTimeout) {
+            clearTimeout(swipeTimeout);
+            swipeTimeout = null;
+        }
+    }, { passive: false }); // 使用 passive: false 以便可以 preventDefault
+}
+
 // 頁面載入時執行
 document.addEventListener('DOMContentLoaded', function () {
     initHeroSlideshow();
@@ -473,6 +602,8 @@ document.addEventListener('DOMContentLoaded', function () {
     switchLanguage('en'); // 預設英文
     initGalleries(); // 初始化畫廊，確保第一張圖片有 active class
     hideSingleImageArrows(); // 隱藏單張圖片的箭頭
+    initKeyboardNavigation(); // 初始化鍵盤導航
+    initTrackpadSwipeNavigation(); // 初始化觸控板滑動導航
 
     // 添加滾動監聽事件
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -1243,8 +1374,9 @@ function initCarousel(carouselElement) {
 
 // === DOT-TO-LINE TIMELINE SYSTEM (Unified SVG) ===
 const lineState = {
-    dotRadius: 4.5,
-    dotOffset: 10, // 10px below navigation
+    dotRadius: 3.6,
+    /* 縮小20%: 4.5 * 0.8 = 3.6 */
+    dotOffset: 200, // 200px below navigation
     dotCx: 0,
     dotCy: 0,
     currentLength: 0,
@@ -1290,7 +1422,8 @@ function applySmoothLineLength(length) {
     lineState.currentLength = targetLength;
     updateVerticalLine(targetLength);
     checkSectionTriggers(targetLength);
-    updateOutroPaths(targetLength);
+    // 只在頁尾時更新分支線條，其餘時間保持垂直線
+    // updateOutroPaths 只在 horizonLocked 時才真正更新分支線條
 }
 
 function ensureExhibitionContentVisible() {
@@ -1347,9 +1480,19 @@ function updateDotMetrics() {
     if (originDot) {
         originDot.setAttribute('cx', dotCx);
         originDot.setAttribute('cy', dotCy);
-        // 手機版：縮小紅圓點20%
-        const mobileRadius = isMobile ? dotRadius * 0.8 : dotRadius;
-        originDot.setAttribute('r', mobileRadius);
+        // 只有在動畫未開始或已完成時才設置半徑，動畫進行中讓動畫控制
+        if (!lineState.introTimeline || !lineState.introTimeline.isActive()) {
+            // 手機版：縮小紅圓點20%
+            const mobileRadius = isMobile ? dotRadius * 0.8 : dotRadius;
+            // 如果動畫還沒開始，保持當前狀態（可能是 0，由 initIntroAnimation 設置）
+            // 如果動畫已完成，設置為正常大小
+            const currentRadius = parseFloat(originDot.getAttribute('r')) || 0;
+            if (currentRadius > 0 || !lineState.introTimeline) {
+                // 動畫已完成或還沒初始化，設置為正常大小
+                originDot.setAttribute('r', mobileRadius);
+            }
+            // 如果 currentRadius 是 0 且 introTimeline 存在，說明動畫還沒開始，保持 0
+        }
     }
 }
 
@@ -1425,14 +1568,27 @@ function lockMainLineAtBottom() {
 // 尾奏收束後把鏡頭交回滑動，主線回到 1:1 跟隨
 function unlockMainLineToScroll() {
     lineState.horizonLocked = false;
+    // 立即隱藏分支線條，只顯示垂直線
+    if (branchLeft && branchRight) {
+        gsap.set([branchLeft, branchRight], { opacity: 0 });
+    }
     const targetLength = Number.isFinite(lineState.scrollLength)
         ? lineState.scrollLength
         : lineState.currentLength;
     applySmoothLineLength(targetLength);
 }
 
-function updateOutroPaths(lengthOverride) {
+function updateOutroPaths(lengthOverride, forceUpdate = false) {
     if (!branchLeft || !branchRight || !heroPath) return;
+
+    // 只在頁尾（horizonLocked）時才更新分支線條，其餘時間保持隱藏
+    // forceUpdate 參數允許在 resetOutroElements 時強制更新
+    if (!lineState.horizonLocked && !forceUpdate) {
+        // 確保分支線條在非頁尾時保持隱藏
+        gsap.set([branchLeft, branchRight], { opacity: 0 });
+        return;
+    }
+
     updateDotMetrics();
 
     const rect = heroPath.getBoundingClientRect();
@@ -1469,7 +1625,8 @@ function updateOutroPaths(lengthOverride) {
 
 function resetOutroElements(lengthOverride) {
     if (!branchLeft || !branchRight) return;
-    updateOutroPaths(lengthOverride);
+    // 強制更新分支線條路徑（即使 horizonLocked 尚未設置）
+    updateOutroPaths(lengthOverride, true);
     if (!outroMeta) return;
 
     gsap.set([branchLeft, branchRight], {
@@ -1483,18 +1640,36 @@ function resetOutroElements(lengthOverride) {
 
 function buildHorizonTimeline() {
     if (typeof gsap === 'undefined') return null;
+    // 確保在構建動畫時，分支線條已經正確更新
+    // 使用 forceUpdate 確保即使 horizonLocked 尚未設置也能更新
     resetOutroElements(lineState.maxLength);
-    if (!outroMeta) return null;
+    if (!outroMeta) {
+        console.warn('[buildHorizonTimeline] outroMeta is null, retrying...');
+        // 如果 outroMeta 為 null，可能是因為 updateOutroPaths 提前返回了
+        // 強制設置 horizonLocked 並重試
+        const wasLocked = lineState.horizonLocked;
+        lineState.horizonLocked = true;
+        updateOutroPaths(lineState.maxLength, true);
+        lineState.horizonLocked = wasLocked;
+        if (!outroMeta) {
+            console.error('[buildHorizonTimeline] Failed to create outroMeta');
+            return null;
+        }
+    }
 
     const branches = [branchLeft, branchRight].filter(Boolean);
     const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
 
-    // 4s：向兩側緩伸，同步淡出到 0
-    tl.to(branchLeft, { strokeDashoffset: 0, duration: 4 }, 0)
-        .to(branchRight, { strokeDashoffset: 0, duration: 4 }, 0)
-        .to(branches, { opacity: 0, duration: 4 }, 0);
+    // 3.5s：向兩側緩伸，同步淡出到 0
+    // 動畫只播放一次，不反向（刪除收回過程）
+    tl.to(branchLeft, { strokeDashoffset: 0, duration: 3.5 }, 0)
+        .to(branchRight, { strokeDashoffset: 0, duration: 3.5 }, 0)
+        .to(branches, { opacity: 0, duration: 3.5 }, 0);
 
-    tl.eventCallback('onReverseComplete', unlockMainLineToScroll);
+    // 動畫完成後，確保分支線條保持隱藏
+    tl.eventCallback('onComplete', () => {
+        gsap.set([branchLeft, branchRight], { opacity: 0 });
+    });
 
     return tl;
 }
@@ -1524,15 +1699,21 @@ function initHorizonTrigger() {
         start: 'top bottom',
         end: 'bottom bottom',
         animation: lineState.outroTimeline,
-        toggleActions: 'play none none reverse',
+        toggleActions: 'play none none none', // 只播放一次，不反向（刪除收回過程）
         invalidateOnRefresh: true,
         onEnter: () => {
+            // 使用者滑到最底部時，線往兩側水平展開3.5秒後消失
             lockMainLineAtBottom();
             resetOutroElements(lineState.maxLength);
+            // 播放動畫
+            if (lineState.outroTimeline) {
+                lineState.outroTimeline.play();
+            }
         },
-        onEnterBack: () => {
-            lockMainLineAtBottom();
-            resetOutroElements(lineState.maxLength);
+        onLeaveBack: () => {
+            // 往上滑動時，立即隱藏分支線條，只顯示垂直線
+            unlockMainLineToScroll();
+            gsap.set([branchLeft, branchRight], { opacity: 0 });
         }
     });
 }
@@ -1546,7 +1727,15 @@ function scheduleTimelineRefresh() {
         calculateMaxLength();
         cacheSectionTriggers();
         updateIntroLength();
-        updateOutroPaths(lineState.horizonLocked ? lineState.maxLength : lineState.currentLength);
+        // 只在頁尾（horizonLocked）時更新分支線條，往上滑動時保持垂直線
+        if (lineState.horizonLocked) {
+            updateOutroPaths(lineState.maxLength);
+        } else {
+            // 確保分支線條在非頁尾時保持隱藏
+            if (branchLeft && branchRight) {
+                gsap.set([branchLeft, branchRight], { opacity: 0 });
+            }
+        }
         initHorizonTrigger();
 
         // 只有在 intro 動畫完成後（ScrollTrigger 已啟動）才根據滾動位置更新
@@ -1701,6 +1890,8 @@ function initIntroAnimation() {
     }
 
     cleanupAnimations();
+    // 強制更新圓點和紅線位置（但不設置半徑，讓動畫來控制）
+    updateDotMetrics();
     calculateMaxLength();
     cacheSectionTriggers();
     updateIntroLength();
@@ -1709,6 +1900,11 @@ function initIntroAnimation() {
     lineState.currentLength = 0;
     lineState.scrollLength = 0;
     updateVerticalLine(0);
+
+    // 設置紅點初始狀態：小到無法被看見（r=0），動畫會讓它變大
+    if (originDot) {
+        originDot.setAttribute('r', 0);
+    }
 
     // 重置所有 section 的顯示狀態
     const sections = document.querySelectorAll('.exhibition-section');
@@ -1725,13 +1921,29 @@ function initIntroAnimation() {
         strokeDashoffset: pathLength
     });
 
-    // GSAP Timeline: 0.2s delay, then line grows down
+    // 手機版：縮小紅圓點20%
+    const isMobile = window.innerWidth <= 768;
+    const targetRadius = isMobile ? lineState.dotRadius * 0.8 : lineState.dotRadius;
+
+    // 設置紅點初始狀態：小到無法被看見（r=0）
+    if (originDot) {
+        gsap.set(originDot, { attr: { r: 0 } });
+    }
+
+    // GSAP Timeline: 紅點變大 → 紅線延伸
+    const totalDuration = 2.0 + 2.5; // 紅點變大(2s) + 紅線延伸(2.5s) = 4.5s
     lineState.introTimeline = gsap.timeline({
         onUpdate: function () {
-            // 在動畫過程中即時檢查觸發
-            const progress = this.progress();
-            const currentLength = progress * lineState.intro2023Length;
-            checkSectionTriggers(currentLength);
+            // 在動畫過程中即時檢查觸發（只在紅線延伸階段）
+            const totalProgress = this.progress();
+            const dotAnimationProgress = 2.0 / totalDuration; // 紅點動畫佔總時長的比例
+
+            if (totalProgress > dotAnimationProgress) {
+                // 紅點動畫完成後，計算紅線延伸的進度
+                const lineProgress = (totalProgress - dotAnimationProgress) / (1 - dotAnimationProgress);
+                const currentLength = lineProgress * lineState.intro2023Length;
+                checkSectionTriggers(currentLength);
+            }
         },
         onComplete: () => {
             // 清除 stroke-dasharray，準備交給 ScrollTrigger
@@ -1741,10 +1953,17 @@ function initIntroAnimation() {
         }
     });
 
-    // Phase 1: Delay 0.2s
-    lineState.introTimeline.to({}, { duration: 0.2 });
+    // Phase 1: 紅點從0變大到正常大小（2秒）
+    if (originDot) {
+        lineState.introTimeline.to(originDot, {
+            attr: { r: targetRadius },
+            duration: 2.0,
+            ease: 'power2.out'
+        }, 0);
+    }
 
-    // Phase 2: Line grows from dot (延伸到覆蓋 2023 section)
+    // Phase 2: 紅線從圓點向下延伸（延伸到覆蓋 2023 section）
+    // 在紅點動畫完成後開始（2秒後）
     lineState.introTimeline.to(lineState, {
         currentLength: lineState.intro2023Length,
         duration: 2.5,
@@ -1755,7 +1974,7 @@ function initIntroAnimation() {
                 strokeDashoffset: pathLength * (1 - (lineState.currentLength / lineState.intro2023Length))
             });
         }
-    });
+    }, 2.0); // 在 2 秒後開始（紅點動畫完成後）
 }
 
 // === SCROLL-CONTROLLED EXTENSION (After Intro) ===
@@ -1876,10 +2095,15 @@ function initUnfurlingScrollAnimation() {
 
     bindTimelineObservers();
 
+    // 強制更新圓點和紅線位置
+    updateDotMetrics();
     // 先計算長度，但不更新紅線位置（保持為 0）
     calculateMaxLength();
     cacheSectionTriggers();
     updateIntroLength();
+
+    // 立即更新垂直線條位置（即使長度為0，也要確保從正確的起始位置開始）
+    updateVerticalLine(0);
 
     // Start intro animation after brief delay
     setTimeout(() => {
@@ -1904,6 +2128,8 @@ document.addEventListener('exhibitionPageToggled', (event) => {
     }
     try {
         setTimeout(() => {
+            // 強制更新圓點和紅線位置
+            updateDotMetrics();
             initUnfurlingScrollAnimation();
         }, 100);
     } catch (error) {

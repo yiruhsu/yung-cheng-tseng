@@ -73,6 +73,17 @@ a {
     border: 1px solid white;
 }
 
+/* bio、書法、繪畫、展演頁面：滑鼠改為深棕色 */
+body.page-light #custom-cursor {
+    background-color: #24190b;
+    mix-blend-mode: normal;
+}
+
+body.page-light #custom-cursor.hovered {
+    border-color: #24190b;
+    background-color: transparent;
+}
+
 /* 4. 點擊狀態：稍微縮小 (增加手感) */
 #custom-cursor.clicked {
     transform: translate(-50%, -50%) scale(0.9);
@@ -84,14 +95,26 @@ a {
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.05);
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    box-shadow: none;
+    z-index: 10000;
+    /* 確保在所有內容之上 */
     padding: 2rem 0;
     /* 減少上下 padding，讓導覽列更緊湊 */
     transition: transform 0.25s ease-out;
     transform: translateY(0);
+}
+
+/* 手機版：導覽列底色長方形寬度 */
+@media (max-width: 768px) {
+    .navigation {
+        width: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        margin-left: 0 !important;
+    }
 }
 
 .nav-container {
@@ -134,6 +157,15 @@ a {
     color: #d1d1d1;
 }
 
+/* bio、書法、繪畫、展演頁面：logo改為深棕色 */
+body.page-light .logo {
+    color: #24190b;
+}
+
+body.page-light .logo:hover {
+    color: #3d2f1a;
+}
+
 /* Logo 在首頁時的啟動狀態 (亮綠色) */
 .logo.active {
     color: #8af2a8 !important;
@@ -171,6 +203,15 @@ a {
     /* cursor: pointer; */
     /* 已刪除：與自訂鼠標衝突 */
     transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* bio、書法、繪畫、展演頁面：導覽列改為深棕色 */
+body.page-light .nav-link {
+    color: rgba(36, 25, 11, 0.85);
+}
+
+body.page-light .nav-link:hover {
+    color: #24190b;
 }
 
 /* 滾動文字容器 */
@@ -230,8 +271,9 @@ body.lang-zh .text-zh {
 }
 
 .nav-link.active {
-    color: #8af2a8 !important;
-    text-shadow: 0 0 10px rgba(138, 242, 168, 0.6);
+    color: #349147 !important;
+    text-shadow: none;
+    /* 移除光暈感 */
     opacity: 1;
 }
 
@@ -283,12 +325,62 @@ body.lang-zh .text-zh {
     opacity: 1;
 }
 
+/* bio、書法、繪畫、展演頁面：語言切換改為深棕色 */
+body.page-light .lang-btn {
+    color: rgba(36, 25, 11, 0.4);
+}
+
+body.page-light .lang-btn:hover:not(.active) {
+    color: #24190b;
+}
+
+body.page-light .lang-btn.active {
+    color: #24190b;
+}
+
+body.page-light .lang-separator {
+    color: rgba(36, 25, 11, 0.2);
+}
+
 /* 主內容區域 */
 .main-content {
-    padding-top: 90px;
-    /* 增加 50% 呼吸感 */
+    padding-top: 0;
+    /* 移除 padding-top，讓內容可以延伸到頂部，襯在 Navbar 下方 */
     background-color: #1a1a1a;
     position: relative;
+}
+
+/* bio、書法、繪畫、展演頁面：米白底 */
+#bio.page,
+#calligraphy.page,
+#painting.page,
+#exhibition.page {
+    background-color: #fffaf2;
+}
+
+#bio .page-container,
+#calligraphy .page-container,
+#painting .page-container,
+#exhibition .page-container {
+    background-color: #fffaf2;
+}
+
+/* bio、書法、繪畫、展演頁面：所有文字改為深棕色 */
+body.page-light .page-title,
+body.page-light .bio-text,
+body.page-light .bio-text h2,
+body.page-light .bio-text h3,
+body.page-light .bio-text p,
+body.page-light .bio-text ul,
+body.page-light .bio-text li,
+body.page-light .artwork-main-info,
+body.page-light .artwork-main-info h2,
+body.page-light .artwork-meta,
+body.page-light .artwork-description,
+body.page-light .work-caption,
+body.page-light .year-title,
+body.page-light .caption {
+    color: #24190b;
 }
 
 /* 頁面切換 - 確保非活動頁面完全隱藏 */
@@ -385,6 +477,10 @@ body.lang-zh .text-zh {
     object-fit: cover;
     /* 關鍵：裁切多餘部分，保持滿版 */
     object-position: center;
+    /* Safari性能優化 */
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
 }
 
 .hero-slide {
@@ -400,6 +496,12 @@ body.lang-zh .text-zh {
     /* 從 0.6 改為 0.85，讓照片更亮 */
     width: 100%;
     height: 100%;
+    /* Safari性能優化：使用GPU加速 */
+    will-change: opacity;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .hero-slide.active {
@@ -413,7 +515,7 @@ body.lang-zh .text-zh {
     bottom: 37.8px;
     right: 20px;
     font-size: 10pt;
-    color: #ffffff;
+    color: #ffffff !important;
     z-index: 100;
     font-family: 'PMingLiU', '新細明體', 'MingLiU', 'Times New Roman', Times, serif;
 }
@@ -504,7 +606,8 @@ body.lang-zh .text-zh {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 0;
+    border-radius: 0 !important;
+    /* 移除圓角 */
     display: block;
     /* 確保圖片顯示 */
     opacity: 1;
@@ -717,6 +820,12 @@ body.lang-zh .text-zh {
     width: max-content;
     will-change: transform;
     transform: translate3d(0, 0, 0);
+    /* Safari性能優化：強制GPU加速 */
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    perspective: 1000px;
+    -webkit-perspective: 1000px;
 }
 
 #painting .painting-item {
@@ -745,6 +854,12 @@ body.lang-zh .text-zh {
     border-radius: 0 !important;
     box-shadow: none;
     transition: transform 0.5s ease;
+    /* Safari性能優化：使用GPU加速 */
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 
@@ -754,7 +869,7 @@ body.lang-zh .text-zh {
     right: 0;
     font-size: 0.8rem;
     letter-spacing: 0.05em;
-    color: #dee0df;
+    color: #24190b;
     text-shadow: none;
     white-space: nowrap;
 }
@@ -773,6 +888,11 @@ body.lang-zh .text-zh {
     background: #1a1a1a;
 }
 
+/* 書法頁面：作品兩側背景改為米白色 */
+#calligraphy .gallery-container {
+    background: #fffaf2;
+}
+
 .gallery-image {
     position: absolute;
     top: 0;
@@ -785,9 +905,19 @@ body.lang-zh .text-zh {
     visibility: visible;
     transition: opacity 0.5s ease-in-out;
     background: #1a1a1a;
+}
+
+/* 書法頁面：圖片背景改為米白色 */
+#calligraphy .gallery-image {
+    background: #fffaf2;
     clip-path: inset(0 0 100% 0);
     will-change: clip-path, opacity;
     border-radius: 2%;
+    /* Safari性能優化：使用GPU加速 */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 /* 確保圖片有圓角 */
@@ -843,6 +973,16 @@ img {
     border-radius: 0;
 }
 
+/* 書法頁面：箭頭顏色改為深棕色 */
+#calligraphy .gallery-nav {
+    color: #24190b;
+}
+
+#calligraphy .gallery-nav:hover {
+    color: #24190b;
+    opacity: 0.8;
+}
+
 .gallery-prev {
     left: 20px;
 }
@@ -864,169 +1004,214 @@ img {
 /* 響應式設計 */
 @media (max-width: 768px) {
 
-    /* 書法頁面：照片瀏覽容器放大20%（整個容器） */
-    #calligraphy .artwork-group {
-        transform: scale(1.3208832);
-        /* 再放大20%: 1.100736 * 1.2 = 1.3208832 */
+    /* =========================================
+       書法頁面專屬手機版排版修復 (精準隔離)
+       只在 .calligraphy-scope-wrapper 下生效
+       ========================================= */
+
+    /* 1. 強制重置定位 (Reset Position) */
+    .calligraphy-scope-wrapper .page-container,
+    .calligraphy-scope-wrapper .page-content,
+    .calligraphy-scope-wrapper .artwork-list,
+    .calligraphy-scope-wrapper .artwork-group,
+    .calligraphy-scope-wrapper .artwork-main,
+    .calligraphy-scope-wrapper .artwork-main-image,
+    .calligraphy-scope-wrapper .artwork-main-info,
+    .calligraphy-scope-wrapper .copyright {
+        position: static !important;
+        width: 100% !important;
+        transform: none !important;
     }
 
-    #calligraphy .image-gallery {
-        position: relative;
-        padding: 0 31.36px;
-        /* 更靠近20%: 39.2px * 0.8 = 31.36px，配合箭頭更靠近照片 */
+    /* 2. 重建垂直堆疊 (Vertical Stack) */
+    .calligraphy-scope-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        padding-top: 80px;
+        /* 避開 Navbar */
+        padding-bottom: 0 !important;
+        /* 移除底部空白 */
+        height: auto !important;
+        min-height: auto !important;
     }
 
-    #calligraphy .gallery-nav {
-        width: 46px;
-        height: 46px;
-        font-size: calc(1.5rem + 6px);
-        position: absolute;
-        z-index: 20;
+    .calligraphy-scope-wrapper .page-container {
+        position: static !important;
+        width: 100% !important;
+        padding: 0 1rem !important;
+        padding-top: 0 !important;
+        padding-bottom: 2rem !important;
+        min-height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
 
-    #calligraphy .gallery-prev {
-        left: -26.88px;
-        /* 更靠近照片20%: -33.6px * 0.8 = -26.88px */
+    .calligraphy-scope-wrapper .page-content {
+        width: 100% !important;
+        position: static !important;
     }
 
-    #calligraphy .gallery-next {
-        right: -26.88px;
-        /* 更靠近照片20%: -33.6px * 0.8 = -26.88px */
+    .calligraphy-scope-wrapper .artwork-list {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+        align-items: center !important;
     }
 
-    /* 移除書法頁照片的白線，小照片與大照片用一樣的尺寸顯示 */
-    #calligraphy .gallery-image {
-        object-fit: cover;
-        /* 改為 cover 以填滿容器，移除白線 */
-        border: none;
-        outline: none;
+    /* 3. 設定間距 (Spacing) */
+    .calligraphy-scope-wrapper .artwork-group {
+        width: 100% !important;
+        max-width: 100% !important;
+        transform: none !important;
+        margin-bottom: 0 !important;
+        position: static !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
 
-    /* 書法頁面：手機版使用正方形相框 */
-    #calligraphy .gallery-container {
-        position: relative;
-        /* 關鍵：讓內部的圖片可以絕對定位 */
-        width: 100%;
-        /* 寬度跟隨外層佈局 */
-        aspect-ratio: 1 / 1;
-        /* 關鍵：強制鎖定長寬比為 1:1 */
-        overflow: hidden;
-        /* 避免內容溢出 */
-        background-color: transparent;
-        /* 或設為 #000 避免載入閃爍 */
-        display: flex;
-        /* 確保內容物置中 */
-        justify-content: center;
-        align-items: center;
-        border: none;
-        outline: none;
+    .calligraphy-scope-wrapper .artwork-group:not(:last-child) {
+        margin-bottom: 6rem !important;
+    }
+
+    .calligraphy-scope-wrapper .artwork-group:last-child {
+        margin-bottom: 4rem !important;
+    }
+
+    .calligraphy-scope-wrapper .artwork-main {
+        width: 100% !important;
+        gap: 2rem !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        position: static !important;
+    }
+
+    .calligraphy-scope-wrapper .artwork-main-image {
+        width: 100% !important;
+        margin-bottom: 0 !important;
+        position: static !important;
+    }
+
+    .calligraphy-scope-wrapper .image-gallery {
+        position: relative !important;
+        width: 100% !important;
+        padding: 0 31.36px !important;
+        margin-bottom: 0 !important;
+    }
+
+    .calligraphy-scope-wrapper .gallery-container {
+        position: relative !important;
+        width: 100% !important;
+        aspect-ratio: 1 / 1 !important;
+        overflow: hidden !important;
+        background-color: transparent !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border: none !important;
+        outline: none !important;
         border-radius: 0 !important;
     }
 
-    /* 書法頁面：增加照片與說明之間的間距 */
-    #calligraphy .artwork-main {
-        gap: 1.5rem;
-        /* 確保每張照片下都有足夠的間距放作品說明 */
+    .calligraphy-scope-wrapper .gallery-image {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        transform: scale(1.01) !important;
+        border-radius: 0 !important;
+        transition: opacity 1s ease-in-out !important;
+        border: none !important;
+        outline: none !important;
     }
 
-    /* 手機版書法作品間隔增加30%：從 4rem 增加到 5.2rem */
-    #calligraphy .artwork-list {
-        gap: 5.2rem;
-        /* 增加30%: 4rem * 1.3 = 5.2rem */
+    .calligraphy-scope-wrapper .gallery-nav {
+        width: 46px !important;
+        height: 46px !important;
+        font-size: calc(1.5rem + 6px) !important;
+        position: absolute !important;
+        z-index: 20 !important;
+        color: #24190b !important;
     }
 
-    /* --- 手機版文字堆疊與間距修正 (精確鎖定版) --- */
-    /* 1. 針對書法頁面的釋文 (artwork-description) */
-    #calligraphy .artwork-description {
-        margin-bottom: 40px !important;
-        /* 拉開與下方版權的距離 (原本太近) */
+    .calligraphy-scope-wrapper .gallery-nav:hover {
+        color: #24190b !important;
+        opacity: 0.8 !important;
+    }
+
+    .calligraphy-scope-wrapper .gallery-prev {
+        left: -26.88px !important;
+    }
+
+    .calligraphy-scope-wrapper .gallery-next {
+        right: -26.88px !important;
+    }
+
+    .calligraphy-scope-wrapper .artwork-main-info {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        margin-bottom: 0 !important;
+        padding: 0 20px !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        position: static !important;
+    }
+
+    .calligraphy-scope-wrapper .artwork-main-info h2 {
+        font-size: calc(0.8rem + 2px) !important;
+        /* 放大 2px */
+        margin-bottom: 0 !important;
+        width: 100% !important;
+    }
+
+    .calligraphy-scope-wrapper .artwork-main-info p,
+    .calligraphy-scope-wrapper .artwork-meta {
+        font-size: calc(0.42rem + 2px) !important;
+        /* 放大 2px */
+        margin-bottom: 0 !important;
         line-height: 1.8 !important;
-        /* 讓文字行距呼吸 */
+        width: 100% !important;
+    }
+
+    .calligraphy-scope-wrapper .artwork-description {
+        font-size: calc(0.552rem + 2px) !important;
+        /* 放大 2px */
+        line-height: 1.6 !important;
+        margin-bottom: 0 !important;
+        margin-top: 1rem !important;
         display: block !important;
-        /* 確保它是獨立區塊 */
         position: relative !important;
-        /* 確保佔據實體空間 */
         height: auto !important;
-        /* 確保包裹它們的父容器不會卡死高度 */
         opacity: 1 !important;
-        /* 防止被意外隱藏 */
+        width: 100% !important;
     }
 
-    /* 2. 針對書法頁面的其他文字段落 */
-    #calligraphy .artwork-main-info p,
-    #calligraphy .artwork-meta {
-        margin-bottom: 25px !important;
-        /* 每一段文字下面都推開 */
-        line-height: 1.8 !important;
-        /* 增加行距 */
-    }
-
-    /* 3. 針對書法頁面的版權 (copyright) */
-    #calligraphy .page-container .copyright {
-        margin-top: 40px !important;
-        /* 再次強制與上方拉開距離 (雙重保險) */
-        padding-top: 20px !important;
-        /* 內部留白 */
-        padding-bottom: 80px !important;
-        /* 底部加高，避免被手機瀏覽器下方工具列擋住 */
-        display: block !important;
-        /* 獨佔一行 */
+    .calligraphy-scope-wrapper .page-container .copyright {
         position: relative !important;
-        /* 改為相對定位，讓它跟隨內容流動 */
+        margin-top: 3rem !important;
+        margin-bottom: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        /* 移除底部空白 */
         bottom: auto !important;
+        right: auto !important;
+        display: block !important;
         clear: both !important;
-        /* 清除左右浮動干擾 */
         text-align: right !important;
         line-height: 1.8 !important;
         height: auto !important;
-        /* 確保包裹它們的父容器不會卡死高度 */
         opacity: 1 !important;
-        /* 防止被意外隱藏 */
-    }
-
-    /* 4. 確保書法頁面容器有足夠空間 */
-    #calligraphy .page-container {
-        padding-bottom: 5rem;
-        /* 增加底部 padding，為版權說明留出空間 */
-        min-height: auto !important;
-        /* 注意：這裡只開 "min-height"，不會破壞 GSAP 的固定高度計算 */
-    }
-
-    /* 書法頁照片：絕對服從相框 */
-    #calligraphy .gallery-image {
-        position: absolute !important;
-        /* 強制脫離文檔流，填滿容器 */
-        top: 0;
-        left: 0;
         width: 100% !important;
-        /* 強制拉寬到 100% */
-        height: 100% !important;
-        /* 強制拉高到 100% (這一步最重要，否則 object-fit 無效) */
-        object-fit: contain;
-        /* 保持原圖比例，完整顯示，留黑邊 */
-        /* object-fit: cover; 若改主意想填滿切邊，改這個就好 */
-        transform: scale(1.01);
-        /* 將圖片放大 1%，讓潛在的白邊被父容器的 overflow: hidden 切除 */
-        border-radius: 0 !important;
-        transition: opacity 1s ease-in-out;
-        /* 放慢0.5秒: 從 0.5s 改為 1s */
-    }
-
-    #calligraphy .artwork-main-info h2 {
-        font-size: 0.8rem;
-        margin-bottom: 0.5rem;
-    }
-
-    #calligraphy .artwork-meta {
-        font-size: 0.42rem;
-        /* 縮小50%: 0.84rem * 0.5 = 0.42rem */
-        margin-bottom: 0.5rem;
-    }
-
-    #calligraphy .artwork-description {
-        font-size: 0.552rem;
-        /* 放大15%: 0.48rem * 1.15 = 0.552rem */
-        line-height: 1.6;
+        padding-right: 20px !important;
     }
 
     /* 其他頁面的瀏覽鍵保持原樣 */
@@ -1056,6 +1241,19 @@ img {
     z-index: 100;
     font-family: 'PMingLiU', '新細明體', 'MingLiU', 'Times New Roman', Times, serif;
     text-align: right;
+}
+
+/* 首頁版權保持白色 */
+.hero .copyright {
+    color: #ffffff;
+}
+
+/* 其他頁面版權改為深棕色 */
+#bio .copyright,
+#calligraphy .copyright,
+#painting .copyright,
+#exhibition .copyright {
+    color: #24190b;
 }
 
 /* 每個頁面容器內的版權資訊 */
@@ -1148,12 +1346,12 @@ img {
     .nav-link {
         font-size: 0.75rem !important;
         /* 約 15px，確保手機閱讀舒適的極限 */
-        letter-spacing: 0.05em !important;
-        /* 關鍵修正：將原本寬鬆的字距縮小 40% 以上 */
+        letter-spacing: 0.1em !important;
+        /* 縮小為 0.1em */
         margin: 0 !important;
         /* 移除多餘外距 */
-        line-height: 1.5 !important;
-        /* 若發生換行，讓上下行不要太擠 */
+        line-height: 0.8 !important;
+        /* 縮小為 0.8 */
         white-space: nowrap !important;
         /* 確保單字本身不會斷開 */
         padding: 0 5% !important;
@@ -1232,7 +1430,8 @@ img {
     }
 
     .main-content {
-        padding-top: 70px;
+        padding-top: 0;
+        /* 移除 padding-top，讓內容可以延伸到頂部，襯在 Navbar 下方 */
     }
 
     .page-container {
@@ -1250,6 +1449,8 @@ img {
         gap: 2rem;
         align-items: center;
         justify-content: center;
+        margin-top: 150px;
+        /* 往下移動 150px，避免被導覽列遮擋 */
     }
 
     #bio .bio-image-wrapper {
@@ -1371,8 +1572,8 @@ body,
 
 /* The Origin Dot - 時間軸起點 (SVG Circle) */
 #timeline-origin-dot {
-    fill: #690404;
-    filter: drop-shadow(0 0 6px rgba(105, 4, 4, 0.45));
+    fill: #a32424;
+    filter: drop-shadow(0 0 6px rgba(163, 36, 36, 0.45));
     transform: translateZ(0);
     will-change: transform;
     z-index: 2;
@@ -1394,21 +1595,21 @@ body,
 
 #hero-path path {
     fill: none;
-    stroke: #690404;
-    stroke-width: 1.4;
-    /* 減少 30%: 2px -> 1.4px */
+    stroke: #a32424;
+    stroke-width: 1.26;
+    /* 變細10%: 1.4px * 0.9 = 1.26px */
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0.7;
     /* 隱約視覺效果 */
-    filter: drop-shadow(0 0 4px rgba(105, 4, 4, 0.3));
+    filter: drop-shadow(0 0 4px rgba(163, 36, 36, 0.3));
     will-change: transform, stroke-dashoffset;
     transform: translateZ(0);
 }
 
 #hero-path .timeline-branch {
-    stroke-width: 0.7;
-    /* 主線 50% */
+    stroke-width: 0.665;
+    /* 變細5%: 0.7px * 0.95 = 0.665px */
     opacity: 0;
     will-change: transform, stroke-dashoffset;
     transform: translateZ(0);
@@ -1591,13 +1792,13 @@ body,
 
     /* 展演頁面：紅圓點與紅線縮小20%，往右邊移動貼齊照片的右側邊緣 */
     #hero-path path {
-        stroke-width: 1.2;
-        /* 縮小20%: 1.5 * 0.8 = 1.2 */
+        stroke-width: 1.08;
+        /* 變細10%: 1.2px * 0.9 = 1.08px */
     }
 
     #timeline-origin-dot {
-        r: 3.6;
-        /* 縮小20%: 4.5 * 0.8 = 3.6 */
+        r: 2.88;
+        /* 縮小20%: 3.6px * 0.8 = 2.88px */
     }
 
     .timeline-works {
