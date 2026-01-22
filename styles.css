@@ -2235,6 +2235,19 @@ body,
     margin: 0 auto;
     z-index: 2;
     /* 確保骰子在文字上方 */
+    
+    /* 性能優化 */
+    opacity: 0;
+    /* 初始隱藏，等圖片載入完成後顯示 */
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    /* 平滑顯示 */
+    contain: layout style paint;
+    /* CSS containment 優化 */
+    transform: translateZ(0);
+    /* 啟用硬體加速 */
+    -webkit-transform: translateZ(0);
+    /* Safari 硬體加速 */
 }
 
 .cube:active {
@@ -2263,6 +2276,16 @@ body,
     transform-style: preserve-3d;
     backface-visibility: hidden;
     /* 優化效能，背面不渲染 */
+    
+    /* 性能優化 */
+    will-change: transform;
+    /* 提示瀏覽器優化 transform */
+    image-rendering: auto;
+    /* 使用瀏覽器預設渲染，確保最佳性能 */
+    -webkit-backface-visibility: hidden;
+    /* Safari 優化 */
+    -webkit-transform: translateZ(0);
+    /* 啟用硬體加速 */
 }
 
 /* --- 3D 建構邏輯 (Transform) --- */
@@ -2270,6 +2293,7 @@ body,
 .face-front {
     transform: rotateY(0deg) translateZ(90px);
     background-image: url('images/seal carving/seal carving_01.jpg');
+    /* 性能優化：使用 fetchpriority 提示 */
 }
 
 .face-back {
@@ -2552,8 +2576,8 @@ body,
         width: 104px;
         /* 手機版縮小立方體：130px * 0.8 = 104px（縮小20%） */
         height: 104px;
-        margin-top: 30px;
-        /* 往下移動30px，避免與 Click 文字重疊 */
+        margin-top: 140px;
+        /* 往下移動140px，確保不擋到 Click 文字（Click 在 top: 100px，字體12px，加上間距 = 140px） */
     }
 
     .cube-face {

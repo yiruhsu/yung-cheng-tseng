@@ -677,7 +677,36 @@ function initTrackpadSwipeNavigation() {
 }
 
 // 頁面載入時執行
+// --- 全域圖片預載入：在頁面載入時就開始預載入篆刻照片 ---
+const sealCarvingImages = [
+    'images/seal carving/seal carving_01.jpg',
+    'images/seal carving/seal carving_02.jpg',
+    'images/seal carving/seal carving_03.jpg',
+    'images/seal carving/seal carving_04.jpg',
+    'images/seal carving/seal carving_05.jpg',
+    'images/seal carving/seal carving_06.jpg'
+];
+
+// 預載入所有篆刻照片（在頁面載入時就開始）
+function preloadSealCarvingImages() {
+    if (window.sealCarvingImagesPreloaded) return;
+    
+    sealCarvingImages.forEach((src) => {
+        const img = new Image();
+        // 設置 fetchpriority 提示瀏覽器優先載入
+        if ('fetchPriority' in img) {
+            img.fetchPriority = 'high';
+        }
+        img.src = src;
+    });
+    
+    window.sealCarvingImagesPreloaded = true;
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+    // 立即開始預載入篆刻照片
+    preloadSealCarvingImages();
+    
     initHeroSlideshow();
     showPage('home');
     initNavScrollSpy();
@@ -2270,6 +2299,57 @@ function initSealCarvingDice() {
     const sceneContainer = document.querySelector('.scene-container');
 
     if (!cube || !sceneContainer || typeof gsap === 'undefined') return;
+
+    // --- 檢查圖片預載入狀態並顯示骰子 ---
+    // 檢查所有圖片是否已載入
+    const checkImagesLoaded = () => {
+        let allLoaded = true;
+        sealCarvingImages.forEach((src) => {
+            const img = new Image();
+            img.src = src;
+            if (!img.complete) {
+                allLoaded = false;
+            }
+        });
+        return allLoaded;
+    };
+
+    // 如果圖片已經預載入，立即顯示骰子
+    if (window.sealCarvingImagesPreloaded) {
+        // 使用 Promise 檢查圖片是否真的載入完成
+        Promise.all(sealCarvingImages.map((src) => {
+            return new Promise((resolve) => {
+                const img = new Image();
+                if (img.complete) {
+                    resolve(true);
+                } else {
+                    img.onload = () => resolve(true);
+                    img.onerror = () => resolve(true);
+                    img.src = src;
+                }
+            });
+        })).then(() => {
+            if (cube) {
+                cube.style.opacity = '1';
+                cube.style.visibility = 'visible';
+            }
+        });
+    } else {
+        // 如果還沒預載入，立即開始並顯示骰子
+        preloadSealCarvingImages();
+        if (cube) {
+            cube.style.opacity = '1';
+            cube.style.visibility = 'visible';
+        }
+    }
+
+    // 設置超時保護：1.5秒後無論如何都顯示骰子
+    setTimeout(() => {
+        if (cube && cube.style.opacity === '0') {
+            cube.style.opacity = '1';
+            cube.style.visibility = 'visible';
+        }
+    }, 1500);
 
     // --- 3D 光影運算引擎 ---
 
