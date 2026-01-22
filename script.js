@@ -571,11 +571,11 @@ function initTrackpadSwipeNavigation() {
         // 判斷滑動方向並切換頁面
         let nextIndex;
         if (accumulatedDeltaX > 0) {
-            // deltaX > 0：往左滑 → 上一頁 (Previous)
-            nextIndex = (currentIndex - 1 + pageOrder.length) % pageOrder.length;
-        } else {
-            // deltaX < 0：往右滑 → 下一頁 (Next)
+            // deltaX > 0：往右滑 → 下一頁 (Next)
             nextIndex = (currentIndex + 1) % pageOrder.length;
+        } else {
+            // deltaX < 0：往左滑 → 上一頁 (Previous)
+            nextIndex = (currentIndex - 1 + pageOrder.length) % pageOrder.length;
         }
 
         // 執行頁面切換
