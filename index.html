@@ -49,6 +49,16 @@
                                 <span>書法</span>
                             </div>
                         </a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('sealcarving'); return false;">
+                            <div class="roll-text text-en">
+                                <span>Seal Carving</span>
+                                <span>Seal Carving</span>
+                            </div>
+                            <div class="roll-text text-zh">
+                                <span>篆刻</span>
+                                <span>篆刻</span>
+                            </div>
+                        </a></li>
                     <li><a href="#" class="nav-link" onclick="showPage('painting'); return false;">
                             <div class="roll-text text-en">
                                 <span>Painting</span>
@@ -326,6 +336,35 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="copyright">©2026 by Yung-Cheng Tseng . All Rights Reserved.</div>
+        </div>
+    </div>
+
+    <!-- 篆刻頁面 -->
+    <div id="sealcarving" class="page">
+        <div class="page-container">
+            <h1 class="page-title"></h1>
+            <div class="page-content">
+                <section id="seal-carving-section" class="content-section">
+                    <div class="scene-container">
+                        <div class="cube" id="cube">
+                            <div class="cube-face face-front"></div>
+                            <div class="cube-face face-back"></div>
+                            <div class="cube-face face-right"></div>
+                            <div class="cube-face face-left"></div>
+                            <div class="cube-face face-top"></div>
+                            <div class="cube-face face-bottom"></div>
+                        </div>
+                        <div class="cube-shadow"></div>
+                    </div>
+
+                    <div id="lightbox" class="hidden">
+                        <div class="lightbox-overlay"></div>
+                        <img id="lightbox-img" src="" alt="Seal Detail">
+                        <button id="close-lightbox">✕</button>
+                    </div>
+                </section>
             </div>
             <div class="copyright">©2026 by Yung-Cheng Tseng . All Rights Reserved.</div>
         </div>

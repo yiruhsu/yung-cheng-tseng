@@ -351,9 +351,10 @@ body.page-light .lang-separator {
     position: relative;
 }
 
-/* bio、書法、繪畫、展演頁面：米白底 */
+/* bio、書法、篆刻、繪畫、展演頁面：米白底 */
 #bio.page,
 #calligraphy.page,
+#sealcarving.page,
 #painting.page,
 #exhibition.page {
     background-color: #fffaf2;
@@ -361,6 +362,7 @@ body.page-light .lang-separator {
 
 #bio .page-container,
 #calligraphy .page-container,
+#sealcarving .page-container,
 #painting .page-container,
 #exhibition .page-container {
     background-color: #fffaf2;
@@ -534,6 +536,7 @@ body.page-light .caption {
 /* 頁面容器樣式 */
 #bio .page-container,
 #calligraphy .page-container,
+#sealcarving .page-container,
 #painting .page-container,
 #exhibition .page-container,
 .page-container {
@@ -894,6 +897,11 @@ body.page-light .caption {
     background: #fffaf2;
 }
 
+/* 篆刻頁面：作品兩側背景改為米白色 */
+#sealcarving .gallery-container {
+    background: #fffaf2;
+}
+
 .gallery-image {
     position: absolute;
     top: 0;
@@ -910,6 +918,19 @@ body.page-light .caption {
 
 /* 書法頁面：圖片背景改為米白色 */
 #calligraphy .gallery-image {
+    background: #fffaf2;
+    clip-path: inset(0 0 100% 0);
+    will-change: clip-path, opacity;
+    border-radius: 2%;
+    /* Safari性能優化：使用GPU加速 */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* 篆刻頁面：圖片背景改為米白色 */
+#sealcarving .gallery-image {
     background: #fffaf2;
     clip-path: inset(0 0 100% 0);
     will-change: clip-path, opacity;
@@ -980,6 +1001,16 @@ img {
 }
 
 #calligraphy .gallery-nav:hover {
+    color: #24190b;
+    opacity: 0.8;
+}
+
+/* 篆刻頁面：箭頭顏色改為深棕色 */
+#sealcarving .gallery-nav {
+    color: #24190b;
+}
+
+#sealcarving .gallery-nav:hover {
     color: #24190b;
     opacity: 0.8;
 }
@@ -1252,6 +1283,7 @@ img {
 /* 其他頁面版權改為深棕色 */
 #bio .copyright,
 #calligraphy .copyright,
+#sealcarving .copyright,
 #painting .copyright,
 #exhibition .copyright {
     color: #24190b;
@@ -1868,5 +1900,268 @@ body,
     .timeline-year {
         padding: 96px 0;
         /* 再縮短20%: 120px * 0.8 = 96px */
+    }
+}
+
+/* =========================================
+   篆刻頁面：3D 立方體樣式
+   ========================================= */
+
+/* --- 3D Cube 場景設定 --- */
+.scene-container {
+    width: 100%;
+    height: 70vh; /* 展示區高度 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px; /* 透視感，數字越小越誇張，1200是標準 */
+    position: relative;
+    z-index: 10;
+    /* 確保骰子在頁面 xy 軸正中央 */
+    margin: 0 auto;
+}
+
+/* 立方體本體 */
+.cube {
+    width: 180px; /* 立方體大小 */
+    height: 180px;
+    position: relative;
+    transform-style: preserve-3d; /* 關鍵：保留 3D 空間 */
+    transform: rotateX(-20deg) rotateY(-20deg); /* 初始角度 */
+    cursor: grab; /* 提示可拖曳 */
+    /* 允許 GSAP 覆蓋 transform */
+    will-change: transform;
+    /* 確保骰子在頁面正中央 */
+    margin: 0 auto;
+}
+
+.cube:active {
+    cursor: grabbing;
+}
+
+/* 每一面的通用樣式 - 修改版 */
+.cube-face {
+    position: absolute;
+    width: 180px; /* 立方體大小 */
+    height: 180px;
+    background-color: transparent; /* 改成透明色 */
+    /* border: 1px solid #eee; <-- 移除這個舊邊框，讓光影來定義邊界 */
+    border-radius: 3px; /* 圓角 */
+    background-size: 90%; /* 照片顯示為 90% 大小 */
+    background-position: center;
+    background-repeat: no-repeat;
+    /* opacity: 0.95; <-- 移除這個整體透明度，改用疊加層控制 */
+    /* box-shadow: inset... <-- 移除舊的內陰影 */
+    
+    /* 關鍵：確保子元素(疊加層)不會超出範圍，且能維持 3D 效果 */
+    transform-style: preserve-3d; 
+    backface-visibility: hidden; /* 優化效能，背面不渲染 */
+}
+
+/* --- 3D 建構邏輯 (Transform) --- */
+/* TranslateZ 的數值必須是寬度的一半 (180px / 2 = 90px) */
+.face-front {
+    transform: rotateY(0deg) translateZ(90px);
+    background-image: url('images/seal carving/seal carving_01.jpg');
+}
+
+.face-back {
+    transform: rotateY(180deg) translateZ(90px);
+    background-image: url('images/seal carving/seal carving_02.jpg');
+}
+
+.face-right {
+    transform: rotateY(90deg) translateZ(90px);
+    background-image: url('images/seal carving/seal carving_03.jpg');
+}
+
+.face-left {
+    transform: rotateY(-90deg) translateZ(90px);
+    background-image: url('images/seal carving/seal carving_04.jpg');
+}
+
+.face-top {
+    transform: rotateX(90deg) translateZ(90px);
+    background-image: url('images/seal carving/seal carving_05.jpg');
+}
+
+.face-bottom {
+    transform: rotateX(-90deg) translateZ(90px);
+    background-image: url('images/seal carving/seal carving_06.jpg');
+}
+
+/* --- 動態光影系統 (Dynamic Lighting System) --- */
+
+/* 所有面的通用疊加層 */
+.cube-face::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* 讓點擊穿透 */
+    z-index: 2;
+    border-radius: 3px; /* 繼承父元素的圓角 */
+    
+    /* 核心修改：背景色改用黑色，透明度由 JS 計算的變數控制 */
+    background-color: #000;
+    opacity: var(--shade, 0); /* 預設為 0 (全亮) */
+    
+    /* 讓光影變化跟隨動畫一樣絲滑，稍快於骰子轉動 */
+    transition: opacity 0.1s linear;
+}
+
+/* 移除原本個別面的固定光影設定 */
+/* 我們將完全依賴 JS 計算 */
+
+/* 翻轉時的光澤效果 - 溫柔的光澤（合併到 .cube-face 基礎樣式中） */
+
+/* 光澤效果將由疊加層控制，這裡先移除舊的 hover 效果 */
+
+/* 陰影 */
+.cube-shadow {
+    width: 200px;
+    height: 40px;
+    background: #bbbdbf;
+    border-radius: 50%;
+    filter: blur(20px);
+    position: absolute;
+    bottom: 15%; /* 在立方體下方 */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.5;
+    z-index: 1;
+    animation: breathe 4s ease-in-out infinite;
+}
+
+/* 呼吸動畫 */
+@keyframes breathe {
+    0%, 100% {
+        transform: translateX(-50%) scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translateX(-50%) scale(0.85);
+        opacity: 0.3;
+    }
+}
+
+
+/* Lightbox 樣式 */
+#lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+#lightbox.hidden {
+    display: none;
+}
+
+#lightbox.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#lightbox .lightbox-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+}
+
+#lightbox-img {
+    max-width: 80%;
+    max-height: 80%;
+    z-index: 2;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+#close-lightbox {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    font-size: 2rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 3;
+    color: #333;
+}
+
+/* 篆刻頁面：關閉按鈕 hover 效果 */
+#close-lightbox:hover {
+    color: #24190b;
+    opacity: 0.8;
+}
+
+/* 響應式設計：手機版調整 */
+@media (max-width: 768px) {
+    .scene-container {
+        height: 60vh;
+        /* 手機版稍微降低高度 */
+        perspective: 800px;
+        /* 手機版調整透視感 */
+    }
+
+    .cube {
+        width: 130px; /* 手機版縮小立方體 */
+        height: 130px;
+    }
+
+    .cube-face {
+        width: 130px;
+        height: 130px;
+        /* 等比例縮小 */
+        border-radius: 3px; /* 保持圓角 */
+        background-size: 90%; /* 照片顯示為 90% 大小 */
+        background-color: transparent; /* 手機版也保持透明 */
+    }
+
+    /* 調整立方體各面的 translateZ 值 (寬度的一半) */
+    .face-front {
+        transform: rotateY(0deg) translateZ(65px); /* 130px / 2 = 65px */
+    }
+
+    .face-back {
+        transform: rotateY(180deg) translateZ(65px);
+    }
+
+    .face-right {
+        transform: rotateY(90deg) translateZ(65px);
+    }
+
+    .face-left {
+        transform: rotateY(-90deg) translateZ(65px);
+    }
+
+    .face-top {
+        transform: rotateX(90deg) translateZ(65px);
+    }
+
+    .face-bottom {
+        transform: rotateX(-90deg) translateZ(65px);
+    }
+
+    .cube-shadow {
+        width: 100px; /* 等比例縮小 */
+        height: 20px;
+        bottom: 10%;
+    }
+
+    #close-lightbox {
+        top: 15px;
+        right: 15px;
+        font-size: 1.5rem;
     }
 }

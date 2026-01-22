@@ -13,8 +13,9 @@ function setActiveNav(pageId) {
         'home': 0,
         'bio': 1,
         'calligraphy': 2,
-        'painting': 3,
-        'exhibition': 4
+        'sealcarving': 3,
+        'painting': 4,
+        'exhibition': 5
     };
 
     if (pageNavMap[pageId] !== undefined) {
@@ -68,8 +69,8 @@ function initNavScrollSpy() {
 function showPage(pageId) {
     destroyPaintingHorizontal();
 
-    // 控制頁面背景色：bio、書法、繪畫、展演頁面使用米白底
-    const lightPages = ['bio', 'calligraphy', 'painting', 'exhibition'];
+    // 控制頁面背景色：bio、書法、篆刻、繪畫、展演頁面使用米白底
+    const lightPages = ['bio', 'calligraphy', 'sealcarving', 'painting', 'exhibition'];
     if (lightPages.includes(pageId)) {
         document.body.classList.add('page-light');
     } else {
@@ -130,6 +131,10 @@ function showPage(pageId) {
 
             if (pageId === 'painting') {
                 initPaintingAnimation();
+            }
+
+            if (pageId === 'sealcarving') {
+                initSealCarvingDice();
             }
         }, 150);
     } else {
@@ -479,7 +484,7 @@ observer.observe(document.body, { childList: true, subtree: true, attributes: tr
 
 // 鍵盤左右切換頁面功能
 function initKeyboardNavigation() {
-    const pageOrder = ['home', 'bio', 'calligraphy', 'painting', 'exhibition'];
+    const pageOrder = ['home', 'bio', 'calligraphy', 'sealcarving', 'painting', 'exhibition'];
 
     document.addEventListener('keydown', (e) => {
         // 只處理左右箭頭鍵，且不在輸入框中時
@@ -513,7 +518,7 @@ function initKeyboardNavigation() {
 
 // 觸控板左右滑動切換頁面功能
 function initTrackpadSwipeNavigation() {
-    const pageOrder = ['home', 'bio', 'calligraphy', 'painting', 'exhibition'];
+    const pageOrder = ['home', 'bio', 'calligraphy', 'sealcarving', 'painting', 'exhibition'];
     let lastSwipeTime = 0;
     const cooldownTime = 1000; // 1秒冷卻時間
     const minSwipeDistance = 50; // 最小滑動距離閾值
@@ -616,6 +621,23 @@ document.addEventListener('DOMContentLoaded', function () {
         // 包含：連結、按鈕、導覽列、圖片、以及任何 class 為 clickable 的東西
         const hoverSelectors = ['a', 'button', '.navigation', '.logo', 'img', '.arrow-btn', '.clickable'];
 
+        // 骰子精確碰撞檢測函數
+        function isMouseOverCube(mouseX, mouseY) {
+            const cube = document.getElementById('cube');
+            if (!cube) return false;
+
+            const rect = cube.getBoundingClientRect();
+            // 檢查滑鼠原點是否在骰子的邊界內
+            // 考慮骰子是 3D 旋轉的，所以使用一個稍微擴大的邊界框來容錯
+            const padding = 20; // 容錯範圍
+            return (
+                mouseX >= rect.left - padding &&
+                mouseX <= rect.right + padding &&
+                mouseY >= rect.top - padding &&
+                mouseY <= rect.bottom + padding
+            );
+        }
+
         // 1. 移動邏輯 (使用 requestAnimationFrame 優化性能)
         let mouseX = 0;
         let mouseY = 0;
@@ -660,7 +682,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // 檢查滑鼠指到的東西，是否是我們定義的目標 (或目標的子元素)
             let target = e.target.closest(hoverSelectors.join(','));
 
-            if (target) {
+            // 檢查滑鼠原點是否在骰子上
+            const isOverCube = isMouseOverCube(e.clientX, e.clientY);
+
+            if (target || isOverCube) {
                 cursor.classList.add('hovered');
             } else {
                 cursor.classList.remove('hovered');
@@ -670,10 +695,24 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.addEventListener('mouseout', (e) => {
             // 當滑鼠離開視窗或元素時的保險機制
             let target = e.target.closest(hoverSelectors.join(','));
-            if (!target) {
+            const isOverCube = isMouseOverCube(e.clientX, e.clientY);
+
+            if (!target && !isOverCube) {
                 cursor.classList.remove('hovered');
             }
         });
+
+        // 額外監聽滑鼠移動，確保骰子檢測更精確
+        window.addEventListener('mousemove', (e) => {
+            const isOverCube = isMouseOverCube(e.clientX, e.clientY);
+            const target = e.target.closest(hoverSelectors.join(','));
+
+            if (isOverCube || target) {
+                cursor.classList.add('hovered');
+            } else {
+                cursor.classList.remove('hovered');
+            }
+        }, { passive: true });
 
         // 3. 點擊回饋 (MouseDown/Up)
         document.addEventListener('mousedown', () => cursor.classList.add('clicked'));
@@ -2141,4 +2180,272 @@ document.addEventListener('exhibitionPageToggled', (event) => {
 window.addEventListener('resize', () => {
     if (!path) return;
     scheduleTimelineRefresh();
+});
+
+// =========================================
+// 篆刻頁面：3D 立方體互動邏輯 (GSAP + 動態光影)
+// =========================================
+function initSealCarvingDice() {
+    const cube = document.getElementById('cube');
+    const sceneContainer = document.querySelector('.scene-container');
+
+    if (!cube || !sceneContainer || typeof gsap === 'undefined') return;
+
+    // --- 3D 光影運算引擎 ---
+
+    // 定義六個面的原始法向量 (Normal Vectors)
+    // 順序對應 HTML: Front, Back, Right, Left, Top, Bottom
+    const faceNormals = [
+        { name: 'front', x: 0, y: 0, z: 1, el: document.querySelector('.face-front') },
+        { name: 'back', x: 0, y: 0, z: -1, el: document.querySelector('.face-back') },
+        { name: 'right', x: 1, y: 0, z: 0, el: document.querySelector('.face-right') },
+        { name: 'left', x: -1, y: 0, z: 0, el: document.querySelector('.face-left') },
+        { name: 'top', x: 0, y: 1, z: 0, el: document.querySelector('.face-top') },
+        { name: 'bottom', x: 0, y: -1, z: 0, el: document.querySelector('.face-bottom') }
+    ];
+
+    // 向量旋轉函數 (數學核心)
+    function rotateVector(x, y, z, rx, ry) {
+        // 將角度轉為弧度
+        const radX = rx * (Math.PI / 180);
+        const radY = ry * (Math.PI / 180);
+
+        // 1. 先繞 X 軸旋轉 (影響 y 和 z)
+        // y' = y*cos(θ) - z*sin(θ)
+        // z' = y*sin(θ) + z*cos(θ)
+        let y1 = y * Math.cos(radX) - z * Math.sin(radX);
+        let z1 = y * Math.sin(radX) + z * Math.cos(radX);
+        let x1 = x; // x 不變
+
+        // 2. 再繞 Y 軸旋轉 (影響 x 和 z)
+        // 注意：CSS 的 rotateY 軸向定義可能需要反轉 sin 的方向以配合視覺
+        let x2 = x1 * Math.cos(radY) + z1 * Math.sin(radY);
+        let z2 = -x1 * Math.sin(radY) + z1 * Math.cos(radY);
+        let y2 = y1; // y 不變
+
+        return { x: x2, y: y2, z: z2 };
+    }
+
+    // 更新光影的主函數
+    function updateLighting(rotationX, rotationY) {
+        faceNormals.forEach(face => {
+            if (!face.el) return;
+
+            // 計算該面旋轉後的新法向量
+            // 注意：我們傳入 -rotationX 和 -rotationY 是因為 CSS transform 的軸向與標準數學座標系有差異
+            const currentNormal = rotateVector(face.x, face.y, face.z, rotationX, rotationY);
+
+            // 核心邏輯：計算亮度
+            // 我們只關心 Y 軸 (Up/Down)。
+            // 如果 Y = 1 (朝正上)，陰影應為 0 (最亮)
+            // 如果 Y = -1 (朝正下)，陰影應為 0.8 (最暗，不要全黑保留細節)
+
+            // 公式：將 -1~1 的 Y值 映射到 0.8~0 的 Opacity
+            // NormalY:  1 (Top) -> Opacity 0
+            // NormalY: -1 (Bottom) -> Opacity 0.8
+
+            let intensity = currentNormal.y;
+
+            // 映射公式
+            // shade = (1 - intensity) * 0.4;  <-- 係數 0.4 代表最暗時遮罩濃度 80% (0.4*2) ? 
+            // 修正公式：讓朝上的面完全透明，朝下的面變黑
+            // intensity 1 -> shade 0
+            // intensity 0 -> shade 0.4
+            // intensity -1 -> shade 0.8
+            // 調亮40%：原本 0.45 * 0.6 = 0.27 (減少40%的陰影)
+            // 溫和50%：0.27 * 0.5 = 0.135 (再減少50%的陰影，讓立體感更溫和)
+            let shadeOpacity = (1 - intensity) * 0.135; // 溫和50%：從 0.27 減少到 0.135
+
+            // 邊界檢查
+            if (shadeOpacity < 0) shadeOpacity = 0;
+            if (shadeOpacity > 0.9) shadeOpacity = 0.9;
+
+            // 直接寫入 CSS 變數
+            face.el.style.setProperty('--shade', shadeOpacity);
+        });
+    }
+
+    // 我們需要一個物件來記錄當前的角度，以便讓 GSAP update 時讀取
+    const cubeState = { rx: -20, ry: -20 }; // 初始角度
+
+    // 初始化光影（使用初始角度）
+    updateLighting(cubeState.rx, cubeState.ry);
+
+    // 初始漂浮動畫 (讓它自己動一點點)
+    // 修改為使用 cubeState 並同步更新光影
+    gsap.to(cubeState, {
+        rx: -20 + 10, // 初始角度 + 偏移
+        duration: 3,
+        yoyo: true,
+        repeat: -1,
+        ease: "sine.inOut",
+        onUpdate: () => {
+            cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg) translateY(30px)`;
+            updateLighting(cubeState.rx, cubeState.ry);
+        }
+    });
+
+    // 滑鼠互動：優雅的慢速跟隨 + 動態光影
+    sceneContainer.addEventListener('mousemove', (e) => {
+        // 如果正在右鍵拖移，不執行滑鼠跟隨
+        if (isRightClickDragging) return;
+
+        // 計算滑鼠在視窗中的相對位置 (-1 到 1)
+        const xPos = (e.clientX / window.innerWidth) * 2 - 1;
+        const yPos = (e.clientY / window.innerHeight) * 2 - 1;
+
+        // 目標角度
+        const targetRotY = xPos * 180;
+        const targetRotX = -yPos * 180;
+
+        gsap.to(cubeState, {
+            rx: targetRotX,
+            ry: targetRotY,
+            duration: 3, // 旋轉更慢：從 2.5 秒改為 3 秒
+            ease: "power2.out",
+            overwrite: "auto",
+
+            // 關鍵：在動畫更新的每一幀，同步更新 CSS 與 光影
+            onUpdate: () => {
+                // 1. 更新骰子旋轉
+                cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg)`;
+
+                // 2. 更新光影計算
+                updateLighting(cubeState.rx, cubeState.ry);
+            }
+        });
+    });
+
+    // --- 右鍵拖移控制骰子旋轉 ---
+    let isRightClickDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragStartRotX = 0;
+    let dragStartRotY = 0;
+    const dragSensitivity = 1.5; // 拖移敏感度，數值越大旋轉越快（調整為 1.5，讓拖移更容易翻動一面）
+
+    // 檢查滑鼠是否在骰子上
+    function isMouseOverCube(mouseX, mouseY) {
+        if (!cube) return false;
+        const rect = cube.getBoundingClientRect();
+        const padding = 20;
+        return (
+            mouseX >= rect.left - padding &&
+            mouseX <= rect.right + padding &&
+            mouseY >= rect.top - padding &&
+            mouseY <= rect.bottom + padding
+        );
+    }
+
+    // 右鍵按下
+    sceneContainer.addEventListener('contextmenu', (e) => {
+        // 檢查是否在骰子上
+        if (isMouseOverCube(e.clientX, e.clientY)) {
+            e.preventDefault(); // 阻止右鍵選單
+            isRightClickDragging = true;
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            dragStartRotX = cubeState.rx;
+            dragStartRotY = cubeState.ry;
+            
+            // 停止當前的 GSAP 動畫
+            gsap.killTweensOf(cubeState);
+        }
+    });
+
+    // 滑鼠移動（拖移時）
+    let dragMoveHandler = (e) => {
+        if (!isRightClickDragging) return;
+
+        // 計算拖移距離
+        const deltaX = e.clientX - dragStartX;
+        const deltaY = e.clientY - dragStartY;
+
+        // 根據拖移方向更新旋轉角度
+        // 向右拖移 → 增加 rotateY（向右翻）
+        // 向左拖移 → 減少 rotateY（向左翻）
+        // 向上拖移 → 減少 rotateX（向上翻）
+        // 向下拖移 → 增加 rotateX（向下翻）
+        const newRotY = dragStartRotY + deltaX * dragSensitivity;
+        const newRotX = dragStartRotX - deltaY * dragSensitivity; // 負號是因為向上拖移應該向上翻
+
+        // 更新狀態
+        cubeState.rx = newRotX;
+        cubeState.ry = newRotY;
+
+        // 立即更新骰子旋轉和光影
+        cube.style.transform = `rotateX(${cubeState.rx}deg) rotateY(${cubeState.ry}deg)`;
+        updateLighting(cubeState.rx, cubeState.ry);
+    };
+
+    // 滑鼠放開（結束拖移）
+    let dragEndHandler = (e) => {
+        // 只處理右鍵放開（button === 2 表示右鍵）
+        if (isRightClickDragging && e.button === 2) {
+            isRightClickDragging = false;
+            e.preventDefault(); // 阻止右鍵選單
+        }
+    };
+
+    // 監聽滑鼠移動和放開事件
+    window.addEventListener('mousemove', dragMoveHandler, { passive: true });
+    window.addEventListener('mouseup', dragEndHandler);
+    // 也監聽右鍵放開（contextmenu 事件）
+    window.addEventListener('contextmenu', (e) => {
+        if (isRightClickDragging) {
+            e.preventDefault();
+            isRightClickDragging = false;
+        }
+    });
+
+    // 點擊放大圖片邏輯
+    const faces = document.querySelectorAll('.cube-face');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.getElementById('close-lightbox');
+
+    if (!lightbox || !lightboxImg) return;
+
+    faces.forEach(face => {
+        face.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            // 抓取該面的背景圖
+            const style = window.getComputedStyle(face);
+            const bgImage = style.backgroundImage;
+
+            // 清理字串，取出網址
+            // 格式通常是: url("...")
+            const url = bgImage.slice(5, -2);
+
+            if (url && url !== 'none') {
+                lightboxImg.src = url;
+                lightbox.classList.add('active');
+            }
+        });
+    });
+
+    // 關閉 Lightbox
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+    }
+
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target.classList.contains('lightbox-overlay')) {
+            lightbox.classList.remove('active');
+        }
+    });
+}
+
+// 在 DOM 載入時初始化篆刻頁面（如果頁面已存在）
+document.addEventListener('DOMContentLoaded', function () {
+    // 延遲初始化，確保所有元素都已載入
+    setTimeout(() => {
+        const sealCarvingPage = document.getElementById('sealcarving');
+        if (sealCarvingPage && sealCarvingPage.classList.contains('active')) {
+            initSealCarvingDice();
+        }
+    }, 200);
 });
