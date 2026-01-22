@@ -1785,8 +1785,8 @@ img {
     }
 
     #painting .caption {
-        font-size: 0.68rem;
-        /* 手機版調整為 0.68rem */
+        font-size: 0.58rem;
+        /* 手機版調整為 0.58rem */
         bottom: -35px;
         /* 確保照片與文字距離保持一致 */
     }
@@ -2712,15 +2712,15 @@ body,
         /* 保持間距不變，確保照片與文字距離與版權說明保持一致 */
     }
 
-    /* 手機版：書法作品說明文字（釋文）放大40% */
+    /* 手機版：書法作品說明文字（釋文） */
     #calligraphy .artwork-description {
-        font-size: 3.92rem;
-        /* 手機版放大40%：2.8rem * 1.4 = 3.92rem */
+        font-size: 4.5rem;
+        /* 手機版調整為 4.5rem */
     }
 
     .calligraphy-scope-wrapper .artwork-description {
-        font-size: 3.92rem !important;
-        /* 手機版放大40%：2.8rem * 1.4 = 3.92rem */
+        font-size: 4.5rem !important;
+        /* 手機版調整為 4.5rem */
         line-height: 1.6 !important;
         margin-bottom: 0 !important;
         margin-top: 1rem !important;
