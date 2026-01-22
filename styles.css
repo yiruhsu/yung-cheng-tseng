@@ -1289,6 +1289,30 @@ img {
     }
 }
 
+/* =========================================
+   中間過渡層級 (Tablet/Laptop Breakpoint)
+   解決導覽列文字重疊問題 (900px - 1200px)
+   ========================================= */
+@media (max-width: 1200px) and (min-width: 769px) {
+    /* 減少導覽連結的左右間距，防止與 Logo 碰撞 */
+    .nav-link {
+        padding: 0 40px;
+        /* 從 90px 減少到 40px，為 Logo 留出更多空間 */
+    }
+
+    /* 稍微縮小 Logo 字體，確保不會佔用過多空間 */
+    .logo {
+        font-size: 1.3rem;
+        /* 從 1.5rem 縮小到 1.3rem */
+    }
+
+    /* 確保導覽列容器有足夠的 padding，避免元素貼邊 */
+    .nav-container {
+        padding: 0 1.5rem;
+        /* 從 2rem 稍微減少，但仍保持適當間距 */
+    }
+}
+
 /* 響應式設計 - 手機版（max-width: 768px） */
 @media (max-width: 768px) {
 
