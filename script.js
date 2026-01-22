@@ -2300,56 +2300,11 @@ function initSealCarvingDice() {
 
     if (!cube || !sceneContainer || typeof gsap === 'undefined') return;
 
-    // --- 檢查圖片預載入狀態並顯示骰子 ---
-    // 檢查所有圖片是否已載入
-    const checkImagesLoaded = () => {
-        let allLoaded = true;
-        sealCarvingImages.forEach((src) => {
-            const img = new Image();
-            img.src = src;
-            if (!img.complete) {
-                allLoaded = false;
-            }
-        });
-        return allLoaded;
-    };
-
-    // 如果圖片已經預載入，立即顯示骰子
-    if (window.sealCarvingImagesPreloaded) {
-        // 使用 Promise 檢查圖片是否真的載入完成
-        Promise.all(sealCarvingImages.map((src) => {
-            return new Promise((resolve) => {
-                const img = new Image();
-                if (img.complete) {
-                    resolve(true);
-                } else {
-                    img.onload = () => resolve(true);
-                    img.onerror = () => resolve(true);
-                    img.src = src;
-                }
-            });
-        })).then(() => {
-            if (cube) {
-                cube.style.opacity = '1';
-                cube.style.visibility = 'visible';
-            }
-        });
-    } else {
-        // 如果還沒預載入，立即開始並顯示骰子
+    // --- 圖片預載入：確保所有骰子照片快速載入（不影響顯示） ---
+    // 預載入圖片但不阻塞骰子顯示
+    if (!window.sealCarvingImagesPreloaded) {
         preloadSealCarvingImages();
-        if (cube) {
-            cube.style.opacity = '1';
-            cube.style.visibility = 'visible';
-        }
     }
-
-    // 設置超時保護：1.5秒後無論如何都顯示骰子
-    setTimeout(() => {
-        if (cube && cube.style.opacity === '0') {
-            cube.style.opacity = '1';
-            cube.style.visibility = 'visible';
-        }
-    }, 1500);
 
     // --- 3D 光影運算引擎 ---
 
