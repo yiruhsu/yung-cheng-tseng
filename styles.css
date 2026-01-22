@@ -77,11 +77,19 @@ a {
 body.page-light #custom-cursor {
     background-color: #24190b;
     mix-blend-mode: normal;
+    width: 7px;
+    /* 縮小30%：10px * 0.7 = 7px */
+    height: 7px;
+    /* 縮小30%：10px * 0.7 = 7px */
 }
 
 body.page-light #custom-cursor.hovered {
     border-color: #24190b;
     background-color: transparent;
+    width: 35px;
+    /* 縮小30%：50px * 0.7 = 35px */
+    height: 35px;
+    /* 縮小30%：50px * 0.7 = 35px */
 }
 
 /* 4. 點擊狀態：稍微縮小 (增加手感) */
@@ -1827,6 +1835,8 @@ img {
         /* 置中 */
         font-size: 0.77rem;
         /* 縮小30%: 1.1rem * 0.7 = 0.77rem */
+        margin-bottom: 2.8rem;
+        /* 增加底部文字與版權說明的空間，增大40%：2rem * 1.4 = 2.8rem */
     }
 
     #bio .bio-text p {
@@ -2607,8 +2617,8 @@ body,
         /* 保持圓角 */
         background-size: 90%;
         /* 照片顯示為 90% 大小 */
-        background-color: transparent;
-        /* 手機版也保持透明 */
+        background-color: #fffaf2;
+        /* 手機版米白色背景 */
     }
 
     /* 調整立方體各面的 translateZ 值 (寬度的一半) */
@@ -2660,7 +2670,8 @@ body,
 
     .seal-detail-container {
         grid-template-columns: 1fr;
-        gap: 3rem;
+        gap: calc(3rem + 30px);
+        /* 增加照片與作品說明之間的距離30px */
         padding: 0 1rem 2rem 1rem;
         margin-bottom: 1.5rem;
     }
@@ -2740,6 +2751,12 @@ body,
         /* 手機版統一增加頂部間距 */
         max-width: 100%;
         /* 確保不會超出螢幕寬度 */
+    }
+
+    /* 手機版：篆刻頁面骰子與版權說明之間的距離加大50% */
+    #sealcarving .scene-container {
+        margin-bottom: 3rem;
+        /* 加大50%：2rem * 1.5 = 3rem */
     }
 
     /* 確保繪畫頁面在手機版正常顯示 */
