@@ -906,7 +906,8 @@ body.page-light .caption {
     position: absolute;
     bottom: -35px;
     right: 0;
-    font-size: 0.8rem;
+    font-size: 6rem;
+    /* 桌面版作品說明改成 6rem */
     letter-spacing: 0.05em;
     color: #24190b;
     text-shadow: none;
@@ -1539,10 +1540,14 @@ img {
         width: 14px;
         height: 14px;
         z-index: 10001;
+        display: block;
+        /* 確保圖示顯示 */
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
         pointer-events: none;
+        object-fit: contain;
+        /* 確保圖片正確顯示 */
     }
 
     .mobile-menu-overlay.active .mobile-menu-favicon {
@@ -2874,8 +2879,8 @@ body,
 
     /* 手機版：篆刻頁面骰子與版權說明之間的距離增加50px */
     #sealcarving .scene-container {
-        margin-bottom: calc(3rem + 50px);
-        /* 原本3rem + 50px */
+        margin-bottom: calc(3rem + 100px);
+        /* 原本3rem + 50px，再增加50px = 3rem + 100px */
     }
 
     /* 確保繪畫頁面在手機版正常顯示 */
@@ -2887,8 +2892,10 @@ body,
     #painting .painting-track {
         gap: 28vw;
         /* 手機版增加40%間距：20vw * 1.4 = 28vw */
-        padding-left: 2vw;
-        padding-right: 2vw;
+        padding-left: 8vw;
+        /* 手機版左右留白改成 8vw */
+        padding-right: 8vw;
+        /* 手機版左右留白改成 8vw */
     }
 
     /* 確保所有圖片在手機版都能正常顯示 */
