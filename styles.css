@@ -904,10 +904,11 @@ body.page-light .caption {
 
 #painting .caption {
     position: absolute;
-    bottom: -35px;
+    bottom: -5px;
+    /* 作品與作品說明間距 5px */
     right: 0;
-    font-size: 6rem;
-    /* 桌面版作品說明改成 6rem */
+    font-size: 1rem;
+    /* 桌面版作品說明改成 1rem */
     letter-spacing: 0.05em;
     color: #24190b;
     text-shadow: none;
@@ -1526,33 +1527,58 @@ img {
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
-        overflow-y: auto;
+        overflow-y: hidden;
+        /* 固定一頁式，禁止滾動 */
         -webkit-overflow-scrolling: touch;
     }
 
     /* 手機版漢堡選單左下角 favicon 圖示 */
+    img.mobile-menu-favicon,
     .mobile-menu-favicon {
-        position: fixed;
-        left: 15px;
-        /* 與 logo 的 margin-left 對齊 */
-        bottom: 10px;
-        /* 底部邊距 10px */
-        width: 14px;
-        height: 14px;
-        z-index: 10001;
-        display: block;
-        /* 確保圖示顯示 */
-        opacity: 0;
-        visibility: hidden;
+        position: fixed !important;
+        /* 用 inset 一次鎖死位置，避免 top/left/bottom/right 互相覆蓋 */
+        inset: auto auto 10px 15px !important;
+        /* bottom 10px / left 15px */
+
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: none !important;
+
+        width: 20px !important;
+        height: 20px !important;
+        /* 圖示大小 20px × 20px */
+        z-index: 10002 !important;
+        /* 在遮罩與內容之上 */
+
+        display: block !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
         transition: opacity 0.3s ease, visibility 0.3s ease;
+
         pointer-events: none;
-        object-fit: contain;
-        /* 確保圖片正確顯示 */
+        object-fit: contain !important;
+        background: transparent !important;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
     }
 
-    .mobile-menu-overlay.active .mobile-menu-favicon {
-        opacity: 1;
-        visibility: visible;
+    /* 確保圖示在選單打開時可見 - 使用最高優先級 */
+    #mobile-menu-overlay.active .mobile-menu-favicon,
+    #mobile-menu-overlay.active img.mobile-menu-favicon,
+    .mobile-menu-overlay.active .mobile-menu-favicon,
+    .mobile-menu-overlay.active img.mobile-menu-favicon {
+        opacity: 1 !important;
+        visibility: visible !important;
+        display: block !important;
+        position: fixed !important;
+        inset: auto auto 10px 15px !important;
+        /* bottom 10px / left 15px */
+        margin: 0 !important;
+        padding: 0 !important;
+        transform: none !important;
+        width: 20px !important;
+        height: 20px !important;
+        z-index: 10002 !important;
     }
 
     .mobile-menu-overlay.active {
@@ -1560,10 +1586,19 @@ img {
         visibility: visible;
     }
 
+    /* 確保選單打開時，圖示也能顯示 */
+    .mobile-menu-overlay.active .mobile-menu-favicon {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
     /* 漢堡選單內容 */
     .mobile-menu-content {
         width: 100%;
-        min-height: 100vh;
+        height: 100vh;
+        /* 固定一頁式，高度為視窗高度 */
+        max-height: 100vh;
+        /* 確保不超出視窗 */
         padding: 8.125rem 2rem 2rem 2rem;
         /* 127px = 8.125rem (107px + 20px) */
         /* CLOSE 按鈕位置 top: 52px + 按鈕高度約 25px + 30px 間距 + 20px 額外距離 = 127px */
@@ -1572,14 +1607,15 @@ img {
         align-items: flex-end;
         justify-content: flex-start;
         position: relative;
+        overflow: hidden;
+        /* 固定一頁式，禁止內容溢出 */
     }
 
     /* 確保 CLOSE 按鈕與 MENU 按鈕位置相同（xy 軸一致） */
     .mobile-menu-toggle.menu-open {
         position: fixed;
-        top: 3.25rem;
-        /* 52px = 3.25rem */
-        /* 與 MENU 按鈕位置相同：navigation padding-top 2rem (32px) + nav-container 高度 40px 的一半 (20px) = 52px */
+        bottom: 1.5rem;
+        /* 從左上角移動到左下角，保持與右側的間距一致 */
         right: 1.5rem;
         /* 與 MENU 按鈕位置相同：nav-container 的 padding-right 1.5rem */
         z-index: 10001;
