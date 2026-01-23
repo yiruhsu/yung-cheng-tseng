@@ -115,8 +115,8 @@ body.page-light #custom-cursor.hovered {
     transform: translateY(0);
 }
 
-/* 手機版：導覽列底色長方形寬度 */
-@media (max-width: 768px) {
+/* 手機版與平板版：導覽列底色長方形寬度 */
+@media (max-width: 1024px) {
     .navigation {
         width: 100% !important;
         left: 0 !important;
@@ -554,8 +554,8 @@ body.page-light .caption {
     font-family: 'PMingLiU', '新細明體', 'MingLiU', 'Times New Roman', Times, serif;
 }
 
-/* 手機版：首頁版權說明字體大小與其他分頁一致 */
-@media (max-width: 768px) {
+/* 手機版與平板版：首頁版權說明字體大小與其他分頁一致 */
+@media (max-width: 1024px) {
     .hero .copyright {
         font-size: 0.583rem;
         /* 7pt = 0.583rem */
@@ -904,8 +904,8 @@ body.page-light .caption {
 
 #painting .caption {
     position: absolute;
-    bottom: -5px;
-    /* 作品與作品說明間距 5px */
+    bottom: -48px;
+    /* 作品與作品說明間距 48px */
     right: 0;
     font-size: 1rem;
     /* 桌面版作品說明改成 1rem */
@@ -1076,8 +1076,8 @@ img {
     transform: translateY(-50%) scale(0.95);
 }
 
-/* 響應式設計 */
-@media (max-width: 768px) {
+/* 響應式設計 - 手機版與平板版 */
+@media (max-width: 1024px) {
 
     /* =========================================
        書法頁面專屬手機版排版修復 (精準隔離)
@@ -1264,9 +1264,10 @@ img {
         width: 100% !important;
     }
 
-    .calligraphy-scope-wrapper .artwork-description {
-        font-size: 3.5rem !important;
-        /* 手機版調整為 3.5rem */
+    .calligraphy-scope-wrapper .artwork-description,
+    .calligraphy-scope-wrapper .artwork-main-info .artwork-description {
+        font-size: 0.8rem !important;
+        /* 手機版調整為 0.8rem */
         line-height: 1.6 !important;
         margin-bottom: 0 !important;
         margin-top: 1rem !important;
@@ -1379,38 +1380,116 @@ img {
 
 /* =========================================
    中間過渡層級 (Tablet/Laptop Breakpoint)
-   解決導覽列文字重疊問題 (900px - 1200px)
+   解決導覽列文字重疊問題 (1025px - 1200px)
+   注意：769px - 1024px 使用漢堡選單（見下方）
    ========================================= */
-@media (max-width: 1200px) and (min-width: 769px) {
+@media (max-width: 1200px) and (min-width: 1025px) {
 
-    /* 減少導覽連結的左右間距，防止與 Logo 碰撞 */
-    .nav-link {
-        padding: 0 40px;
-        /* 從 90px 減少到 40px，為 Logo 留出更多空間 */
-    }
-
-    /* 稍微縮小 Logo 字體，確保不會佔用過多空間 */
-    .logo {
-        font-size: 1.3rem;
-        /* 從 1.5rem 縮小到 1.3rem */
-    }
-
-    /* 確保導覽列容器有足夠的 padding，避免元素貼邊 */
+    /* 平板版：導覽列換行佈局 */
     .nav-container {
-        padding: 0 1.5rem;
-        /* 從 2rem 稍微減少，但仍保持適當間距 */
-        justify-content: space-between;
-        /* 保持 space-between，讓 logo 在左，語言切換和 MENU 在右 */
+        flex-wrap: wrap !important;
+        /* 允許換行 */
+        padding: 0.75rem 1.5rem !important;
+        /* 增加上下 padding，為兩行佈局留出空間 */
+        height: auto !important;
+        /* 自動高度，適應兩行佈局 */
+        min-height: 2.5rem;
+        /* 最小高度保持原樣 */
+        align-items: center;
+    }
+
+    /* Logo 在第一行左側 */
+    .logo {
+        font-size: 1.2rem;
+        /* 稍微縮小 Logo 字體 */
+        order: 1;
+        /* 確保在第一行 */
+        margin-bottom: 0;
+        width: auto;
+    }
+
+    /* 中間導覽連結容器：換到第二行，靠左 */
+    .nav-menu-center {
+        position: static !important;
+        /* 移除絕對定位 */
+        transform: none !important;
+        /* 移除居中變換 */
+        order: 2;
+        /* 確保在第二行 */
+        flex: 1;
+        /* 佔用剩餘空間 */
+        min-width: 0;
+        /* 允許縮小 */
+        margin-right: 1rem;
+        /* 與語言切換器保持間距 */
+    }
+
+    /* 導覽選單：水平排列，允許換行 */
+    .nav-menu {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        /* 增加間距，避免重疊 */
+    }
+
+    /* 減少導覽連結的左右間距 */
+    .nav-link {
+        padding: 0 15px;
+        /* 從 90px 減少到 15px，為平板留出更多空間 */
+        font-size: 0.75rem;
+        /* 稍微縮小字體 */
+    }
+
+    /* 語言切換器：在第二行右側 */
+    .language-switcher {
+        display: flex !important;
+        /* 顯示語言切換器 */
+        order: 3;
+        /* 確保在第二行右側 */
+        flex-shrink: 0;
+        /* 防止被壓縮 */
+    }
+
+    /* 隱藏手機版元素 */
+    .mobile-language-switcher,
+    .mobile-menu-toggle {
+        display: none !important;
     }
 }
 
-/* 響應式設計 - 手機版（max-width: 768px） */
-@media (max-width: 768px) {
+/* =========================================
+   小平板範圍 (769px - 900px)
+   進一步調整間距和字體
+   ========================================= */
+@media (max-width: 900px) and (min-width: 769px) {
+
+    /* 進一步減少導覽連結間距 */
+    .nav-link {
+        padding: 0 15px;
+        /* 進一步減少間距 */
+        font-size: 0.7rem;
+        /* 進一步縮小字體 */
+    }
+
+    /* Logo 字體再縮小 */
+    .logo {
+        font-size: 1.1rem;
+    }
+
+    /* 導覽選單間距 */
+    .nav-menu {
+        gap: 0.3rem;
+    }
+}
+
+/* 響應式設計 - 手機版與平板版（max-width: 1024px，包含 iPad 直立模式） */
+@media (max-width: 1024px) {
 
     /* 網站標題 */
     .logo {
         font-size: 0.9rem;
-        line-height: 1.2;
+        line-height: 3.125rem;
+        /* 與 nav-container 高度一致，確保垂直居中 */
         margin-left: 15px;
         /* 往右移 15px */
         white-space: nowrap;
@@ -1423,6 +1502,9 @@ img {
         /* 移除寬度限制，確保完整顯示 */
         flex-shrink: 0;
         /* 防止被壓縮 */
+        display: flex;
+        align-items: center;
+        /* 確保內容垂直居中 */
     }
 
     /* --- 手機版導覽列：漢堡選單模式 --- */
@@ -1444,6 +1526,17 @@ img {
         /* 手機版隱藏桌面版語言切換器 */
     }
 
+    /* 手機版：Logo 靠左對齊 */
+    .logo {
+        flex-shrink: 0;
+        /* 防止被壓縮 */
+        margin-right: auto;
+        /* 自動右邊距，確保靠左對齊 */
+        display: flex;
+        align-items: center;
+        /* 確保與其他元素垂直對齊 */
+    }
+
     /* 手機版：語言切換器（MENU 左側） */
     .mobile-language-switcher {
         display: flex !important;
@@ -1451,10 +1544,12 @@ img {
         gap: 0.4rem;
         margin-right: 4px;
         /* MENU 按鈕左側的間距 4px（小間距保持 px） */
-        margin-left: auto;
-        /* 自動左邊距，確保靠右對齊 */
+        margin-left: 0;
+        /* 移除自動左邊距，讓它在 MENU 左側 */
         flex-shrink: 0;
         /* 防止被壓縮 */
+        height: 3.125rem;
+        /* 與 nav-container 高度一致，確保垂直對齊 */
     }
 
     /* 漢堡選單按鈕 */
@@ -1473,15 +1568,22 @@ img {
         padding: 0.5rem 0;
         cursor: pointer;
         z-index: 10001;
-        position: relative;
+        position: relative !important;
+        /* 改回 relative，讓它在導覽列的流中 */
         margin-right: 0;
         margin-left: 0;
         width: auto;
         /* 改為 auto，移除左側空白區塊 */
         padding-left: 0;
         /* 移除左側 padding */
-        padding-right: 1.5rem;
-        /* 與 nav-container 的 padding-right 一致，確保與 CLOSE 按鈕對齊 */
+        padding-right: 0;
+        /* 移除右側 padding */
+        flex-shrink: 0;
+        /* 防止被壓縮 */
+        height: 3.125rem;
+        /* 與 nav-container 高度一致，確保垂直對齊 */
+        line-height: 3.125rem;
+        /* 與 nav-container 高度一致，確保垂直對齊 */
     }
 
     /* 手機版 MENU/CLOSE 按鈕顏色 */
@@ -1532,17 +1634,25 @@ img {
         -webkit-overflow-scrolling: touch;
     }
 
-    /* 手機版漢堡選單左下角 favicon 圖示 */
+    /* 手機版漢堡選單 favicon 圖示：與 CLOSE 按鈕垂直對齊，水平排列 */
     img.mobile-menu-favicon,
     .mobile-menu-favicon {
         position: fixed !important;
-        /* 用 inset 一次鎖死位置，避免 top/left/bottom/right 互相覆蓋 */
-        inset: auto auto 10px 15px !important;
-        /* bottom 10px / left 15px */
+        /* 計算位置：navigation padding-top 2rem (32px) + nav-container 高度 3.125rem (50px) / 2 = 3.5625rem (57px) */
+        /* favicon 使用 translateY(-50%) 垂直居中，所以 top 設為 3.5625rem */
+        top: 3.5625rem !important;
+        /* 57px = 3.5625rem，與 CLOSE 按鈕垂直中心對齊 */
+        left: 1rem !important;
+        /* 從左側 1rem，與 nav-container 的 padding-left 一致 */
+        bottom: auto !important;
+        /* 移除 bottom，改用 top */
+        right: auto !important;
+        /* 移除 right */
 
         margin: 0 !important;
         padding: 0 !important;
-        transform: none !important;
+        transform: translateY(-50%) !important;
+        /* 垂直居中對齊，確保與 CLOSE 按鈕在同一水平線 */
 
         width: 20px !important;
         height: 20px !important;
@@ -1571,11 +1681,16 @@ img {
         visibility: visible !important;
         display: block !important;
         position: fixed !important;
-        inset: auto auto 10px 15px !important;
-        /* bottom 10px / left 15px */
+        top: 3.5625rem !important;
+        /* 57px = 3.5625rem，與 CLOSE 按鈕垂直中心對齊 */
+        left: 1rem !important;
+        /* 從左側 1rem */
+        bottom: auto !important;
+        right: auto !important;
+        transform: translateY(-50%) !important;
+        /* 垂直居中對齊，確保與 CLOSE 按鈕在同一水平線 */
         margin: 0 !important;
         padding: 0 !important;
-        transform: none !important;
         width: 20px !important;
         height: 20px !important;
         z-index: 10002 !important;
@@ -1613,11 +1728,8 @@ img {
 
     /* 確保 CLOSE 按鈕與 MENU 按鈕位置相同（xy 軸一致） */
     .mobile-menu-toggle.menu-open {
-        position: fixed;
-        bottom: 1.5rem;
-        /* 從左上角移動到左下角，保持與右側的間距一致 */
-        right: 1.5rem;
-        /* 與 MENU 按鈕位置相同：nav-container 的 padding-right 1.5rem */
+        position: relative !important;
+        /* 保持相對定位，與 MENU 按鈕在同一水平軸上 */
         z-index: 10001;
         width: auto;
         padding-right: 0;
@@ -2283,7 +2395,7 @@ body,
     background: rgba(180, 180, 180, 0.8);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
 
     /* 展演頁面：紅圓點與紅線縮小20%，往右邊移動貼齊照片的右側邊緣 */
     #hero-path path {
@@ -2732,8 +2844,8 @@ body,
     margin-bottom: 0;
 }
 
-/* 響應式設計：手機版調整 */
-@media (max-width: 768px) {
+/* 響應式設計：手機版與平板版調整 */
+@media (max-width: 1024px) {
     .scene-container {
         height: 60vh;
         /* 手機版稍微降低高度 */
@@ -2867,18 +2979,21 @@ body,
     }
 
     /* 手機版：書法作品說明文字（釋文） */
-    #calligraphy .artwork-description {
-        font-size: 3.5rem;
-        /* 手機版調整為 3.5rem */
-    }
-
-    .calligraphy-scope-wrapper .artwork-description {
-        font-size: 3.5rem !important;
-        /* 手機版調整為 3.5rem */
+    #calligraphy .artwork-description,
+    #calligraphy .artwork-main-info .artwork-description,
+    .calligraphy-scope-wrapper .artwork-description,
+    .calligraphy-scope-wrapper .artwork-main-info .artwork-description {
+        font-size: 0.8rem !important;
+        /* 手機版調整為 0.8rem */
         line-height: 1.6 !important;
         margin-bottom: 0 !important;
         margin-top: 1rem !important;
         /* 確保間距保持一致 */
+        display: block !important;
+        position: relative !important;
+        height: auto !important;
+        opacity: 1 !important;
+        width: 100% !important;
     }
 
     /* 確保所有頁面的版權資訊在手機版都有適當的樣式 */
