@@ -127,6 +127,10 @@ function showPage(pageId) {
 
             if (pageId === 'calligraphy') {
                 initAnimations();
+                // 初始化手機版觸控滑動功能
+                setTimeout(() => {
+                    initCalligraphyTouchSwipe();
+                }, 200);
             }
 
             if (pageId === 'painting') {
@@ -366,7 +370,7 @@ function initPaintingAnimation() {
         scrollTrigger: {
             trigger: viewport,
             pin: true,
-            scrub: 1.5, // 增加慣性緩衝時間
+            scrub: 0.5, // 減少緩衝時間，讓滑動更順暢：從 1.5 改為 0.5
             // End 也同步增加緩衝，讓滾動軸長度足以容納多出來的距離
             end: () => `+=${Math.abs(getScrollAmount())}`,
             invalidateOnRefresh: true,
@@ -719,6 +723,26 @@ document.addEventListener('DOMContentLoaded', function () {
     initTrackpadSwipeNavigation(); // 初始化觸控板滑動導航
     initMobileMenu(); // 初始化手機版漢堡選單
 
+    // 如果初始頁面是書法頁面，初始化觸控滑動功能
+    const initialPage = document.querySelector('.page.active');
+    if (initialPage && initialPage.id === 'calligraphy') {
+        setTimeout(() => {
+            initCalligraphyTouchSwipe();
+        }, 300);
+    }
+
+    // 視窗大小改變時重新初始化觸控滑動（手機版切換）
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            const currentPage = document.querySelector('.page.active');
+            if (currentPage && currentPage.id === 'calligraphy') {
+                initCalligraphyTouchSwipe();
+            }
+        }, 300);
+    });
+
     // 添加滾動監聽事件
     window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -881,6 +905,126 @@ function changeImage(button, direction) {
         }
     });
 }
+
+// 書法頁面手機版：觸控滑動切換圖片功能
+function initCalligraphyTouchSwipe() {
+    // 只在手機版啟用（螢幕寬度 <= 768px）
+    if (window.innerWidth > 768) return;
+
+    const galleries = document.querySelectorAll('#calligraphy .image-gallery');
+    if (!galleries.length) return;
+
+    galleries.forEach(gallery => {
+        const container = gallery.querySelector('.gallery-container');
+        if (!container) return;
+
+        const images = container.querySelectorAll('.gallery-image');
+        if (images.length <= 1) return; // 只有一張圖片時不需要滑動
+
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        let isSwiping = false;
+        const minSwipeDistance = 50; // 最小滑動距離（像素）
+
+        // 觸控開始
+        container.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            isSwiping = false;
+        }, { passive: true });
+
+        // 觸控移動
+        container.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            touchEndX = touch.clientX;
+            touchEndY = touch.clientY;
+
+            // 計算移動距離
+            const deltaX = Math.abs(touchEndX - touchStartX);
+            const deltaY = Math.abs(touchEndY - touchStartY);
+
+            // 如果水平移動距離大於垂直移動距離，視為滑動
+            if (deltaX > deltaY && deltaX > 10) {
+                isSwiping = true;
+            }
+        }, { passive: true });
+
+        // 觸控結束
+        container.addEventListener('touchend', (e) => {
+            if (!isSwiping) return;
+
+            touchEndX = e.changedTouches[0].clientX;
+            touchEndY = e.changedTouches[0].clientY;
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            const absDeltaX = Math.abs(deltaX);
+            const absDeltaY = Math.abs(deltaY);
+
+            // 確保是水平滑動且距離足夠
+            if (absDeltaX > absDeltaY && absDeltaX > minSwipeDistance) {
+                // 找到當前顯示的圖片
+                let currentIndex = -1;
+                images.forEach((img, index) => {
+                    if (img.classList.contains('active')) {
+                        currentIndex = index;
+                    }
+                });
+
+                if (currentIndex === -1) {
+                    currentIndex = 0;
+                    if (images[0]) {
+                        images[0].classList.add('active');
+                    }
+                }
+
+                // 判斷滑動方向
+                let direction = 0;
+                if (deltaX > 0) {
+                    // 向右滑 → 上一張
+                    direction = -1;
+                } else {
+                    // 向左滑 → 下一張
+                    direction = 1;
+                }
+
+                // 計算下一張圖片的索引（循環）
+                let nextIndex = currentIndex + direction;
+                if (nextIndex < 0) {
+                    nextIndex = images.length - 1;
+                } else if (nextIndex >= images.length) {
+                    nextIndex = 0;
+                }
+
+                // 切換圖片
+                if (currentIndex >= 0 && currentIndex < images.length && images[currentIndex]) {
+                    images[currentIndex].classList.remove('active');
+                }
+                if (nextIndex >= 0 && nextIndex < images.length && images[nextIndex]) {
+                    images[nextIndex].classList.add('active');
+                }
+
+                // 確保只有一張圖片是活動的
+                images.forEach((img, index) => {
+                    if (img && index !== nextIndex) {
+                        img.classList.remove('active');
+                    }
+                });
+            }
+
+            // 重置狀態
+            isSwiping = false;
+            touchStartX = 0;
+            touchStartY = 0;
+            touchEndX = 0;
+            touchEndY = 0;
+        }, { passive: true });
+    });
+}
+
 // ====== 展演頁面：強制修正與自動輪播補丁 ======
 document.addEventListener("DOMContentLoaded", () => {
     // 給一點時間讓 JS 把照片畫出來 (0.5秒後執行)
@@ -2074,7 +2218,9 @@ function initIntroAnimation() {
     const targetRadius = isMobile ? lineState.dotRadius * 0.8 : lineState.dotRadius;
 
     // 設置紅點初始狀態：小到無法被看見（r=0）
+    // 確保在動畫開始前，半徑為 0（無論桌面版或手機版）
     if (originDot) {
+        originDot.setAttribute('r', 0);
         gsap.set(originDot, { attr: { r: 0 } });
     }
 
