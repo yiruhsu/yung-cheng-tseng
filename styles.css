@@ -1726,6 +1726,10 @@ img {
         width: 20px !important;
         height: 20px !important;
         z-index: 10002 !important;
+        pointer-events: auto !important;
+        /* 選單打開時啟用點擊事件，讓 favicon 可以點擊 */
+        cursor: pointer !important;
+        /* 添加 pointer 樣式提示可點擊 */
     }
 
     .mobile-menu-overlay.active {
@@ -1746,13 +1750,13 @@ img {
         /* 固定一頁式，高度為視窗高度 */
         max-height: 100vh;
         /* 確保不超出視窗 */
-        padding: 8.125rem 2rem 2rem 2rem;
-        /* 127px = 8.125rem (107px + 20px) */
-        /* CLOSE 按鈕位置 top: 52px + 按鈕高度約 25px + 30px 間距 + 20px 額外距離 = 127px */
+        padding: 2rem;
+        /* 簡化 padding，使用 justify-content: center 來置中 */
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        justify-content: flex-start;
+        justify-content: center;
+        /* 改為 center，讓五個分頁在 667px 高度上置中 */
         position: relative;
         overflow: hidden;
         /* 固定一頁式，禁止內容溢出 */
@@ -1843,7 +1847,8 @@ img {
         display: block;
         padding: 1.8rem 0;
         /* 增加20%間距：1.5rem * 1.2 = 1.8rem */
-        color: #523b1d;
+        color: #c4b5a0;
+        /* 預設為淺灰色，與深棕色 #523b1d 形成對比 */
         font-family: 'Times New Roman', Times, serif;
         font-size: 1rem;
         text-decoration: none;
@@ -1855,6 +1860,12 @@ img {
         transition: color 0.3s ease;
         padding-right: 0;
         /* 確保與 CLOSE 按鈕對齊 */
+    }
+
+    /* 當前分頁顯示為深棕色 */
+    .mobile-nav-link.active {
+        color: #523b1d !important;
+        /* 深棕色，與淺灰色 #c4b5a0 形成明顯對比 */
     }
 
     .mobile-nav-link .roll-text {

@@ -526,6 +526,7 @@ function initMobileMenu() {
     const menuOverlay = document.getElementById('mobile-menu-overlay');
     const menuText = menuToggle?.querySelector('.menu-text');
     const body = document.body;
+    const favicon = document.querySelector('.mobile-menu-favicon');
 
     if (!menuToggle || !menuOverlay || !menuText) return;
 
@@ -533,6 +534,17 @@ function initMobileMenu() {
         e.stopPropagation();
         toggleMobileMenu();
     });
+
+    // 點擊 favicon 前往首頁並關閉選單
+    if (favicon) {
+        favicon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showPage('home');
+            toggleMobileMenu(); // 關閉選單
+        });
+        // 添加 cursor pointer 樣式提示可點擊
+        favicon.style.cursor = 'pointer';
+    }
 
     // 點擊遮罩外部關閉選單
     menuOverlay.addEventListener('click', (e) => {
@@ -569,6 +581,50 @@ function toggleMobileMenu() {
         // 選單打開時，CLOSE 按鈕變為深棕色
         menuToggle.style.color = '#24190b';
         body.style.overflow = 'hidden'; // 防止背景滾動
+        
+        // 標記當前頁面對應的選單項目
+        updateMobileMenuActiveState();
+    }
+}
+
+// 更新手機版選單的當前頁面標記
+function updateMobileMenuActiveState() {
+    // 獲取當前活動的頁面
+    const activePage = document.querySelector('.page.active');
+    if (!activePage) return;
+    
+    const currentPageId = activePage.id;
+    
+    // 頁面 ID 與選單項目的對應關係
+    const pageToMenuMap = {
+        'bio': 'bio',
+        'calligraphy': 'calligraphy',
+        'sealcarving': 'sealcarving',
+        'painting': 'painting',
+        'exhibition': 'exhibition'
+    };
+    
+    // 移除所有選單項目的 active 類
+    const allMobileLinks = document.querySelectorAll('.mobile-nav-link');
+    allMobileLinks.forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    // 如果當前頁面是首頁，所有選單項目都顯示深棕色
+    if (currentPageId === 'home') {
+        allMobileLinks.forEach(link => {
+            link.classList.add('active');
+        });
+    }
+    // 如果當前頁面在對應關係中，標記對應的選單項目
+    else if (pageToMenuMap[currentPageId]) {
+        // 找到對應的選單項目（通過 onclick 屬性中的 pageId）
+        allMobileLinks.forEach(link => {
+            const onclickAttr = link.getAttribute('onclick');
+            if (onclickAttr && onclickAttr.includes(`'${pageToMenuMap[currentPageId]}'`)) {
+                link.classList.add('active');
+            }
+        });
     }
 }
 
