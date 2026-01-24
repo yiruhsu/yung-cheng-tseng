@@ -1702,6 +1702,14 @@ img {
         background: transparent !important;
         image-rendering: -webkit-optimize-contrast;
         image-rendering: crisp-edges;
+        
+        /* 移除點擊時的淺藍色底色 */
+        -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -webkit-user-drag: none !important;
+        outline: none !important;
+        -webkit-touch-callout: none !important;
     }
 
     /* 確保圖示在選單打開時可見 - 使用最高優先級 */
@@ -1730,6 +1738,14 @@ img {
         /* 選單打開時啟用點擊事件，讓 favicon 可以點擊 */
         cursor: pointer !important;
         /* 添加 pointer 樣式提示可點擊 */
+        
+        /* 移除點擊時的淺藍色底色 */
+        -webkit-tap-highlight-color: transparent !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -webkit-user-drag: none !important;
+        outline: none !important;
+        -webkit-touch-callout: none !important;
     }
 
     .mobile-menu-overlay.active {
