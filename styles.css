@@ -97,6 +97,38 @@ body.page-light #custom-cursor.hovered {
     transform: translate(-50%, -50%) scale(0.9);
 }
 
+/* 手機版：隱藏正常狀態的小圓點，保留點擊時的大圓形並縮小10% */
+@media (max-width: 1024px) {
+    /* 隱藏正常狀態的鼠標（小圓點） */
+    #custom-cursor {
+        width: 0 !important;
+        height: 0 !important;
+        background-color: transparent !important;
+        opacity: 0;
+    }
+
+    /* 點擊或懸停時顯示大圓形，縮小10% */
+    #custom-cursor.hovered,
+    #custom-cursor.clicked {
+        width: 45px !important;
+        /* 50px * 0.9 = 45px */
+        height: 45px !important;
+        background-color: transparent !important;
+        border: 1px solid white;
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+
+    /* page-light 頁面：點擊時的大圓形也縮小10% */
+    body.page-light #custom-cursor.hovered,
+    body.page-light #custom-cursor.clicked {
+        width: 31.5px !important;
+        /* 35px * 0.9 = 31.5px */
+        height: 31.5px !important;
+        border-color: #24190b;
+    }
+}
+
 /* 導航選單 */
 .navigation {
     position: fixed;
