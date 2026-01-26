@@ -331,6 +331,19 @@ function initAnimations() {
 }
 
 let paintingScrollTween;
+let scrollRefreshRaf = null;
+
+function scheduleScrollTriggerRefresh() {
+    if (scrollRefreshRaf) {
+        cancelAnimationFrame(scrollRefreshRaf);
+    }
+    scrollRefreshRaf = requestAnimationFrame(() => {
+        scrollRefreshRaf = null;
+        if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+        }
+    });
+}
 
 function initPaintingAnimation() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
@@ -370,7 +383,9 @@ function initPaintingAnimation() {
         scrollTrigger: {
             trigger: viewport,
             pin: true,
-            scrub: 0.5, // 減少緩衝時間，讓滑動更順暢：從 1.5 改為 0.5
+            scrub: 0.25, // 進一步降低延遲，提升滑動即時感
+            anticipatePin: 1,
+            fastScrollEnd: true,
             // End 也同步增加緩衝，讓滾動軸長度足以容納多出來的距離
             end: () => `+=${Math.abs(getScrollAmount())}`,
             invalidateOnRefresh: true,
@@ -398,22 +413,16 @@ function destroyPaintingHorizontal() {
 
 // 關鍵保險：監聽所有圖片載入完成後，強制刷新 ScrollTrigger
 window.addEventListener('load', () => {
-    if (typeof ScrollTrigger !== 'undefined') {
-        ScrollTrigger.refresh();
-    }
+    scheduleScrollTriggerRefresh();
 });
 
 const paintingImages = document.querySelectorAll('.painting-item img');
 paintingImages.forEach(img => {
     if (img.complete) {
-        if (typeof ScrollTrigger !== 'undefined') {
-            ScrollTrigger.refresh();
-        }
+        scheduleScrollTriggerRefresh();
     } else {
         img.addEventListener('load', () => {
-            if (typeof ScrollTrigger !== 'undefined') {
-                ScrollTrigger.refresh();
-            }
+            scheduleScrollTriggerRefresh();
         });
     }
 });
@@ -767,6 +776,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // 立即開始預載入篆刻照片
     preloadSealCarvingImages();
     
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.config({
+            ignoreMobileResize: true,
+            limitCallbacks: true
+        });
+    }
+
     initHeroSlideshow();
     showPage('home');
     initNavScrollSpy();
@@ -806,6 +822,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const cursor = document.getElementById('custom-cursor');
 
     if (cursor) {
+        // 標記游標已準備好，才隱藏原生游標
+        document.body.classList.add('cursor-ready');
+
         // 定義所有需要觸發「大圓圈」的元素選擇器
         // 包含：連結、按鈕、導覽列、圖片、以及任何 class 為 clickable 的東西
         const hoverSelectors = ['a', 'button', '.navigation', '.logo', 'img', '.arrow-btn', '.clickable'];
@@ -1751,6 +1770,22 @@ const lineSmooth = {
 };
 const imageRevealTimers = new WeakMap();
 const IMAGE_REVEAL_DELAY = 2; // 年份先獨白 2 秒
+const workItemObservers = new WeakMap();
+const EXHIBITION_IDLE_REFRESH_MS = 60000;
+let lastExhibitionScrollAt = Date.now();
+
+function isExhibitionPageActive() {
+    const activePage = document.querySelector('.page.active');
+    return !!activePage && activePage.id === 'exhibition';
+}
+
+function refreshExhibitionScrollState() {
+    if (!isExhibitionPageActive()) return;
+    scheduleTimelineRefresh();
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.update(true);
+    }
+}
 
 // 讓主線像鏡頭平移般平順：上下滾動都維持柔和跟隨
 function applySmoothLineLength(length) {
@@ -2142,23 +2177,49 @@ function revealExhibitionSection(section) {
     const workItems = section.querySelectorAll('.work-item');
 
     // Year title fade in - 年代標題動畫完成後才啟動輪播和顯示照片
-    const revealImages = () => {
-        if (section.dataset.imagesRevealed === 'true') return;
-        section.dataset.imagesRevealed = 'true';
+    const revealWorkItem = (item) => {
+        if (!item || item.dataset.revealed === 'true') return;
+        item.dataset.revealed = 'true';
+        if (typeof gsap !== 'undefined') {
+            // 照片顯示動畫（scale 由 matchMedia 在初始化時設置）
+            gsap.fromTo(
+                item,
+                { opacity: 0, clipPath: 'inset(0 0 100% 0)' },
+                { opacity: 1, clipPath: 'inset(0 0 0% 0)', duration: 1.8, ease: 'power2.out' }
+            );
+        } else {
+            item.style.opacity = '1';
+            item.style.clipPath = 'inset(0 0 0% 0)';
+        }
+    };
 
-        workItems.forEach((item) => {
-            if (typeof gsap !== 'undefined') {
-                // 照片顯示動畫（scale 由 matchMedia 在初始化時設置）
-                gsap.fromTo(
-                    item,
-                    { opacity: 0, clipPath: 'inset(0 0 100% 0)' },
-                    { opacity: 1, clipPath: 'inset(0 0 0% 0)', duration: 2.2, ease: 'power2.out' }
-                );
-            } else {
-                item.style.opacity = '1';
-                item.style.clipPath = 'inset(0 0 0% 0)';
+    const setupWorkItemObserver = () => {
+        if (workItemObservers.has(section)) return;
+        if (typeof IntersectionObserver === 'undefined') {
+            workItems.forEach(revealWorkItem);
+            section.dataset.imagesRevealed = 'true';
+            return;
+        }
+
+        const observer = new IntersectionObserver((entries, io) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                revealWorkItem(entry.target);
+                io.unobserve(entry.target);
+            });
+            // 若全部已顯示，標記完成
+            const allRevealed = Array.from(workItems).every(item => item.dataset.revealed === 'true');
+            if (allRevealed) {
+                section.dataset.imagesRevealed = 'true';
             }
+        }, {
+            root: null,
+            threshold: 0.25,
+            rootMargin: '120px 0px'
         });
+
+        workItems.forEach(item => observer.observe(item));
+        workItemObservers.set(section, observer);
     };
 
     if (yearTitle && typeof gsap !== 'undefined') {
@@ -2178,10 +2239,10 @@ function revealExhibitionSection(section) {
                         }
                     });
 
-                    // 年代出現後 0.5 秒，照片才出現
+                    // 年代出現後再監聽照片進場（用鏡頭進場感，進入視窗才顯示）
                     if (section.dataset.imagesRevealScheduled !== 'true') {
                         section.dataset.imagesRevealScheduled = 'true';
-                        gsap.delayedCall(0.5, revealImages);
+                        gsap.delayedCall(0.5, setupWorkItemObserver);
                     }
                 }
             }
@@ -2198,7 +2259,7 @@ function revealExhibitionSection(section) {
 
         if (section.dataset.imagesRevealScheduled !== 'true') {
             section.dataset.imagesRevealScheduled = 'true';
-            setTimeout(revealImages, 500); // 0.5 秒後顯示照片
+            setTimeout(setupWorkItemObserver, 500); // 0.5 秒後監聽進場顯示
         }
     }
 }
@@ -2481,6 +2542,7 @@ document.addEventListener('exhibitionPageToggled', (event) => {
             // 強制更新圓點和紅線位置
             updateDotMetrics();
             initUnfurlingScrollAnimation();
+            lastExhibitionScrollAt = Date.now();
         }, 100);
     } catch (error) {
         console.error('Exhibition animation init failed:', error);
@@ -2492,6 +2554,36 @@ window.addEventListener('resize', () => {
     if (!path) return;
     scheduleTimelineRefresh();
 });
+
+window.addEventListener('scroll', () => {
+    if (!isExhibitionPageActive()) return;
+    const now = Date.now();
+    if (now - lastExhibitionScrollAt > EXHIBITION_IDLE_REFRESH_MS) {
+        refreshExhibitionScrollState();
+    }
+    lastExhibitionScrollAt = now;
+}, { passive: true });
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        refreshExhibitionScrollState();
+    }
+});
+
+window.addEventListener('pageshow', () => {
+    refreshExhibitionScrollState();
+});
+
+window.addEventListener('focus', () => {
+    refreshExhibitionScrollState();
+});
+
+if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', () => {
+        if (!isExhibitionPageActive()) return;
+        scheduleTimelineRefresh();
+    });
+}
 
 // =========================================
 // 篆刻頁面：3D 立方體互動邏輯 (GSAP + 動態光影)
