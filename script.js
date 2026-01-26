@@ -297,6 +297,44 @@ function initAnimations() {
     calligraphyTriggers.forEach(trigger => trigger.kill());
     calligraphyTriggers = [];
 
+    const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
+    const galleries = document.querySelectorAll('#calligraphy .image-gallery');
+
+    if (!isDesktop) {
+        // 手機/平板：用淡入取代捲軸動畫（每次進入都重置）
+        if (typeof IntersectionObserver === 'undefined') {
+            galleries.forEach(gallery => gallery.classList.add('calligraphy-visible'));
+            return;
+        }
+
+        const groups = Array.from(document.querySelectorAll('#calligraphy .artwork-group'));
+        const getDelayForGallery = (gallery) => {
+            const group = gallery.closest('.artwork-group');
+            if (!group) return 0;
+            const index = groups.indexOf(group);
+            return index === 2 ? 1.5 : 0;
+        };
+
+        galleries.forEach(gallery => {
+            gallery.classList.remove('calligraphy-visible');
+            gallery.style.transitionDelay = '0s';
+        });
+
+        const observer = new IntersectionObserver((entries, io) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const delay = getDelayForGallery(entry.target);
+                entry.target.style.transitionDelay = `${delay}s`;
+                entry.target.classList.add('calligraphy-visible');
+                io.unobserve(entry.target);
+            });
+        }, { threshold: 0.2, rootMargin: '120px 0px' });
+
+        galleries.forEach(gallery => observer.observe(gallery));
+        return;
+    }
+
+    // 桌面版：保留捲軸顯示動畫
     const targets = document.querySelectorAll('#calligraphy .gallery-image');
     targets.forEach(img => {
         if (!img) return;
@@ -2365,14 +2403,27 @@ function initIntroAnimation() {
         gsap.set(originDot, { attr: { r: 0 } });
     }
 
-    // GSAP Timeline: 紅線直接延伸
-    const totalDuration = 2.5; // 紅線延伸(2.5s)
+    // GSAP Timeline: 桌面版保留紅點放大，平板/手機紅點固定不動畫
+    const isDesktop = window.matchMedia('(min-width: 1025px)').matches;
+    const dotDuration = isDesktop ? 2.0 : 0;
+    if (!isDesktop && originDot) {
+        originDot.setAttribute('r', targetRadius);
+        gsap.set(originDot, { attr: { r: targetRadius } });
+    }
+    const lineDuration = 2.5;
+    const totalDuration = dotDuration + lineDuration;
     lineState.introTimeline = gsap.timeline({
         onUpdate: function () {
             // 在動畫過程中即時檢查觸發（只在紅線延伸階段）
             const totalProgress = this.progress();
-            const currentLength = totalProgress * lineState.intro2023Length;
-            checkSectionTriggers(currentLength);
+            const dotAnimationProgress = totalDuration > 0 ? (dotDuration / totalDuration) : 0;
+            if (totalProgress >= dotAnimationProgress) {
+                const lineProgress = dotDuration === 0
+                    ? totalProgress
+                    : (totalProgress - dotAnimationProgress) / (1 - dotAnimationProgress);
+                const currentLength = lineProgress * lineState.intro2023Length;
+                checkSectionTriggers(currentLength);
+            }
         },
         onComplete: () => {
             // 清除 stroke-dasharray，準備交給 ScrollTrigger
@@ -2382,10 +2433,19 @@ function initIntroAnimation() {
         }
     });
 
+    // 桌面版紅點放大（手機版略過）
+    if (originDot && dotDuration > 0) {
+        lineState.introTimeline.to(originDot, {
+            attr: { r: targetRadius },
+            duration: dotDuration,
+            ease: 'power2.out'
+        }, 0);
+    }
+
     // 紅線從圓點向下延伸（延伸到覆蓋 2023 section）
     lineState.introTimeline.to(lineState, {
         currentLength: lineState.intro2023Length,
-        duration: 2.5,
+        duration: lineDuration,
         ease: 'power2.out',
         onUpdate: () => {
             updateVerticalLine(lineState.currentLength);
@@ -2393,7 +2453,7 @@ function initIntroAnimation() {
                 strokeDashoffset: pathLength * (1 - (lineState.currentLength / lineState.intro2023Length))
             });
         }
-    }, 0);
+    }, dotDuration);
 }
 
 // === SCROLL-CONTROLLED EXTENSION (After Intro) ===

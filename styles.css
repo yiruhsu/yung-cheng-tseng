@@ -2917,8 +2917,8 @@ body.cursor-ready * {
         top: 6.25rem;
         /* 100px = 6.25rem */
         /* 從導覽列往下 100px（相對於 scene-container） */
-        font-size: 0.75rem;
-        /* 12px = 0.75rem */
+        font-size: 0.6rem;
+        /* 縮小20%：12px * 0.8 = 9.6px */
     }
 
     .cube {
@@ -3027,15 +3027,30 @@ body.cursor-ready * {
     }
 
     .seal-detail-description {
-        font-size: 0.8125rem;
-        /* 13px = 0.8125rem */
+        font-size: 0.65rem;
+        /* 縮小20%：13px * 0.8 = 10.4px */
     }
 
     .seal-detail-description p {
-        font-size: 0.8125rem;
-        /* 13px = 0.8125rem */
+        font-size: 0.65rem;
+        /* 縮小20%：13px * 0.8 = 10.4px */
         margin: 0 0 3em 0;
         /* 保持間距不變，確保照片與文字距離與版權說明保持一致 */
+    }
+
+    /* 手機版：書法作品照片淡入（1秒） */
+    #calligraphy .image-gallery {
+        opacity: 0;
+        transition: opacity 1s ease;
+    }
+
+    #calligraphy .image-gallery.calligraphy-visible {
+        opacity: 1;
+    }
+
+    #calligraphy .gallery-image {
+        clip-path: inset(0 0 0% 0);
+        transition: opacity 1s ease;
     }
 
     /* 手機版：書法作品說明文字（釋文） */
