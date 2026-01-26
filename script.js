@@ -1771,6 +1771,7 @@ const lineSmooth = {
 const imageRevealTimers = new WeakMap();
 const IMAGE_REVEAL_DELAY = 2; // 年份先獨白 2 秒
 const workItemObservers = new WeakMap();
+const sectionRevealHandlers = new WeakMap();
 const EXHIBITION_IDLE_REFRESH_MS = 60000;
 let lastExhibitionScrollAt = Date.now();
 
@@ -1930,6 +1931,7 @@ function cacheSectionTriggers() {
         const containerTop = timelineContainer.getBoundingClientRect().top + window.scrollY;
         const triggerLength = sectionTop - containerTop - lineState.dotCy + 150;
 
+        section.dataset.triggerLength = String(triggerLength);
         return { section, triggerLength };
     });
 }
@@ -2172,6 +2174,8 @@ function revealExhibitionSection(section) {
 
     section.classList.add('exhibition-revealed');
     section.classList.remove('hidden');
+    // 進場時先刷新紅線計算，避免久停後同步錯位
+    scheduleTimelineRefresh();
 
     const yearTitle = section.querySelector('.year-title');
     const workItems = section.querySelectorAll('.work-item');
@@ -2201,25 +2205,40 @@ function revealExhibitionSection(section) {
             return;
         }
 
+        const revealAllWorkItems = () => {
+            if (section.dataset.lineReady !== 'true') return;
+            workItems.forEach(revealWorkItem);
+            section.dataset.imagesRevealed = 'true';
+        };
+
         const observer = new IntersectionObserver((entries, io) => {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
-                revealWorkItem(entry.target);
+                if (section.dataset.lineReady !== 'true') return;
+                revealAllWorkItems();
                 io.unobserve(entry.target);
             });
-            // 若全部已顯示，標記完成
-            const allRevealed = Array.from(workItems).every(item => item.dataset.revealed === 'true');
-            if (allRevealed) {
-                section.dataset.imagesRevealed = 'true';
-            }
         }, {
             root: null,
             threshold: 0.25,
             rootMargin: '120px 0px'
         });
 
-        workItems.forEach(item => observer.observe(item));
+        const observeTarget = section.querySelector('.timeline-year') || section;
+        observer.observe(observeTarget);
         workItemObservers.set(section, observer);
+        sectionRevealHandlers.set(section, revealAllWorkItems);
+
+        // 首幀檢查：若已在視窗內，立即顯示
+        requestAnimationFrame(revealAllWorkItems);
+
+        // 兜底：避免 IO 在長時間停留後失效，強制顯示
+        setTimeout(() => {
+            const anyRevealed = Array.from(workItems).some(item => item.dataset.revealed === 'true');
+            if (!anyRevealed) {
+                revealAllWorkItems();
+            }
+        }, 1500);
     };
 
     if (yearTitle && typeof gsap !== 'undefined') {
@@ -2267,6 +2286,11 @@ function revealExhibitionSection(section) {
 function checkSectionTriggers(currentLength) {
     sectionTriggers.forEach(({ section, triggerLength }) => {
         if (currentLength >= triggerLength) {
+            section.dataset.lineReady = 'true';
+            const handler = sectionRevealHandlers.get(section);
+            if (handler) {
+                handler();
+            }
             revealExhibitionSection(section);
         }
     });
@@ -2341,20 +2365,14 @@ function initIntroAnimation() {
         gsap.set(originDot, { attr: { r: 0 } });
     }
 
-    // GSAP Timeline: 紅點變大 → 紅線延伸
-    const totalDuration = 2.0 + 2.5; // 紅點變大(2s) + 紅線延伸(2.5s) = 4.5s
+    // GSAP Timeline: 紅線直接延伸
+    const totalDuration = 2.5; // 紅線延伸(2.5s)
     lineState.introTimeline = gsap.timeline({
         onUpdate: function () {
             // 在動畫過程中即時檢查觸發（只在紅線延伸階段）
             const totalProgress = this.progress();
-            const dotAnimationProgress = 2.0 / totalDuration; // 紅點動畫佔總時長的比例
-
-            if (totalProgress > dotAnimationProgress) {
-                // 紅點動畫完成後，計算紅線延伸的進度
-                const lineProgress = (totalProgress - dotAnimationProgress) / (1 - dotAnimationProgress);
-                const currentLength = lineProgress * lineState.intro2023Length;
-                checkSectionTriggers(currentLength);
-            }
+            const currentLength = totalProgress * lineState.intro2023Length;
+            checkSectionTriggers(currentLength);
         },
         onComplete: () => {
             // 清除 stroke-dasharray，準備交給 ScrollTrigger
@@ -2364,17 +2382,7 @@ function initIntroAnimation() {
         }
     });
 
-    // Phase 1: 紅點從0變大到正常大小（2秒）
-    if (originDot) {
-        lineState.introTimeline.to(originDot, {
-            attr: { r: targetRadius },
-            duration: 2.0,
-            ease: 'power2.out'
-        }, 0);
-    }
-
-    // Phase 2: 紅線從圓點向下延伸（延伸到覆蓋 2023 section）
-    // 在紅點動畫完成後開始（2秒後）
+    // 紅線從圓點向下延伸（延伸到覆蓋 2023 section）
     lineState.introTimeline.to(lineState, {
         currentLength: lineState.intro2023Length,
         duration: 2.5,
@@ -2385,7 +2393,7 @@ function initIntroAnimation() {
                 strokeDashoffset: pathLength * (1 - (lineState.currentLength / lineState.intro2023Length))
             });
         }
-    }, 2.0); // 在 2 秒後開始（紅點動畫完成後）
+    }, 0);
 }
 
 // === SCROLL-CONTROLLED EXTENSION (After Intro) ===
