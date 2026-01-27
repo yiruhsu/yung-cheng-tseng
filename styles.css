@@ -8,413 +8,423 @@ body.cursor-ready *::after,
 body.cursor-ready a,
 body.cursor-ready button,
 body.cursor-ready input {
-    /* 使用 1x1 透明像素圖片作為鼠標，如果載入失敗才 fallback 到 none */
-    cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC'), none !important;
+  /* 使用 1x1 透明像素圖片作為鼠標，如果載入失敗才 fallback 到 none */
+  cursor:
+    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC"),
+    none !important;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'PMingLiU', '新細明體', 'MingLiU', 'Times New Roman', Times, serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #1a1a1a;
-    color: #7a7a7a;
-    line-height: 4.0;
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+  font-family:
+    "PMingLiU", "新細明體", "MingLiU", "Times New Roman", Times, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #1a1a1a;
+  color: #7a7a7a;
+  line-height: 4;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 html {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
-
 
 /* 2. 自訂鼠標容器 */
 #custom-cursor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 10px;
-    /* 實心小白點 */
-    height: 10px;
-    background-color: white;
-    border-radius: 50%;
-    pointer-events: none;
-    /* 關鍵：讓點擊穿透 */
-    z-index: 999999;
-    /* 最高層級，蓋過所有圖片與導覽列 */
-    transform: translate(-50%, -50%);
-    /* 移除 transform 的 transition，改用 will-change 優化性能 */
-    will-change: width, height, background-color, left, top;
-    transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
-    mix-blend-mode: difference;
-    /* 選用：讓鼠標在白色背景上變成黑色，永遠看得到 */
-    opacity: 0;
-    /* JS 初始化成功後才顯示，避免游標卡在左上角 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 10px;
+  /* 實心小白點 */
+  height: 10px;
+  background-color: white;
+  border-radius: 50%;
+  pointer-events: none;
+  /* 關鍵：讓點擊穿透 */
+  z-index: 999999;
+  /* 最高層級，蓋過所有圖片與導覽列 */
+  transform: translate(-50%, -50%);
+  /* 移除 transform 的 transition，改用 will-change 優化性能 */
+  will-change: width, height, background-color, left, top;
+  transition:
+    width 0.2s ease,
+    height 0.2s ease,
+    background-color 0.2s ease;
+  mix-blend-mode: difference;
+  /* 選用：讓鼠標在白色背景上變成黑色，永遠看得到 */
+  opacity: 0;
+  /* JS 初始化成功後才顯示，避免游標卡在左上角 */
 }
 
 /* JS 初始化完成才顯示自訂游標 */
 body.cursor-ready #custom-cursor {
-    opacity: 1;
+  opacity: 1;
 }
 /* 3. 互動狀態：空心大圓 */
 #custom-cursor.hovered {
-    width: 50px;
-    height: 50px;
-    background-color: transparent;
-    border: 1px solid white;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border: 1px solid white;
 }
 
 /* bio、書法、繪畫、展演頁面：滑鼠改為深棕色 */
 body.page-light #custom-cursor {
-    background-color: #24190b;
-    mix-blend-mode: normal;
-    width: 7px;
-    /* 縮小30%：10px * 0.7 = 7px */
-    height: 7px;
-    /* 縮小30%：10px * 0.7 = 7px */
+  background-color: #24190b;
+  mix-blend-mode: normal;
+  width: 7px;
+  /* 縮小30%：10px * 0.7 = 7px */
+  height: 7px;
+  /* 縮小30%：10px * 0.7 = 7px */
 }
 
 body.page-light #custom-cursor.hovered {
-    border-color: #24190b;
-    background-color: transparent;
-    width: 35px;
-    /* 縮小30%：50px * 0.7 = 35px */
-    height: 35px;
-    /* 縮小30%：50px * 0.7 = 35px */
+  border-color: #24190b;
+  background-color: transparent;
+  width: 35px;
+  /* 縮小30%：50px * 0.7 = 35px */
+  height: 35px;
+  /* 縮小30%：50px * 0.7 = 35px */
 }
 
 /* 4. 點擊狀態：稍微縮小 (增加手感) */
 #custom-cursor.clicked {
-    transform: translate(-50%, -50%) scale(0.9);
+  transform: translate(-50%, -50%) scale(0.9);
 }
 
 /* 手機版：隱藏正常狀態的小圓點，保留點擊時的大圓形並縮小10% */
 @media (max-width: 1024px) {
-    /* 隱藏正常狀態的鼠標（小圓點） */
-    #custom-cursor {
-        width: 0 !important;
-        height: 0 !important;
-        background-color: transparent !important;
-        opacity: 0;
-    }
+  /* 隱藏正常狀態的鼠標（小圓點） */
+  #custom-cursor {
+    width: 0 !important;
+    height: 0 !important;
+    background-color: transparent !important;
+    opacity: 0;
+  }
 
-    /* 點擊或懸停時顯示大圓形，縮小10% */
-    #custom-cursor.hovered,
-    #custom-cursor.clicked {
-        width: 45px !important;
-        /* 50px * 0.9 = 45px */
-        height: 45px !important;
-        background-color: transparent !important;
-        border: 1px solid white;
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
+  /* 點擊或懸停時顯示大圓形，縮小10% */
+  #custom-cursor.hovered,
+  #custom-cursor.clicked {
+    width: 45px !important;
+    /* 50px * 0.9 = 45px */
+    height: 45px !important;
+    background-color: transparent !important;
+    border: 1px solid white;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 
-    /* page-light 頁面：點擊時的大圓形也縮小10% */
-    body.page-light #custom-cursor.hovered,
-    body.page-light #custom-cursor.clicked {
-        width: 31.5px !important;
-        /* 35px * 0.9 = 31.5px */
-        height: 31.5px !important;
-        border-color: #24190b;
-    }
+  /* page-light 頁面：點擊時的大圓形也縮小10% */
+  body.page-light #custom-cursor.hovered,
+  body.page-light #custom-cursor.clicked {
+    width: 31.5px !important;
+    /* 35px * 0.9 = 31.5px */
+    height: 31.5px !important;
+    border-color: #24190b;
+  }
 }
 
 /* 導航選單 */
 .navigation {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background-color: transparent;
-    backdrop-filter: blur(10px);
-    box-shadow: none;
-    z-index: 10000;
-    /* 確保在所有內容之上 */
-    padding: 2rem 0;
-    /* 減少上下 padding，讓導覽列更緊湊 */
-    transition: transform 0.25s ease-out;
-    transform: translateY(0);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+  box-shadow: none;
+  z-index: 10000;
+  /* 確保在所有內容之上 */
+  padding: 2rem 0;
+  /* 減少上下 padding，讓導覽列更緊湊 */
+  transition: transform 0.25s ease-out;
+  transform: translateY(0);
 }
 
 /* 手機版與平板版：導覽列底色長方形寬度 */
 @media (max-width: 1024px) {
-    .navigation {
-        width: 100% !important;
-        left: 0 !important;
-        right: 0 !important;
-        margin-left: 0 !important;
-        background-color: transparent;
-    }
+  .navigation {
+    width: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin-left: 0 !important;
+    background-color: transparent;
+  }
 }
 
 .nav-container {
-    position: relative;
-    width: 100%;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 2.5rem;
-    /* 40px = 2.5rem */
-    /* 固定高度，確保所有元素在同一行 */
+  position: relative;
+  width: 100%;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.5rem;
+  /* 40px = 2.5rem */
+  /* 固定高度，確保所有元素在同一行 */
 }
 
 /* 中間導覽連結容器（絕對居中） */
 .nav-menu-center {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    /* 確保導覽連結在螢幕正中央，不受左右內容寬度影響 */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  /* 確保導覽連結在螢幕正中央，不受左右內容寬度影響 */
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-family: "Playfair Display", serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    letter-spacing: 0.02em;
-    color: #ffffff;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-    line-height: 2.5rem;
-    /* 40px = 2.5rem */
-    /* 與導覽列高度一致，確保在同一行 */
-    display: flex;
-    align-items: center;
-    /* 確保 Logo 靠左，無額外 margin */
-    margin-left: 0;
+  font-size: 1.5rem;
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+  line-height: 2.5rem;
+  /* 40px = 2.5rem */
+  /* 與導覽列高度一致，確保在同一行 */
+  display: flex;
+  align-items: center;
+  /* 確保 Logo 靠左，無額外 margin */
+  margin-left: 0;
 }
 
 .logo:hover {
-    color: #d1d1d1;
+  color: #d1d1d1;
 }
 
 /* bio、書法、繪畫、展演頁面：logo改為深棕色 */
 body.page-light .logo {
-    color: #24190b;
+  color: #24190b;
 }
 
 body.page-light .logo:hover {
-    color: #3d2f1a;
+  color: #3d2f1a;
 }
 
 /* Logo 在首頁時的啟動狀態 (亮綠色) */
 .logo.active {
-    color: #8af2a8 !important;
-    text-shadow: 0 0 10px rgba(138, 242, 168, 0.6);
+  color: #8af2a8 !important;
+  text-shadow: 0 0 10px rgba(138, 242, 168, 0.6);
 }
 
 .nav-menu {
-    display: flex;
-    list-style: none;
-    gap: 0;
-    align-items: center;
+  display: flex;
+  list-style: none;
+  gap: 0;
+  align-items: center;
 }
 
 .nav-menu li {
-    flex: 1;
-    text-align: center;
-    min-width: 0;
+  flex: 1;
+  text-align: center;
+  min-width: 0;
 }
 
 .nav-link {
-    color: rgba(255, 255, 255, 0.85);
-    font-weight: 300;
-    font-size: 0.833rem;
-    /* 從 1.5rem 縮小 8pt (約 0.667rem) */
-    font-family: 'Times New Roman', Times, serif;
-    text-transform: uppercase;
-    padding: 0 90px;
-    /* 左右間距 */
-    display: block;
-    text-decoration: none;
-    position: relative;
-    height: 2.5rem;
-    /* 40px = 2.5rem */
-    /* 減少高度，讓導覽列更緊湊 */
-    overflow: hidden;
-    /* cursor: pointer; */
-    /* 已刪除：與自訂鼠標衝突 */
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 300;
+  font-size: 0.833rem;
+  /* 從 1.5rem 縮小 8pt (約 0.667rem) */
+  font-family: "Times New Roman", Times, serif;
+  text-transform: uppercase;
+  padding: 0 90px;
+  /* 左右間距 */
+  display: block;
+  text-decoration: none;
+  position: relative;
+  height: 2.5rem;
+  /* 40px = 2.5rem */
+  /* 減少高度，讓導覽列更緊湊 */
+  overflow: hidden;
+  /* cursor: pointer; */
+  /* 已刪除：與自訂鼠標衝突 */
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
 }
 
 /* bio、書法、繪畫、展演頁面：導覽列改為深棕色 */
 body.page-light .nav-link {
-    color: rgba(36, 25, 11, 0.85);
+  color: rgba(36, 25, 11, 0.85);
 }
 
 body.page-light .nav-link:hover {
-    color: #24190b;
+  color: #24190b;
 }
 
 /* 滾動文字容器 */
 .roll-text {
-    display: flex;
-    flex-direction: column;
-    transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
-    /* 從 0.5s 改為 1s */
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5rem;
-    /* 80px = 5rem */
-    /* 兩個文字的高度 (40px * 2) */
+  display: flex;
+  flex-direction: column;
+  transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+  /* 從 0.5s 改為 1s */
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
+  /* 80px = 5rem */
+  /* 兩個文字的高度 (40px * 2) */
 }
 
 .roll-text span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 2.5rem;
-    /* 40px = 2.5rem */
-    /* 與 .nav-link 高度一致 */
-    flex-shrink: 0;
-    letter-spacing: 3px;
-    font-family: 'Times New Roman', Times, serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  /* 40px = 2.5rem */
+  /* 與 .nav-link 高度一致 */
+  flex-shrink: 0;
+  letter-spacing: 3px;
+  font-family: "Times New Roman", Times, serif;
 }
 
 /* Hover 動畫 - 向上滾動（只在桌面版和平板版） */
 @media (min-width: 769px) {
-    .nav-link:hover .roll-text {
-        transform: translateY(-2.5rem);
-        /* 40px = 2.5rem */
-        /* 與單個文字高度一致 */
-    }
+  .nav-link:hover .roll-text {
+    transform: translateY(-2.5rem);
+    /* 40px = 2.5rem */
+    /* 與單個文字高度一致 */
+  }
 }
 
 .nav-link:hover {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 /* 中英文切換顯示控制 */
 .text-zh {
-    display: none;
+  display: none;
 }
 
 body.lang-zh .text-en {
-    display: none;
+  display: none;
 }
 
 body.lang-zh .text-zh {
-    display: flex;
+  display: flex;
 }
 
 /* 中文微調：字體稍微縮小以匹配英文視覺重量 */
 .text-zh span {
-    font-size: 1rem;
-    /* 從 1.3rem 縮小 8pt，約為 0.633rem */
-    font-weight: 400;
-    font-family: 'Times New Roman', Times, serif;
+  font-size: 1rem;
+  /* 從 1.3rem 縮小 8pt，約為 0.633rem */
+  font-weight: 400;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .nav-link.active {
-    color: #349147 !important;
-    text-shadow: none;
-    /* 移除光暈感 */
-    opacity: 1;
+  color: #349147 !important;
+  text-shadow: none;
+  /* 移除光暈感 */
+  opacity: 1;
 }
 
 /* 語言切換按鈕 */
 .language-switcher {
-    display: none;
-    /* 桌面版隱藏語言切換按鈕 */
-    align-items: center;
-    gap: 0.5rem;
-    height: 2.5rem;
-    /* 40px = 2.5rem */
-    /* 與導覽列高度一致 */
-    line-height: 2.5rem;
-    /* 40px = 2.5rem */
-    /* 確保語言切換器靠右，無額外 margin */
-    margin-right: 0;
+  display: none;
+  /* 桌面版隱藏語言切換按鈕 */
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.5rem;
+  /* 40px = 2.5rem */
+  /* 與導覽列高度一致 */
+  line-height: 2.5rem;
+  /* 40px = 2.5rem */
+  /* 確保語言切換器靠右，無額外 margin */
+  margin-right: 0;
 }
 
 /* 手機版漢堡選單按鈕（桌面版隱藏） */
 .mobile-menu-toggle {
-    display: none;
+  display: none;
 }
 
 /* 手機版漢堡選單遮罩（桌面版隱藏） */
 .mobile-menu-overlay {
-    display: none;
+  display: none;
 }
 
 .lang-btn {
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.4);
-    /* 非活動語言：變暗 */
-    font-family: 'PMingLiU', '新細明體', 'MingLiU', 'Times New Roman', Times, serif;
-    font-size: 1rem;
-    font-weight: 400;
-    /* cursor: pointer; */
-    /* 已刪除：與自訂鼠標衝突 */
-    padding: 0.25rem 0.5rem;
-    transition: color 0.3s ease;
-    opacity: 1;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  /* 非活動語言：變暗 */
+  font-family:
+    "PMingLiU", "新細明體", "MingLiU", "Times New Roman", Times, serif;
+  font-size: 1rem;
+  font-weight: 400;
+  /* cursor: pointer; */
+  /* 已刪除：與自訂鼠標衝突 */
+  padding: 0.25rem 0.5rem;
+  transition: color 0.3s ease;
+  opacity: 1;
 }
 
 /* 非活動語言 hover 效果 */
 .lang-btn:hover:not(.active) {
-    color: rgba(255, 255, 255, 1);
-    /* hover 時變為完全白色，提供互動反饋 */
+  color: rgba(255, 255, 255, 1);
+  /* hover 時變為完全白色，提供互動反饋 */
 }
 
 /* 活動語言（選中） */
 .lang-btn.active {
-    color: #ffffff;
-    /* 亮白色，完全不透明 */
-    font-weight: 500;
-    /* 稍微加粗 */
-    opacity: 1;
+  color: #ffffff;
+  /* 亮白色，完全不透明 */
+  font-weight: 500;
+  /* 稍微加粗 */
+  opacity: 1;
 }
 
 .lang-separator {
-    color: rgba(255, 255, 255, 0.2);
-    /* 保持低調，不與文字競爭 */
-    opacity: 1;
+  color: rgba(255, 255, 255, 0.2);
+  /* 保持低調，不與文字競爭 */
+  opacity: 1;
 }
 
 /* bio、書法、繪畫、展演頁面：語言切換改為深棕色 */
 body.page-light .lang-btn {
-    color: #24190b66;
+  color: #24190b66;
 }
 
 body.page-light .lang-btn:hover:not(.active) {
-    color: #24190b;
+  color: #24190b;
 }
 
 body.page-light .lang-btn.active {
-    color: #24190b;
+  color: #24190b;
 }
 
 body.page-light .lang-separator {
-    color: rgba(36, 25, 11, 0.2);
+  color: rgba(36, 25, 11, 0.2);
 }
 
 /* 主內容區域 */
 .main-content {
-    padding-top: 0;
-    /* 移除 padding-top，讓內容可以延伸到頂部，襯在 Navbar 下方 */
-    background-color: #1a1a1a;
-    position: relative;
+  padding-top: 0;
+  /* 移除 padding-top，讓內容可以延伸到頂部，襯在 Navbar 下方 */
+  background-color: #1a1a1a;
+  position: relative;
 }
 
 /* bio、書法、篆刻、繪畫、展演頁面：米白底 */
@@ -423,7 +433,7 @@ body.page-light .lang-separator {
 #sealcarving.page,
 #painting.page,
 #exhibition.page {
-    background-color: #fffaf2;
+  background-color: #fffaf2;
 }
 
 #bio .page-container,
@@ -431,7 +441,7 @@ body.page-light .lang-separator {
 #sealcarving .page-container,
 #painting .page-container,
 #exhibition .page-container {
-    background-color: #fffaf2;
+  background-color: #fffaf2;
 }
 
 /* bio、書法、繪畫、展演頁面：所有文字改為深棕色 */
@@ -449,156 +459,157 @@ body.page-light .artwork-description,
 body.page-light .work-caption,
 body.page-light .year-title,
 body.page-light .caption {
-    color: #24190b;
+  color: #24190b;
 }
 
 /* 頁面切換 - 確保非活動頁面完全隱藏 */
 .page {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    min-height: 0 !important;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  min-height: 0 !important;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .page.active {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    height: auto !important;
-    min-height: 100vh !important;
-    width: 100%;
-    position: relative;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  width: 100%;
+  position: relative;
 }
 
 /* 確保非活動頁面完全隱藏 */
 .page:not(.active) {
-    display: none !important;
-    visibility: hidden;
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
+  display: none !important;
+  visibility: hidden;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 /* 首頁專用樣式 */
 #home.page {
-    display: none !important;
-    visibility: hidden !important;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+  display: none !important;
+  visibility: hidden !important;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #home.page.active {
-    display: block !important;
-    visibility: visible !important;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    margin: 0;
-    padding: 0;
+  display: block !important;
+  visibility: visible !important;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 /* 首頁樣式 */
 .hero {
-    background: #1a1a1a;
-    color: #e0e0e0;
-    height: 100vh;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
+  background: #1a1a1a;
+  color: #e0e0e0;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 .hero-slideshow {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    background: #1a1a1a;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #1a1a1a;
 }
 
 /* 首頁全螢幕強制設定 */
 #home,
 .hero,
 .hero-slideshow {
-    width: 100vw !important;
-    height: 100vh !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden;
-    position: relative;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  position: relative;
 }
 
 /* 確保圖片填滿且不變形 */
 .hero-slideshow img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* 關鍵：裁切多餘部分，保持滿版 */
-    object-position: center;
-    /* Safari性能優化 */
-    will-change: transform;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 關鍵：裁切多餘部分，保持滿版 */
+  object-position: center;
+  /* Safari性能優化 */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .hero-slide {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #1a1a1a;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-    filter: brightness(0.85);
-    /* 從 0.6 改為 0.85，讓照片更亮 */
-    width: 100%;
-    height: 100%;
-    /* Safari性能優化：使用GPU加速 */
-    will-change: opacity;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #1a1a1a;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  filter: brightness(0.85);
+  /* 從 0.6 改為 0.85，讓照片更亮 */
+  width: 100%;
+  height: 100%;
+  /* Safari性能優化：使用GPU加速 */
+  will-change: opacity;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .hero-slide.active {
-    opacity: 1;
+  opacity: 1;
 }
 
 /* hero-overlay 和 hero-content 已刪除 */
 
 .hero .copyright {
-    position: absolute;
-    bottom: 37.8px;
-    right: 1.25rem;
-    /* 20px = 1.25rem */
-    font-size: 0.833rem;
-    /* 10pt = 0.833rem */
-    color: #ffffff !important;
-    z-index: 100;
-    font-family: 'PMingLiU', '新細明體', 'MingLiU', 'Times New Roman', Times, serif;
+  position: absolute;
+  bottom: 37.8px;
+  right: 1.25rem;
+  /* 20px = 1.25rem */
+  font-size: 0.833rem;
+  /* 10pt = 0.833rem */
+  color: #ffffff !important;
+  z-index: 100;
+  font-family:
+    "PMingLiU", "新細明體", "MingLiU", "Times New Roman", Times, serif;
 }
 
 /* 手機版與平板版：首頁版權說明字體大小與其他分頁一致 */
 @media (max-width: 1024px) {
-    .hero .copyright {
-        font-size: 0.583rem;
-        /* 7pt = 0.583rem */
-        bottom: 15px;
-        right: 15px;
-    }
+  .hero .copyright {
+    font-size: 0.583rem;
+    /* 7pt = 0.583rem */
+    bottom: 15px;
+    right: 15px;
+  }
 }
 
 /* 頁面容器樣式 */
@@ -608,769 +619,768 @@ body.page-light .caption {
 #painting .page-container,
 #exhibition .page-container,
 .page-container {
-    max-width: 75rem;
-    /* 1200px = 75rem */
-    margin: 0 auto;
-    padding: 3rem 2rem 5rem 2rem;
-    /* 底部增加空間給版權資訊 */
-    background: transparent;
-    min-height: calc(100vh - 5rem);
-    /* 80px = 5rem */
-    color: #e0e0e0;
-    position: relative;
-    padding-top: 20vh !important;
-    /* 強制拉開導覽列與內容的距離 */
+  max-width: 75rem;
+  /* 1200px = 75rem */
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem 2rem;
+  /* 底部增加空間給版權資訊 */
+  background: transparent;
+  min-height: calc(100vh - 5rem);
+  /* 80px = 5rem */
+  color: #e0e0e0;
+  position: relative;
+  padding-top: 20vh !important;
+  /* 強制拉開導覽列與內容的距離 */
 }
 
 /* 展演頁：移除底部空白，讓版權緊貼內容 */
 #exhibition .page-container {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    min-height: auto;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  min-height: auto;
 }
 
 #exhibition .page-container .page-content {
-    width: 100%;
-    min-height: 0;
+  width: 100%;
+  min-height: 0;
 }
 
 #exhibition .page-container .copyright {
-    position: static;
-    margin-top: 0;
-    margin-bottom: 0;
-    right: auto;
-    bottom: auto;
-    text-align: right;
-    display: block;
-    width: 100%;
+  position: static;
+  margin-top: 0;
+  margin-bottom: 0;
+  right: auto;
+  bottom: auto;
+  text-align: right;
+  display: block;
+  width: 100%;
 }
 
 .page-title {
-    font-size: 3rem;
-    margin-bottom: 3rem;
-    text-align: center;
-    color: #e0e0e0;
-    font-weight: 700;
+  font-size: 3rem;
+  margin-bottom: 3rem;
+  text-align: center;
+  color: #e0e0e0;
+  font-weight: 700;
 }
 
 .page-content {
-    width: 100%;
+  width: 100%;
 }
 
 /* BIO 頁面樣式 */
 .bio-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .bio-image-wrapper {
-    width: 23.625rem;
-    /* 378px = 23.625rem */
-    height: 23.625rem;
-    /* 378px = 23.625rem */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: auto;
+  width: 23.625rem;
+  /* 378px = 23.625rem */
+  height: 23.625rem;
+  /* 378px = 23.625rem */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
 }
 
 .bio-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 0 !important;
-    /* 移除圓角 */
-    display: block;
-    /* 確保圖片顯示 */
-    opacity: 1;
-    /* 確保不透明 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 !important;
+  /* 移除圓角 */
+  display: block;
+  /* 確保圖片顯示 */
+  opacity: 1;
+  /* 確保不透明 */
 }
 
 .bio-image-placeholder {
-    width: 100%;
-    aspect-ratio: 1;
-    background: #000000;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #d0d0d0;
-    font-size: 1.2rem;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #000000;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d0d0d0;
+  font-size: 1.2rem;
 }
 
 .bio-text h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: #e0e0e0;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #e0e0e0;
 }
 
 .bio-text h3 {
-    font-size: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    color: #e0e0e0;
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #e0e0e0;
 }
 
 .bio-text p {
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    color: #d0d0d0;
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  color: #d0d0d0;
 }
 
 .bio-text p[data-lang-zh] {
-    font-size: 1.1rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-weight: normal;
+  font-size: 1.1rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: normal;
 }
 
 .bio-text ul {
-    margin-left: 2rem;
-    font-size: 1.1rem;
-    line-height: 2;
-    color: #d0d0d0;
+  margin-left: 2rem;
+  font-size: 1.1rem;
+  line-height: 2;
+  color: #d0d0d0;
 }
 
 .bio-text li {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* Bio 內容樣式（桌面版原始樣式） */
 .bio-content {
-    font-size: 1rem;
+  font-size: 1rem;
 }
 
 /* 作品網格樣式 */
 .artwork-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
 }
 
 .artwork-item {
-    background: #000000;
-    border-radius: 15px;
-    overflow: hidden;
-    transition: all 0.3s ease;
+  background: #000000;
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .artwork-item:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .artwork-image-placeholder {
-    width: 100%;
-    aspect-ratio: 4/3;
-    background: #000000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #d0d0d0;
-    font-size: 1.2rem;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d0d0d0;
+  font-size: 1.2rem;
 }
 
 .artwork-info {
-    padding: 1.5rem;
+  padding: 1.5rem;
 }
 
 .artwork-info h3 {
-    font-size: 1.3rem;
-    margin-bottom: 0.5rem;
-    color: #e0e0e0;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: #e0e0e0;
 }
 
 .artwork-info p {
-    color: #d0d0d0;
-    font-size: 0.95rem;
-    line-height: 1.6;
+  color: #d0d0d0;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 .artwork-list {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  width: 100%;
 }
 
 .artwork-group {
-    width: 100%;
+  width: 100%;
 }
 
 .artwork-main {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .artwork-main-image {
-    width: 100%;
+  width: 100%;
 }
 
 .artwork-main-info {
-    width: 100%;
+  width: 100%;
 }
 
 .artwork-main-info h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: #e0e0e0;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #e0e0e0;
 }
 
 .artwork-meta {
-    font-size: 1rem;
-    color: #d0d0d0;
-    margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #d0d0d0;
+  margin-bottom: 1rem;
 }
 
 .artwork-description {
-    font-size: 1rem;
-    line-height: 1.8;
-    color: #d0d0d0;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #d0d0d0;
 }
 
 /* 書法頁面專用樣式 - 縮小16%並置中（放大20%後從70%變為84%） */
 #calligraphy .artwork-list {
-    align-items: center;
+  align-items: center;
 }
 
 #calligraphy .artwork-group {
-    width: 84%;
-    transform: scale(0.84);
-    transform-origin: center top;
-    margin-bottom: -8%;
+  width: 84%;
+  transform: scale(0.84);
+  transform-origin: center top;
+  margin-bottom: -8%;
 }
 
 #calligraphy .artwork-main {
-    align-items: center;
+  align-items: center;
 }
 
 #calligraphy .artwork-main-info {
-    text-align: center;
+  text-align: center;
 }
 
 #calligraphy .artwork-main-info h2 {
-    font-size: 1.512rem;
-    /* 1.8rem * 0.84 */
+  font-size: 1.512rem;
+  /* 1.8rem * 0.84 */
 }
 
 #calligraphy .artwork-meta {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 #calligraphy .artwork-description {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
 }
 
 /* 圖片輪播樣式 */
 .image-gallery {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 25rem;
-    /* 400px = 25rem */
-    height: auto;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25rem;
+  /* 400px = 25rem */
+  height: auto;
 }
 
 /* 繪畫頁面 - 水平滾動視窗 */
 #painting .painting-viewport {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow: hidden;
-    position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
 }
 
 #painting .painting-track {
-    display: flex;
-    align-items: center;
-    gap: 35vw;
-    padding-left: 5vw;
-    padding-right: 5vw;
-    width: max-content;
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    /* Safari性能優化：強制GPU加速 */
-    -webkit-transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    perspective: 1000px;
-    -webkit-perspective: 1000px;
+  display: flex;
+  align-items: center;
+  gap: 35vw;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  /* Safari性能優化：強制GPU加速 */
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
 
 #painting .painting-item {
-    position: relative;
-    height: 60vh;
-    width: auto;
-    flex-shrink: 0;
+  position: relative;
+  height: 60vh;
+  width: auto;
+  flex-shrink: 0;
 }
 
 /* 特定作品縮小版 */
 #painting .painting-item.small-size {
-    height: 36vh;
-    /* 原本 60vh 的 60% */
-    align-self: center;
+  height: 36vh;
+  /* 原本 60vh 的 60% */
+  align-self: center;
 }
 
 #painting .image-wrapper {
-    height: 100%;
-    width: auto;
+  height: 100%;
+  width: auto;
 }
 
 #painting .painting-item img {
-    height: 100%;
-    width: auto;
-    display: block;
-    border-radius: 0 !important;
-    box-shadow: none;
-    transition: transform 0.5s ease;
-    /* Safari性能優化：使用GPU加速 */
-    will-change: transform;
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  height: 100%;
+  width: auto;
+  display: block;
+  border-radius: 0 !important;
+  box-shadow: none;
+  transition: transform 0.5s ease;
+  /* Safari性能優化：使用GPU加速 */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
-
 #painting .caption {
-    position: absolute;
-    bottom: -48px;
-    /* 作品與作品說明間距 48px */
-    right: 0;
-    font-size: 1rem;
-    /* 桌面版作品說明改成 1rem */
-    letter-spacing: 0.05em;
-    color: #24190b;
-    text-shadow: none;
-    white-space: nowrap;
+  position: absolute;
+  bottom: -48px;
+  /* 作品與作品說明間距 48px */
+  right: 0;
+  font-size: 1rem;
+  /* 桌面版作品說明改成 1rem */
+  letter-spacing: 0.05em;
+  color: #24190b;
+  text-shadow: none;
+  white-space: nowrap;
 }
 
 #painting .painting-viewport::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .gallery-container {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    min-height: 25rem;
-    /* 400px = 25rem */
-    height: auto;
-    background: #1a1a1a;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  min-height: 25rem;
+  /* 400px = 25rem */
+  height: auto;
+  background: #1a1a1a;
 }
 
 /* 書法頁面：作品兩側背景改為米白色 */
 #calligraphy .gallery-container {
-    background: #fffaf2;
+  background: #fffaf2;
 }
 
 /* 篆刻頁面：作品兩側背景改為米白色 */
 #sealcarving .gallery-container {
-    background: #fffaf2;
+  background: #fffaf2;
 }
 
 .gallery-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0;
-    display: block;
-    visibility: visible;
-    transition: opacity 0.5s ease-in-out;
-    background: #1a1a1a;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  display: block;
+  visibility: visible;
+  transition: opacity 0.5s ease-in-out;
+  background: #1a1a1a;
 }
 
 /* 書法頁面：圖片背景改為米白色 */
 #calligraphy .gallery-image {
-    background: #fffaf2;
-    clip-path: inset(0 0 100% 0);
-    will-change: clip-path, opacity;
-    border-radius: 2%;
-    /* Safari性能優化：使用GPU加速 */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  background: #fffaf2;
+  clip-path: inset(0 0 100% 0);
+  will-change: clip-path, opacity;
+  border-radius: 2%;
+  /* Safari性能優化：使用GPU加速 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* 篆刻頁面：圖片背景改為米白色 */
 #sealcarving .gallery-image {
-    background: #fffaf2;
-    clip-path: inset(0 0 100% 0);
-    will-change: clip-path, opacity;
-    border-radius: 2%;
-    /* Safari性能優化：使用GPU加速 */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  background: #fffaf2;
+  clip-path: inset(0 0 100% 0);
+  will-change: clip-path, opacity;
+  border-radius: 2%;
+  /* Safari性能優化：使用GPU加速 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* 確保圖片有圓角 */
 img {
-    border-radius: 12px !important;
-    /* 約 2% */
+  border-radius: 12px !important;
+  /* 約 2% */
 }
 
 .gallery-image.active {
-    opacity: 1 !important;
-    z-index: 1;
-    display: block !important;
-    visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 1;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* 確保 painting 頁面的圖片正確顯示 */
 #painting .gallery-container {
-    min-height: 31.25rem;
-    /* 500px = 31.25rem */
-    height: auto;
-    background: #1a1a1a;
+  min-height: 31.25rem;
+  /* 500px = 31.25rem */
+  height: auto;
+  background: #1a1a1a;
 }
 
 #painting .gallery-image {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 0;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 0;
 }
 
 #painting .gallery-image.active {
-    opacity: 1 !important;
-    display: block !important;
-    visibility: visible !important;
-    z-index: 1;
+  opacity: 1 !important;
+  display: block !important;
+  visibility: visible !important;
+  z-index: 1;
 }
 
 .gallery-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    color: #e0e0e0;
-    border: none;
-    width: 4.0625rem;
-    /* 65px = 4.0625rem */
-    height: 4.0625rem;
-    /* 65px = 4.0625rem */
-    font-size: calc(2rem + 11px);
-    /* cursor: pointer; */
-    /* 已刪除：與自訂鼠標衝突 */
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    border-radius: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  color: #e0e0e0;
+  border: none;
+  width: 4.0625rem;
+  /* 65px = 4.0625rem */
+  height: 4.0625rem;
+  /* 65px = 4.0625rem */
+  font-size: calc(2rem + 11px);
+  /* cursor: pointer; */
+  /* 已刪除：與自訂鼠標衝突 */
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  border-radius: 0;
 }
 
 /* 書法頁面：箭頭顏色改為深棕色 */
 #calligraphy .gallery-nav {
-    color: #24190b;
+  color: #24190b;
 }
 
 #calligraphy .gallery-nav:hover {
-    color: #24190b;
-    opacity: 0.8;
+  color: #24190b;
+  opacity: 0.8;
 }
 
 /* 篆刻頁面：箭頭顏色改為深棕色 */
 #sealcarving .gallery-nav {
-    color: #24190b;
+  color: #24190b;
 }
 
 #sealcarving .gallery-nav:hover {
-    color: #24190b;
-    opacity: 0.8;
+  color: #24190b;
+  opacity: 0.8;
 }
 
 .gallery-prev {
-    left: 1.25rem;
-    /* 20px = 1.25rem */
+  left: 1.25rem;
+  /* 20px = 1.25rem */
 }
 
 .gallery-next {
-    right: 1.25rem;
-    /* 20px = 1.25rem */
+  right: 1.25rem;
+  /* 20px = 1.25rem */
 }
 
 .gallery-nav:hover {
-    background: transparent;
-    color: #ffffff;
-    transform: translateY(-50%) scale(1.1);
+  background: transparent;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.1);
 }
 
 .gallery-nav:active {
-    transform: translateY(-50%) scale(0.95);
+  transform: translateY(-50%) scale(0.95);
 }
 
 /* 響應式設計 - 手機版與平板版 */
 @media (max-width: 1024px) {
-
-    /* =========================================
+  /* =========================================
        書法頁面專屬手機版排版修復 (精準隔離)
        只在 .calligraphy-scope-wrapper 下生效
        ========================================= */
 
-    /* 1. 強制重置定位 (Reset Position) */
-    .calligraphy-scope-wrapper .page-container,
-    .calligraphy-scope-wrapper .page-content,
-    .calligraphy-scope-wrapper .artwork-list,
-    .calligraphy-scope-wrapper .artwork-group,
-    .calligraphy-scope-wrapper .artwork-main,
-    .calligraphy-scope-wrapper .artwork-main-image,
-    .calligraphy-scope-wrapper .artwork-main-info,
-    .calligraphy-scope-wrapper .copyright {
-        position: static !important;
-        width: 100% !important;
-        transform: none !important;
-    }
+  /* 1. 強制重置定位 (Reset Position) */
+  .calligraphy-scope-wrapper .page-container,
+  .calligraphy-scope-wrapper .page-content,
+  .calligraphy-scope-wrapper .artwork-list,
+  .calligraphy-scope-wrapper .artwork-group,
+  .calligraphy-scope-wrapper .artwork-main,
+  .calligraphy-scope-wrapper .artwork-main-image,
+  .calligraphy-scope-wrapper .artwork-main-info,
+  .calligraphy-scope-wrapper .copyright {
+    position: static !important;
+    width: 100% !important;
+    transform: none !important;
+  }
 
-    /* 2. 重建垂直堆疊 (Vertical Stack) */
-    .calligraphy-scope-wrapper {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        padding-top: 5rem;
-        /* 80px = 5rem */
-        /* 避開 Navbar */
-        padding-bottom: 0 !important;
-        /* 移除底部空白 */
-        height: auto !important;
-        min-height: auto !important;
-    }
+  /* 2. 重建垂直堆疊 (Vertical Stack) */
+  .calligraphy-scope-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding-top: 5rem;
+    /* 80px = 5rem */
+    /* 避開 Navbar */
+    padding-bottom: 0 !important;
+    /* 移除底部空白 */
+    height: auto !important;
+    min-height: auto !important;
+  }
 
-    .calligraphy-scope-wrapper .page-container {
-        position: static !important;
-        width: 100% !important;
-        padding: 0 1rem !important;
-        padding-top: 0 !important;
-        padding-bottom: 2rem !important;
-        min-height: auto !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-    }
+  .calligraphy-scope-wrapper .page-container {
+    position: static !important;
+    width: 100% !important;
+    padding: 0 1rem !important;
+    padding-top: 0 !important;
+    padding-bottom: 2rem !important;
+    min-height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
 
-    .calligraphy-scope-wrapper .page-content {
-        width: 100% !important;
-        position: static !important;
-    }
+  .calligraphy-scope-wrapper .page-content {
+    width: 100% !important;
+    position: static !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-list {
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0 !important;
-        align-items: center !important;
-    }
+  .calligraphy-scope-wrapper .artwork-list {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    align-items: center !important;
+  }
 
-    /* 3. 設定間距 (Spacing) */
-    .calligraphy-scope-wrapper .artwork-group {
-        width: 100% !important;
-        max-width: 100% !important;
-        transform: none !important;
-        margin-bottom: 0 !important;
-        position: static !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-    }
+  /* 3. 設定間距 (Spacing) */
+  .calligraphy-scope-wrapper .artwork-group {
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: none !important;
+    margin-bottom: 0 !important;
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-group:not(:last-child) {
-        margin-bottom: 6rem !important;
-    }
+  .calligraphy-scope-wrapper .artwork-group:not(:last-child) {
+    margin-bottom: 6rem !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-group:last-child {
-        margin-bottom: 4rem !important;
-    }
+  .calligraphy-scope-wrapper .artwork-group:last-child {
+    margin-bottom: 4rem !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-main {
-        width: 100% !important;
-        gap: 2rem !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        position: static !important;
-    }
+  .calligraphy-scope-wrapper .artwork-main {
+    width: 100% !important;
+    gap: 2rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    position: static !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-main-image {
-        width: 100% !important;
-        margin-bottom: 0 !important;
-        position: static !important;
-    }
+  .calligraphy-scope-wrapper .artwork-main-image {
+    width: 100% !important;
+    margin-bottom: 0 !important;
+    position: static !important;
+  }
 
-    .calligraphy-scope-wrapper .image-gallery {
-        position: relative !important;
-        width: 100% !important;
-        padding: 0 1.96rem !important;
-        /* 31.36px = 1.96rem */
-        margin-bottom: 0 !important;
-    }
+  .calligraphy-scope-wrapper .image-gallery {
+    position: relative !important;
+    width: 100% !important;
+    padding: 0 1.96rem !important;
+    /* 31.36px = 1.96rem */
+    margin-bottom: 0 !important;
+  }
 
-    .calligraphy-scope-wrapper .gallery-container {
-        position: relative !important;
-        width: 100% !important;
-        aspect-ratio: 1 / 1 !important;
-        overflow: hidden !important;
-        background-color: transparent !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        border: none !important;
-        outline: none !important;
-        border-radius: 0 !important;
-    }
+  .calligraphy-scope-wrapper .gallery-container {
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 1 / 1 !important;
+    overflow: hidden !important;
+    background-color: transparent !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    border: none !important;
+    outline: none !important;
+    border-radius: 0 !important;
+  }
 
-    .calligraphy-scope-wrapper .gallery-image {
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: contain !important;
-        transform: scale(1.01) !important;
-        border-radius: 0 !important;
-        transition: opacity 1s ease-in-out !important;
-        border: none !important;
-        outline: none !important;
-    }
+  .calligraphy-scope-wrapper .gallery-image {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    transform: scale(1.01) !important;
+    border-radius: 0 !important;
+    transition: opacity 1s ease-in-out !important;
+    border: none !important;
+    outline: none !important;
+  }
 
-    .calligraphy-scope-wrapper .gallery-nav {
-        width: 2.875rem !important;
-        /* 46px = 2.875rem */
-        height: 2.875rem !important;
-        /* 46px = 2.875rem */
-        font-size: calc(1.5rem + 6px) !important;
-        position: absolute !important;
-        z-index: 20 !important;
-        color: #24190b !important;
-    }
+  .calligraphy-scope-wrapper .gallery-nav {
+    width: 2.875rem !important;
+    /* 46px = 2.875rem */
+    height: 2.875rem !important;
+    /* 46px = 2.875rem */
+    font-size: calc(1.5rem + 6px) !important;
+    position: absolute !important;
+    z-index: 20 !important;
+    color: #24190b !important;
+  }
 
-    .calligraphy-scope-wrapper .gallery-nav:hover {
-        color: #24190b !important;
-        opacity: 0.8 !important;
-    }
+  .calligraphy-scope-wrapper .gallery-nav:hover {
+    color: #24190b !important;
+    opacity: 0.8 !important;
+  }
 
-    .calligraphy-scope-wrapper .gallery-prev {
-        left: -1.68rem !important;
-        /* 26.88px = 1.68rem */
-    }
+  .calligraphy-scope-wrapper .gallery-prev {
+    left: -1.68rem !important;
+    /* 26.88px = 1.68rem */
+  }
 
-    .calligraphy-scope-wrapper .gallery-next {
-        right: -1.68rem !important;
-        /* 26.88px = 1.68rem */
-    }
+  .calligraphy-scope-wrapper .gallery-next {
+    right: -1.68rem !important;
+    /* 26.88px = 1.68rem */
+  }
 
-    .calligraphy-scope-wrapper .artwork-main-info {
-        width: 100% !important;
-        max-width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 0.75rem !important;
-        margin-bottom: 0 !important;
-        padding: 0 1.25rem !important;
-        /* 20px = 1.25rem */
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        position: static !important;
-    }
+  .calligraphy-scope-wrapper .artwork-main-info {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    margin-bottom: 0 !important;
+    padding: 0 1.25rem !important;
+    /* 20px = 1.25rem */
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    position: static !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-main-info h2 {
-        font-size: calc(0.8rem + 2px) !important;
-        /* 放大 2px */
-        margin-bottom: 0 !important;
-        width: 100% !important;
-    }
+  .calligraphy-scope-wrapper .artwork-main-info h2 {
+    font-size: calc(0.8rem + 2px) !important;
+    /* 放大 2px */
+    margin-bottom: 0 !important;
+    width: 100% !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-main-info p,
-    .calligraphy-scope-wrapper .artwork-meta {
-        font-size: calc(0.42rem + 2px) !important;
-        /* 放大 2px */
-        margin-bottom: 0 !important;
-        line-height: 1.8 !important;
-        width: 100% !important;
-    }
+  .calligraphy-scope-wrapper .artwork-main-info p,
+  .calligraphy-scope-wrapper .artwork-meta {
+    font-size: calc(0.42rem + 2px) !important;
+    /* 放大 2px */
+    margin-bottom: 0 !important;
+    line-height: 1.8 !important;
+    width: 100% !important;
+  }
 
-    .calligraphy-scope-wrapper .artwork-description,
-    .calligraphy-scope-wrapper .artwork-main-info .artwork-description {
-        font-size: 0.8rem !important;
-        /* 手機版調整為 0.8rem */
-        line-height: 1.6 !important;
-        margin-bottom: 0 !important;
-        margin-top: 1rem !important;
-        display: block !important;
-        position: relative !important;
-        height: auto !important;
-        opacity: 1 !important;
-        width: 100% !important;
-    }
+  .calligraphy-scope-wrapper .artwork-description,
+  .calligraphy-scope-wrapper .artwork-main-info .artwork-description {
+    font-size: 0.8rem !important;
+    /* 手機版調整為 0.8rem */
+    line-height: 1.6 !important;
+    margin-bottom: 0 !important;
+    margin-top: 1rem !important;
+    display: block !important;
+    position: relative !important;
+    height: auto !important;
+    opacity: 1 !important;
+    width: 100% !important;
+  }
 
-    .calligraphy-scope-wrapper .page-container .copyright {
-        position: relative !important;
-        margin-top: 3rem !important;
-        margin-bottom: 0 !important;
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        /* 移除底部空白 */
-        bottom: auto !important;
-        right: auto !important;
-        display: block !important;
-        clear: both !important;
-        text-align: right !important;
-        line-height: 1.8 !important;
-        height: auto !important;
-        opacity: 1 !important;
-        width: 100% !important;
-        padding-right: 1.25rem !important;
-        /* 20px = 1.25rem */
-    }
+  .calligraphy-scope-wrapper .page-container .copyright {
+    position: relative !important;
+    margin-top: 3rem !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    /* 移除底部空白 */
+    bottom: auto !important;
+    right: auto !important;
+    display: block !important;
+    clear: both !important;
+    text-align: right !important;
+    line-height: 1.8 !important;
+    height: auto !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    padding-right: 1.25rem !important;
+    /* 20px = 1.25rem */
+  }
 
-    /* 其他頁面的瀏覽鍵保持原樣 */
-    .gallery-nav {
-        width: 2.875rem;
-        /* 46px = 2.875rem */
-        height: 2.875rem;
-        /* 46px = 2.875rem */
-        font-size: calc(1.5rem + 6px);
-    }
+  /* 其他頁面的瀏覽鍵保持原樣 */
+  .gallery-nav {
+    width: 2.875rem;
+    /* 46px = 2.875rem */
+    height: 2.875rem;
+    /* 46px = 2.875rem */
+    font-size: calc(1.5rem + 6px);
+  }
 
-    .gallery-prev {
-        left: 10px;
-    }
+  .gallery-prev {
+    left: 10px;
+  }
 
-    .gallery-next {
-        right: 10px;
-    }
+  .gallery-next {
+    right: 10px;
+  }
 }
 
 /* 版權資訊 */
 .copyright {
-    position: absolute;
-    bottom: 37.8px;
-    /* 1cm = 37.8px */
-    right: 1.25rem;
-    /* 20px = 1.25rem */
-    font-size: 0.833rem;
-    /* 10pt = 0.833rem */
-    color: #d0d0d0;
-    z-index: 100;
-    font-family: 'PMingLiU', '新細明體', 'MingLiU', 'Times New Roman', Times, serif;
-    text-align: right;
+  position: absolute;
+  bottom: 37.8px;
+  /* 1cm = 37.8px */
+  right: 1.25rem;
+  /* 20px = 1.25rem */
+  font-size: 0.833rem;
+  /* 10pt = 0.833rem */
+  color: #d0d0d0;
+  z-index: 100;
+  font-family:
+    "PMingLiU", "新細明體", "MingLiU", "Times New Roman", Times, serif;
+  text-align: right;
 }
 
 /* 首頁版權保持白色 */
 .hero .copyright {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 /* 其他頁面版權改為深棕色 */
@@ -1379,40 +1389,39 @@ img {
 #sealcarving .copyright,
 #painting .copyright,
 #exhibition .copyright {
-    color: #24190b;
+  color: #24190b;
 }
 
 /* 每個頁面容器內的版權資訊 */
 .page-container .copyright {
-    position: absolute;
-    bottom: 37.8px;
-    /* 1cm = 37.8px */
-    right: 1.25rem;
-    /* 20px = 1.25rem */
-    text-align: right;
+  position: absolute;
+  bottom: 37.8px;
+  /* 1cm = 37.8px */
+  right: 1.25rem;
+  /* 20px = 1.25rem */
+  text-align: right;
 }
 
 /* Bio 頁面：版權資訊向右偏移 20% */
 #bio .page-container .copyright {
-    padding-right: 20%;
-    /* 向右偏移 20%，保持右對齊但視覺上向左移動 */
+  padding-right: 20%;
+  /* 向右偏移 20%，保持右對齊但視覺上向左移動 */
 }
 
 /* 響應式設計 - 手機與平板（max-width: 1024px） */
 @media screen and (max-width: 1024px) {
+  /* Bio 內容響應式樣式 */
+  .bio-content {
+    width: 70%;
+    /* 縮小 30% */
+    font-size: 0.7rem;
+  }
 
-    /* Bio 內容響應式樣式 */
-    .bio-content {
-        width: 70%;
-        /* 縮小 30% */
-        font-size: 0.7rem;
-    }
-
-    /* 同時支援 .bio-text（向後兼容，如果 HTML 中使用 .bio-text） */
-    .bio-text {
-        width: 70%;
-        font-size: 0.7rem;
-    }
+  /* 同時支援 .bio-text（向後兼容，如果 HTML 中使用 .bio-text） */
+  .bio-text {
+    width: 70%;
+    font-size: 0.7rem;
+  }
 }
 
 /* =========================================
@@ -1421,77 +1430,76 @@ img {
    注意：769px - 1024px 使用漢堡選單（見下方）
    ========================================= */
 @media (max-width: 1200px) and (min-width: 1025px) {
+  /* 平板版：導覽列換行佈局 */
+  .nav-container {
+    flex-wrap: wrap !important;
+    /* 允許換行 */
+    padding: 0.75rem 1.5rem !important;
+    /* 增加上下 padding，為兩行佈局留出空間 */
+    height: auto !important;
+    /* 自動高度，適應兩行佈局 */
+    min-height: 2.5rem;
+    /* 最小高度保持原樣 */
+    align-items: center;
+  }
 
-    /* 平板版：導覽列換行佈局 */
-    .nav-container {
-        flex-wrap: wrap !important;
-        /* 允許換行 */
-        padding: 0.75rem 1.5rem !important;
-        /* 增加上下 padding，為兩行佈局留出空間 */
-        height: auto !important;
-        /* 自動高度，適應兩行佈局 */
-        min-height: 2.5rem;
-        /* 最小高度保持原樣 */
-        align-items: center;
-    }
+  /* Logo 在第一行左側 */
+  .logo {
+    font-size: 1.2rem;
+    /* 稍微縮小 Logo 字體 */
+    order: 1;
+    /* 確保在第一行 */
+    margin-bottom: 0;
+    width: auto;
+  }
 
-    /* Logo 在第一行左側 */
-    .logo {
-        font-size: 1.2rem;
-        /* 稍微縮小 Logo 字體 */
-        order: 1;
-        /* 確保在第一行 */
-        margin-bottom: 0;
-        width: auto;
-    }
+  /* 中間導覽連結容器：換到第二行，靠左 */
+  .nav-menu-center {
+    position: static !important;
+    /* 移除絕對定位 */
+    transform: none !important;
+    /* 移除居中變換 */
+    order: 2;
+    /* 確保在第二行 */
+    flex: 1;
+    /* 佔用剩餘空間 */
+    min-width: 0;
+    /* 允許縮小 */
+    margin-right: 1rem;
+    /* 與語言切換器保持間距 */
+  }
 
-    /* 中間導覽連結容器：換到第二行，靠左 */
-    .nav-menu-center {
-        position: static !important;
-        /* 移除絕對定位 */
-        transform: none !important;
-        /* 移除居中變換 */
-        order: 2;
-        /* 確保在第二行 */
-        flex: 1;
-        /* 佔用剩餘空間 */
-        min-width: 0;
-        /* 允許縮小 */
-        margin-right: 1rem;
-        /* 與語言切換器保持間距 */
-    }
+  /* 導覽選單：水平排列，允許換行 */
+  .nav-menu {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    /* 增加間距，避免重疊 */
+  }
 
-    /* 導覽選單：水平排列，允許換行 */
-    .nav-menu {
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        /* 增加間距，避免重疊 */
-    }
+  /* 減少導覽連結的左右間距 */
+  .nav-link {
+    padding: 0 15px;
+    /* 從 90px 減少到 15px，為平板留出更多空間 */
+    font-size: 0.75rem;
+    /* 稍微縮小字體 */
+  }
 
-    /* 減少導覽連結的左右間距 */
-    .nav-link {
-        padding: 0 15px;
-        /* 從 90px 減少到 15px，為平板留出更多空間 */
-        font-size: 0.75rem;
-        /* 稍微縮小字體 */
-    }
+  /* 語言切換器：在第二行右側 */
+  .language-switcher {
+    display: flex !important;
+    /* 顯示語言切換器 */
+    order: 3;
+    /* 確保在第二行右側 */
+    flex-shrink: 0;
+    /* 防止被壓縮 */
+  }
 
-    /* 語言切換器：在第二行右側 */
-    .language-switcher {
-        display: flex !important;
-        /* 顯示語言切換器 */
-        order: 3;
-        /* 確保在第二行右側 */
-        flex-shrink: 0;
-        /* 防止被壓縮 */
-    }
-
-    /* 隱藏手機版元素 */
-    .mobile-language-switcher,
-    .mobile-menu-toggle {
-        display: none !important;
-    }
+  /* 隱藏手機版元素 */
+  .mobile-language-switcher,
+  .mobile-menu-toggle {
+    display: none !important;
+  }
 }
 
 /* =========================================
@@ -1499,676 +1507,678 @@ img {
    進一步調整間距和字體
    ========================================= */
 @media (max-width: 900px) and (min-width: 769px) {
+  /* 進一步減少導覽連結間距 */
+  .nav-link {
+    padding: 0 15px;
+    /* 進一步減少間距 */
+    font-size: 0.7rem;
+    /* 進一步縮小字體 */
+  }
 
-    /* 進一步減少導覽連結間距 */
-    .nav-link {
-        padding: 0 15px;
-        /* 進一步減少間距 */
-        font-size: 0.7rem;
-        /* 進一步縮小字體 */
-    }
+  /* Logo 字體再縮小 */
+  .logo {
+    font-size: 1.1rem;
+  }
 
-    /* Logo 字體再縮小 */
-    .logo {
-        font-size: 1.1rem;
-    }
-
-    /* 導覽選單間距 */
-    .nav-menu {
-        gap: 0.3rem;
-    }
+  /* 導覽選單間距 */
+  .nav-menu {
+    gap: 0.3rem;
+  }
 }
 
 /* 響應式設計 - 手機版與平板版（max-width: 1024px，包含 iPad 直立模式） */
 @media (max-width: 1024px) {
-
-    /* 網站標題 */
-    .logo {
-        font-size: 0.9rem;
-        line-height: 3.125rem;
-        /* 與 nav-container 高度一致，確保垂直居中 */
-        margin-left: 15px;
-        /* 往右移 15px */
-        white-space: nowrap;
-        /* 保持一行，不換行 */
-        overflow: visible;
-        /* 確保完整顯示，不被截斷 */
-        text-overflow: clip;
-        /* 不使用省略號 */
-        max-width: none;
-        /* 移除寬度限制，確保完整顯示 */
-        flex-shrink: 0;
-        /* 防止被壓縮 */
-        display: flex;
-        align-items: center;
-        /* 確保內容垂直居中 */
-    }
-
-    /* --- 手機版導覽列：漢堡選單模式 --- */
-    .nav-container {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        width: 100% !important;
-        padding: 0 1rem !important;
-        height: 3.125rem !important;
-        /* 50px = 3.125rem */
-        position: relative !important;
-    }
-
-    /* 隱藏原有的導覽選單和語言切換器 */
-    .nav-menu-center,
-    .language-switcher {
-        display: none !important;
-        /* 手機版隱藏桌面版語言切換器 */
-    }
-
-    /* 手機版：Logo 靠左對齊 */
-    .logo {
-        flex-shrink: 0;
-        /* 防止被壓縮 */
-        margin-right: auto;
-        /* 自動右邊距，確保靠左對齊 */
-        display: flex;
-        align-items: center;
-        /* 確保與其他元素垂直對齊 */
-    }
-
-    /* 手機版：語言切換器（MENU 左側） */
-    .mobile-language-switcher {
-        display: flex !important;
-        align-items: center;
-        gap: 0.4rem;
-        margin-right: 4px;
-        /* MENU 按鈕左側的間距 4px（小間距保持 px） */
-        margin-left: 0;
-        /* 移除自動左邊距，讓它在 MENU 左側 */
-        flex-shrink: 0;
-        /* 防止被壓縮 */
-        height: 3.125rem;
-        /* 與 nav-container 高度一致，確保垂直對齊 */
-    }
-
-    /* 漢堡選單按鈕 */
-    .mobile-menu-toggle {
-        display: flex !important;
-        align-items: center;
-        justify-content: flex-end;
-        /* 改為靠右對齊 */
-        background: transparent;
-        border: none;
-        color: #533c1d;
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 0.675rem;
-        /* 10.8px = 0.675rem */
-        letter-spacing: 0.1em;
-        padding: 0.5rem 0;
-        cursor: pointer;
-        z-index: 10001;
-        position: relative !important;
-        /* 改回 relative，讓它在導覽列的流中 */
-        margin-right: 0;
-        margin-left: 0;
-        width: auto;
-        /* 改為 auto，移除左側空白區塊 */
-        padding-left: 0;
-        /* 移除左側 padding */
-        padding-right: 0;
-        /* 移除右側 padding */
-        flex-shrink: 0;
-        /* 防止被壓縮 */
-        height: 3.125rem;
-        /* 與 nav-container 高度一致，確保垂直對齊 */
-        line-height: 3.125rem;
-        /* 與 nav-container 高度一致，確保垂直對齊 */
-    }
-
-    /* 手機版 MENU/CLOSE 按鈕顏色 */
-    .mobile-menu-toggle {
-        color: #523b1d !important;
-    }
-
-    /* 首頁的 menu 固定是白色 */
-    body:not(.page-light) .mobile-menu-toggle {
-        color: #ffffff !important;
-    }
-
-    /* 選單打開時，CLOSE 按鈕顏色（從首頁點擊時轉為深棕色） */
-    .mobile-menu-overlay.active~.nav-container .mobile-menu-toggle,
-    .mobile-menu-overlay.active+* .mobile-menu-toggle {
-        color: #24190b !important;
-    }
-
-    /* 更精確的選擇器：當選單打開時，CLOSE 按鈕變為深棕色 */
-    body .mobile-menu-overlay.active~* .mobile-menu-toggle,
-    .nav-container:has(~ .mobile-menu-overlay.active) .mobile-menu-toggle {
-        color: #24190b !important;
-    }
-
-    /* 手機版漢堡選單遮罩（手機版顯示） */
-    .mobile-menu-overlay {
-        display: block !important;
-    }
-
-    .menu-text {
-        display: block;
-    }
-
-    /* 漢堡選單遮罩 */
-    .mobile-menu-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background-color: #fffaf2;
-        z-index: 10000;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        overflow-y: hidden;
-        /* 固定一頁式，禁止滾動 */
-        -webkit-overflow-scrolling: touch;
-    }
-
-    /* 手機版漢堡選單 favicon 圖示：與 CLOSE 按鈕垂直對齊，水平排列 */
-    img.mobile-menu-favicon,
-    .mobile-menu-favicon {
-        position: fixed !important;
-        /* 計算位置：navigation padding-top 2rem (32px) + nav-container 高度 3.125rem (50px) / 2 = 3.5625rem (57px) */
-        /* favicon 使用 translateY(-50%) 垂直居中，所以 top 設為 3.5625rem */
-        top: 3.5625rem !important;
-        /* 57px = 3.5625rem，與 CLOSE 按鈕垂直中心對齊 */
-        left: 1rem !important;
-        /* 從左側 1rem，與 nav-container 的 padding-left 一致 */
-        bottom: auto !important;
-        /* 移除 bottom，改用 top */
-        right: auto !important;
-        /* 移除 right */
-
-        margin: 0 !important;
-        padding: 0 !important;
-        transform: translateY(-50%) !important;
-        /* 垂直居中對齊，確保與 CLOSE 按鈕在同一水平線 */
-
-        width: 20px !important;
-        height: 20px !important;
-        /* 圖示大小 20px × 20px */
-        z-index: 10002 !important;
-        /* 在遮罩與內容之上 */
-
-        display: block !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-
-        pointer-events: none;
-        object-fit: contain !important;
-        background: transparent !important;
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
-        
-        /* 移除點擊時的淺藍色底色 */
-        -webkit-tap-highlight-color: transparent !important;
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        -webkit-user-drag: none !important;
-        outline: none !important;
-        -webkit-touch-callout: none !important;
-    }
-
-    /* 確保圖示在選單打開時可見 - 使用最高優先級 */
-    #mobile-menu-overlay.active .mobile-menu-favicon,
-    #mobile-menu-overlay.active img.mobile-menu-favicon,
-    .mobile-menu-overlay.active .mobile-menu-favicon,
-    .mobile-menu-overlay.active img.mobile-menu-favicon {
-        opacity: 1 !important;
-        visibility: visible !important;
-        display: block !important;
-        position: fixed !important;
-        top: 3.5625rem !important;
-        /* 57px = 3.5625rem，與 CLOSE 按鈕垂直中心對齊 */
-        left: 1rem !important;
-        /* 從左側 1rem */
-        bottom: auto !important;
-        right: auto !important;
-        transform: translateY(-50%) !important;
-        /* 垂直居中對齊，確保與 CLOSE 按鈕在同一水平線 */
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 20px !important;
-        height: 20px !important;
-        z-index: 10002 !important;
-        pointer-events: auto !important;
-        /* 選單打開時啟用點擊事件，讓 favicon 可以點擊 */
-        cursor: pointer !important;
-        /* 添加 pointer 樣式提示可點擊 */
-        
-        /* 移除點擊時的淺藍色底色 */
-        -webkit-tap-highlight-color: transparent !important;
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        -webkit-user-drag: none !important;
-        outline: none !important;
-        -webkit-touch-callout: none !important;
-    }
-
-    .mobile-menu-overlay.active {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    /* 確保選單打開時，圖示也能顯示 */
-    .mobile-menu-overlay.active .mobile-menu-favicon {
-        opacity: 1 !important;
-        visibility: visible !important;
-    }
-
-    /* 漢堡選單內容 */
-    .mobile-menu-content {
-        width: 100%;
-        height: 100vh;
-        /* 固定一頁式，高度為視窗高度 */
-        max-height: 100vh;
-        /* 確保不超出視窗 */
-        padding: 2rem;
-        /* 簡化 padding，使用 justify-content: center 來置中 */
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        justify-content: center;
-        /* 改為 center，讓五個分頁在 667px 高度上置中 */
-        position: relative;
-        overflow: hidden;
-        /* 固定一頁式，禁止內容溢出 */
-    }
-
-    /* 確保 CLOSE 按鈕與 MENU 按鈕位置相同（xy 軸一致） */
-    .mobile-menu-toggle.menu-open {
-        position: relative !important;
-        /* 保持相對定位，與 MENU 按鈕在同一水平軸上 */
-        z-index: 10001;
-        width: auto;
-        padding-right: 0;
-        justify-content: flex-end;
-        /* 確保文字靠右 */
-        margin-bottom: 0;
-        /* 確保沒有額外的 margin */
-    }
-
-    /* 選單打開時，CLOSE 按鈕顏色為深棕色 */
-    .mobile-menu-toggle.menu-open {
-        color: #24190b !important;
-    }
-
-    .mobile-nav-menu {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        /* 間距由 mobile-menu-content 的 padding-top 控制 */
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0;
-    }
-
-    .mobile-nav-menu li {
-        width: 100%;
-        opacity: 0;
-        transform: translateX(1.25rem);
-        /* 20px = 1.25rem */
-        transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .mobile-menu-overlay:not(.active) .mobile-nav-menu li {
-        opacity: 0;
-        transform: translateX(1.25rem);
-        /* 20px = 1.25rem */
-    }
-
-    .mobile-menu-overlay.active .mobile-nav-menu li {
-        animation: slideInFromRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(1) {
-        animation-delay: 0.1s;
-    }
-
-    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(2) {
-        animation-delay: 0.2s;
-    }
-
-    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(3) {
-        animation-delay: 0.3s;
-    }
-
-    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(4) {
-        animation-delay: 0.4s;
-    }
-
-    .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(5) {
-        animation-delay: 0.5s;
-    }
-
-    @keyframes slideInFromRight {
-        from {
-            opacity: 0;
-            transform: translateX(1.25rem);
-            /* 20px = 1.25rem */
-        }
-
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    .mobile-nav-link {
-        display: block;
-        padding: 1.8rem 0;
-        /* 增加20%間距：1.5rem * 1.2 = 1.8rem */
-        color: #c4b5a0;
-        /* 預設為淺灰色，與深棕色 #523b1d 形成對比 */
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 1rem;
-        text-decoration: none;
-        text-align: right;
-        width: 100%;
-        position: relative;
-        overflow: visible;
-        /* 改為 visible，確保沒有隱藏的文字 */
-        transition: color 0.3s ease;
-        padding-right: 0;
-        /* 確保與 CLOSE 按鈕對齊 */
-    }
-
-    /* 當前分頁顯示為深棕色 */
-    .mobile-nav-link.active {
-        color: #523b1d !important;
-        /* 深棕色，與淺灰色 #c4b5a0 形成明顯對比 */
-    }
-
-    .mobile-nav-link .roll-text {
-        height: 2.5rem;
-        /* 40px = 2.5rem */
-        text-align: right;
-        transition: none !important;
-        /* 移除手機版的滾動效果 */
-        transform: none !important;
-        /* 強制移除任何 transform */
-        overflow: visible;
-        /* 確保沒有隱藏的文字 */
-    }
-
-    .mobile-nav-link .roll-text span {
-        height: 2.5rem;
-        /* 40px = 2.5rem */
-        font-size: 0.8rem;
-        /* 手機版縮小20%：1rem * 0.8 = 0.8rem */
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        text-align: right;
-        width: 100%;
-    }
-
-    /* 手機版：只顯示第一個 span，隱藏第二個 span */
-    .mobile-nav-link .roll-text span:nth-child(2) {
-        display: none !important;
-    }
-
-    /* 手機版移除 hover 滾動效果 */
-    .mobile-nav-link:hover .roll-text {
-        transform: none !important;
-    }
-
-    .mobile-nav-link:active .roll-text {
-        transform: none !important;
-    }
-
-    /* 點擊時的深色狀態 */
-    .mobile-nav-link.clicking {
-        color: #24190b !important;
-        transition: color 0.2s ease;
-    }
-
-    /* 點擊時的深色狀態 - 文字內容 */
-    .mobile-nav-link.clicking .roll-text span {
-        color: #24190b !important;
-    }
-
-    /* 其他分頁變淡色 */
-    .mobile-nav-link.fading {
-        color: #a9a9a9 !important;
-        transition: color 0.2s ease;
-    }
-
-    /* 其他分頁變淡色 - 文字內容 */
-    .mobile-nav-link.fading .roll-text span {
-        color: #a9a9a9 !important;
-    }
-
-    .text-zh span {
-        font-size: 0.42rem;
-        /* 縮小30%: 0.6rem * 0.7 = 0.42rem */
-    }
-
-    .roll-text span {
-        font-size: 0.525rem;
-        /* 縮小30%以匹配導覽列 */
-    }
-
-    /* 調整滾動文字容器高度以匹配縮小後的導覽列 */
-    .roll-text {
-        height: 4rem;
-        /* 64px = 4rem */
-        /* 從 80px 縮小到 64px (兩個 32px 的高度) */
-    }
-
-    .roll-text span {
-        height: 2rem;
-        /* 32px = 2rem */
-        /* 從 40px 縮小到 32px */
-    }
-
-    /* 手機版移除原有的導覽選單滾動效果（因為已經隱藏） */
-    /* .nav-link:hover .roll-text 已移除，因為手機版使用漢堡選單 */
-
-    /* 語言切換按鈕縮小到跟導覽列大小一樣 */
-    .language-switcher {
-        height: 32px;
-        /* 與導覽列高度一致 */
-        line-height: 32px;
-        gap: 0.4rem;
-        /* 從 0.5rem 縮小到 0.4rem */
-        margin-right: 0;
-        /* 手機版不需要 margin */
-    }
-
-    /* 手機版導覽列中的語言切換按鈕（MENU 左側） */
-    .mobile-language-switcher .lang-btn {
-        font-size: 0.441rem;
-        /* 放大20%：0.3675rem * 1.2 = 0.441rem */
-        color: #523b1d;
-        /* 與其他選單項目顏色一致 */
-        padding: 0.2rem 0.4rem;
-        height: auto;
-        line-height: 1.2;
-    }
-
-    .mobile-language-switcher .lang-btn.active {
-        color: #24190b;
-        /* 活動狀態：深棕色 */
-    }
-
-    .mobile-language-switcher .lang-separator {
-        font-size: 0.441rem;
-        /* 放大20%：與按鈕字型一致 */
-        color: #523b1d;
-        /* 與其他選單項目顏色一致 */
-    }
-
-    /* 首頁的語言切換按鈕顏色 */
-    body:not(.page-light) .mobile-language-switcher .lang-btn {
-        color: #ffffff !important;
-    }
-
-    body:not(.page-light) .mobile-language-switcher .lang-btn.active {
-        color: #ffffff !important;
-    }
-
-    body:not(.page-light) .mobile-language-switcher .lang-separator {
-        color: rgba(255, 255, 255, 0.4) !important;
-    }
-
-    /* 手機版：版權資訊樣式調整 */
-    .copyright {
-        font-size: 0.583rem;
-        /* 7pt = 0.583rem */
-        bottom: 15px;
-        right: 15px;
-        /* 調整位置 */
-    }
-
-    .page-container .copyright {
-        bottom: 15px;
-        right: 15px;
-        font-size: 0.583rem;
-        /* 7pt = 0.583rem */
-    }
-
-    /* 手機版：Bio 頁面版權資訊偏移調整 */
-    #bio .page-container .copyright {
-        padding-right: 10%;
-        /* 手機版減少偏移量 */
-    }
-
-    .lang-btn {
-        font-size: 0.525rem;
-        /* 與導覽列字體大小一致: 0.525rem */
-        padding: 0.2rem 0.4rem;
-        /* 從 0.25rem 0.5rem 縮小 */
-        height: 32px;
-        /* 與導覽列高度一致 */
-        line-height: 32px;
-    }
-
-
-    /* 繪畫頁面：照片放大30%（整個容器） */
-    #painting .painting-item {
-        height: 43.68vh;
-        /* 放大30%: 33.6vh * 1.3 = 43.68vh */
-    }
-
-    #painting .painting-item.small-size {
-        height: 26.208vh;
-        /* 放大30%: 20.16vh * 1.3 = 26.208vh */
-    }
-
-    #painting .caption {
-        font-size: 0.54rem;
-        /* 手機版調整為 0.54rem */
-        bottom: -35px;
-        /* 確保照片與文字距離保持一致 */
-    }
-
-    .main-content {
-        padding-top: 0;
-        /* 移除 padding-top，讓內容可以延伸到頂部，襯在 Navbar 下方 */
-    }
-
-    .page-container {
-        padding: 2rem 1rem;
-        padding-top: 6.25rem;
-        /* 100px = 6.25rem */
-        /* 手機版增加頂部間距，避免被導覽列遮擋 */
-    }
-
-    .page-title {
-        font-size: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .page-content {
-        width: 100%;
-        /* 確保手機版內容寬度100% */
-    }
-
-    /* Bio 頁面：照片置中，圖文縮小30% */
-    .bio-section {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        align-items: center;
-        justify-content: center;
-        margin-top: 9.375rem;
-        /* 150px = 9.375rem */
-        /* 往下移動 150px，避免被導覽列遮擋 */
-    }
-
-    #bio .bio-image-wrapper {
-        width: 13.23rem;
-        /* 211.68px = 13.23rem */
-        height: 13.23rem;
-        /* 211.68px = 13.23rem */
-        margin: 0 auto;
-        /* 置中 */
-    }
-
-    #bio .bio-text {
-        width: 91%;
-        /* 調寬30%: 70% * 1.3 = 91% */
-        margin: 0 auto;
-        /* 置中 */
-        font-size: 0.77rem;
-        /* 縮小30%: 1.1rem * 0.7 = 0.77rem */
-        margin-bottom: 2.8rem;
-        /* 增加底部文字與版權說明的空間，增大40%：2rem * 1.4 = 2.8rem */
-    }
-
-    #bio .bio-text p {
-        font-size: 0.77rem;
-        /* 縮小30% */
-        line-height: 1.8;
-    }
-
-    #bio .bio-text ul {
-        font-size: 0.77rem;
-        /* 縮小30% */
-    }
-
-    .bio-image-placeholder {
-        max-width: 13.125rem;
-        /* 210px = 13.125rem */
-        margin: 0 auto;
-    }
-
-    .artwork-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .copyright {
-        font-size: 0.583rem;
-        /* 7pt = 0.583rem */
-        bottom: 15px;
-        right: 15px;
-    }
+  /* 網站標題 */
+  .logo {
+    font-size: 0.9rem;
+    line-height: 3.125rem;
+    /* 與 nav-container 高度一致，確保垂直居中 */
+    margin-left: 15px;
+    /* 往右移 15px */
+    white-space: nowrap;
+    /* 保持一行，不換行 */
+    overflow: visible;
+    /* 確保完整顯示，不被截斷 */
+    text-overflow: clip;
+    /* 不使用省略號 */
+    max-width: none;
+    /* 移除寬度限制，確保完整顯示 */
+    flex-shrink: 0;
+    /* 防止被壓縮 */
+    display: flex;
+    align-items: center;
+    /* 確保內容垂直居中 */
+  }
+
+  /* --- 手機版導覽列：漢堡選單模式 --- */
+  .nav-container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 1rem !important;
+    height: 3.125rem !important;
+    /* 50px = 3.125rem */
+    position: relative !important;
+  }
+
+  /* 隱藏原有的導覽選單和語言切換器 */
+  .nav-menu-center,
+  .language-switcher {
+    display: none !important;
+    /* 手機版隱藏桌面版語言切換器 */
+  }
+
+  /* 手機版：Logo 靠左對齊 */
+  .logo {
+    flex-shrink: 0;
+    /* 防止被壓縮 */
+    margin-right: auto;
+    /* 自動右邊距，確保靠左對齊 */
+    display: flex;
+    align-items: center;
+    /* 確保與其他元素垂直對齊 */
+  }
+
+  /* 手機版：語言切換器（MENU 左側） */
+  .mobile-language-switcher {
+    display: flex !important;
+    align-items: center;
+    gap: 0.4rem;
+    margin-right: 4px;
+    /* MENU 按鈕左側的間距 4px（小間距保持 px） */
+    margin-left: 0;
+    /* 移除自動左邊距，讓它在 MENU 左側 */
+    flex-shrink: 0;
+    /* 防止被壓縮 */
+    height: 3.125rem;
+    /* 與 nav-container 高度一致，確保垂直對齊 */
+  }
+
+  /* 漢堡選單按鈕 */
+  .mobile-menu-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    /* 改為靠右對齊 */
+    background: transparent;
+    border: none;
+    color: #533c1d;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 0.675rem;
+    /* 10.8px = 0.675rem */
+    letter-spacing: 0.1em;
+    padding: 0.5rem 0;
+    cursor: pointer;
+    z-index: 10001;
+    position: relative !important;
+    /* 改回 relative，讓它在導覽列的流中 */
+    margin-right: 0;
+    margin-left: 0;
+    width: auto;
+    /* 改為 auto，移除左側空白區塊 */
+    padding-left: 0;
+    /* 移除左側 padding */
+    padding-right: 0;
+    /* 移除右側 padding */
+    flex-shrink: 0;
+    /* 防止被壓縮 */
+    height: 3.125rem;
+    /* 與 nav-container 高度一致，確保垂直對齊 */
+    line-height: 3.125rem;
+    /* 與 nav-container 高度一致，確保垂直對齊 */
+  }
+
+  /* 手機版 MENU/CLOSE 按鈕顏色 */
+  .mobile-menu-toggle {
+    color: #523b1d !important;
+  }
+
+  /* 首頁的 menu 固定是白色 */
+  body:not(.page-light) .mobile-menu-toggle {
+    color: #ffffff !important;
+  }
+
+  /* 選單打開時，CLOSE 按鈕顏色（從首頁點擊時轉為深棕色） */
+  .mobile-menu-overlay.active ~ .nav-container .mobile-menu-toggle,
+  .mobile-menu-overlay.active + * .mobile-menu-toggle {
+    color: #24190b !important;
+  }
+
+  /* 更精確的選擇器：當選單打開時，CLOSE 按鈕變為深棕色 */
+  body .mobile-menu-overlay.active ~ * .mobile-menu-toggle,
+  .nav-container:has(~ .mobile-menu-overlay.active) .mobile-menu-toggle {
+    color: #24190b !important;
+  }
+
+  /* 手機版漢堡選單遮罩（手機版顯示） */
+  .mobile-menu-overlay {
+    display: block !important;
+  }
+
+  .menu-text {
+    display: block;
+  }
+
+  /* 漢堡選單遮罩 */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #fffaf2;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+    overflow-y: hidden;
+    /* 固定一頁式，禁止滾動 */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* 手機版漢堡選單 favicon 圖示：與 CLOSE 按鈕垂直對齊，水平排列 */
+  img.mobile-menu-favicon,
+  .mobile-menu-favicon {
+    position: fixed !important;
+    /* 計算位置：navigation padding-top 2rem (32px) + nav-container 高度 3.125rem (50px) / 2 = 3.5625rem (57px) */
+    /* favicon 使用 translateY(-50%) 垂直居中，所以 top 設為 3.5625rem */
+    top: 3.5625rem !important;
+    /* 57px = 3.5625rem，與 CLOSE 按鈕垂直中心對齊 */
+    left: 1rem !important;
+    /* 從左側 1rem，與 nav-container 的 padding-left 一致 */
+    bottom: auto !important;
+    /* 移除 bottom，改用 top */
+    right: auto !important;
+    /* 移除 right */
+
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: translateY(-50%) !important;
+    /* 垂直居中對齊，確保與 CLOSE 按鈕在同一水平線 */
+
+    width: 20px !important;
+    height: 20px !important;
+    /* 圖示大小 20px × 20px */
+    z-index: 10002 !important;
+    /* 在遮罩與內容之上 */
+
+    display: block !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition:
+      opacity 0.3s ease,
+      visibility 0.3s ease;
+
+    pointer-events: none;
+    object-fit: contain !important;
+    background: transparent !important;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+
+    /* 移除點擊時的淺藍色底色 */
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-user-drag: none !important;
+    outline: none !important;
+    -webkit-touch-callout: none !important;
+  }
+
+  /* 確保圖示在選單打開時可見 - 使用最高優先級 */
+  #mobile-menu-overlay.active .mobile-menu-favicon,
+  #mobile-menu-overlay.active img.mobile-menu-favicon,
+  .mobile-menu-overlay.active .mobile-menu-favicon,
+  .mobile-menu-overlay.active img.mobile-menu-favicon {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    position: fixed !important;
+    top: 3.5625rem !important;
+    /* 57px = 3.5625rem，與 CLOSE 按鈕垂直中心對齊 */
+    left: 1rem !important;
+    /* 從左側 1rem */
+    bottom: auto !important;
+    right: auto !important;
+    transform: translateY(-50%) !important;
+    /* 垂直居中對齊，確保與 CLOSE 按鈕在同一水平線 */
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    z-index: 10002 !important;
+    pointer-events: auto !important;
+    /* 選單打開時啟用點擊事件，讓 favicon 可以點擊 */
+    cursor: pointer !important;
+    /* 添加 pointer 樣式提示可點擊 */
+
+    /* 移除點擊時的淺藍色底色 */
+    -webkit-tap-highlight-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-user-drag: none !important;
+    outline: none !important;
+    -webkit-touch-callout: none !important;
+  }
+
+  .mobile-menu-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* 確保選單打開時，圖示也能顯示 */
+  .mobile-menu-overlay.active .mobile-menu-favicon {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* 漢堡選單內容 */
+  .mobile-menu-content {
+    width: 100%;
+    height: 100vh;
+    /* 固定一頁式，高度為視窗高度 */
+    max-height: 100vh;
+    /* 確保不超出視窗 */
+    padding: 2rem;
+    /* 簡化 padding，使用 justify-content: center 來置中 */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    /* 改為 center，讓五個分頁在 667px 高度上置中 */
+    position: relative;
+    overflow: hidden;
+    /* 固定一頁式，禁止內容溢出 */
+  }
+
+  /* 確保 CLOSE 按鈕與 MENU 按鈕位置相同（xy 軸一致） */
+  .mobile-menu-toggle.menu-open {
+    position: relative !important;
+    /* 保持相對定位，與 MENU 按鈕在同一水平軸上 */
+    z-index: 10001;
+    width: auto;
+    padding-right: 0;
+    justify-content: flex-end;
+    /* 確保文字靠右 */
+    margin-bottom: 0;
+    /* 確保沒有額外的 margin */
+  }
+
+  /* 選單打開時，CLOSE 按鈕顏色為深棕色 */
+  .mobile-menu-toggle.menu-open {
+    color: #24190b !important;
+  }
+
+  .mobile-nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* 間距由 mobile-menu-content 的 padding-top 控制 */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
+  }
+
+  .mobile-nav-menu li {
+    width: 100%;
+    opacity: 0;
+    transform: translateX(1.25rem);
+    /* 20px = 1.25rem */
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .mobile-menu-overlay:not(.active) .mobile-nav-menu li {
+    opacity: 0;
+    transform: translateX(1.25rem);
+    /* 20px = 1.25rem */
+  }
+
+  .mobile-menu-overlay.active .mobile-nav-menu li {
+    animation: slideInFromRight 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  .mobile-menu-overlay.active .mobile-nav-menu li:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(1.25rem);
+      /* 20px = 1.25rem */
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .mobile-nav-link {
+    display: block;
+    padding: 1.8rem 0;
+    /* 增加20%間距：1.5rem * 1.2 = 1.8rem */
+    color: #c4b5a0;
+    /* 預設為淺灰色，與深棕色 #523b1d 形成對比 */
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: right;
+    width: 100%;
+    position: relative;
+    overflow: visible;
+    /* 改為 visible，確保沒有隱藏的文字 */
+    transition: color 0.3s ease;
+    padding-right: 0;
+    /* 確保與 CLOSE 按鈕對齊 */
+  }
+
+  /* 當前分頁顯示為深棕色 */
+  .mobile-nav-link.active {
+    color: #523b1d !important;
+    /* 深棕色，與淺灰色 #c4b5a0 形成明顯對比 */
+  }
+
+  .mobile-nav-link .roll-text {
+    height: 2.5rem;
+    /* 40px = 2.5rem */
+    text-align: right;
+    transition: none !important;
+    /* 移除手機版的滾動效果 */
+    transform: none !important;
+    /* 強制移除任何 transform */
+    overflow: visible;
+    /* 確保沒有隱藏的文字 */
+  }
+
+  .mobile-nav-link .roll-text span {
+    height: 2.5rem;
+    /* 40px = 2.5rem */
+    font-size: 0.8rem;
+    /* 手機版縮小20%：1rem * 0.8 = 0.8rem */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-align: right;
+    width: 100%;
+  }
+
+  /* 手機版：只顯示第一個 span，隱藏第二個 span */
+  .mobile-nav-link .roll-text span:nth-child(2) {
+    display: none !important;
+  }
+
+  /* 手機版移除 hover 滾動效果 */
+  .mobile-nav-link:hover .roll-text {
+    transform: none !important;
+  }
+
+  .mobile-nav-link:active .roll-text {
+    transform: none !important;
+  }
+
+  /* 點擊時的深色狀態 */
+  .mobile-nav-link.clicking {
+    color: #24190b !important;
+    transition: color 0.2s ease;
+  }
+
+  /* 點擊時的深色狀態 - 文字內容 */
+  .mobile-nav-link.clicking .roll-text span {
+    color: #24190b !important;
+  }
+
+  /* 其他分頁變淡色 */
+  .mobile-nav-link.fading {
+    color: #a9a9a9 !important;
+    transition: color 0.2s ease;
+  }
+
+  /* 其他分頁變淡色 - 文字內容 */
+  .mobile-nav-link.fading .roll-text span {
+    color: #a9a9a9 !important;
+  }
+
+  .text-zh span {
+    font-size: 0.42rem;
+    /* 縮小30%: 0.6rem * 0.7 = 0.42rem */
+  }
+
+  .roll-text span {
+    font-size: 0.525rem;
+    /* 縮小30%以匹配導覽列 */
+  }
+
+  /* 調整滾動文字容器高度以匹配縮小後的導覽列 */
+  .roll-text {
+    height: 4rem;
+    /* 64px = 4rem */
+    /* 從 80px 縮小到 64px (兩個 32px 的高度) */
+  }
+
+  .roll-text span {
+    height: 2rem;
+    /* 32px = 2rem */
+    /* 從 40px 縮小到 32px */
+  }
+
+  /* 手機版移除原有的導覽選單滾動效果（因為已經隱藏） */
+  /* .nav-link:hover .roll-text 已移除，因為手機版使用漢堡選單 */
+
+  /* 語言切換按鈕縮小到跟導覽列大小一樣 */
+  .language-switcher {
+    height: 32px;
+    /* 與導覽列高度一致 */
+    line-height: 32px;
+    gap: 0.4rem;
+    /* 從 0.5rem 縮小到 0.4rem */
+    margin-right: 0;
+    /* 手機版不需要 margin */
+  }
+
+  /* 手機版導覽列中的語言切換按鈕（MENU 左側） */
+  .mobile-language-switcher .lang-btn {
+    font-size: 0.441rem;
+    /* 放大20%：0.3675rem * 1.2 = 0.441rem */
+    color: #523b1d;
+    /* 與其他選單項目顏色一致 */
+    padding: 0.2rem 0.4rem;
+    height: auto;
+    line-height: 1.2;
+  }
+
+  .mobile-language-switcher .lang-btn.active {
+    color: #24190b;
+    /* 活動狀態：深棕色 */
+  }
+
+  .mobile-language-switcher .lang-separator {
+    font-size: 0.441rem;
+    /* 放大20%：與按鈕字型一致 */
+    color: #523b1d;
+    /* 與其他選單項目顏色一致 */
+  }
+
+  /* 首頁的語言切換按鈕顏色 */
+  body:not(.page-light) .mobile-language-switcher .lang-btn {
+    color: #ffffff !important;
+  }
+
+  body:not(.page-light) .mobile-language-switcher .lang-btn.active {
+    color: #ffffff !important;
+  }
+
+  body:not(.page-light) .mobile-language-switcher .lang-separator {
+    color: rgba(255, 255, 255, 0.4) !important;
+  }
+
+  /* 手機版：版權資訊樣式調整 */
+  .copyright {
+    font-size: 0.583rem;
+    /* 7pt = 0.583rem */
+    bottom: 15px;
+    right: 15px;
+    /* 調整位置 */
+  }
+
+  .page-container .copyright {
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.583rem;
+    /* 7pt = 0.583rem */
+  }
+
+  /* 手機版：Bio 頁面版權資訊偏移調整 */
+  #bio .page-container .copyright {
+    padding-right: 10%;
+    /* 手機版減少偏移量 */
+  }
+
+  .lang-btn {
+    font-size: 0.525rem;
+    /* 與導覽列字體大小一致: 0.525rem */
+    padding: 0.2rem 0.4rem;
+    /* 從 0.25rem 0.5rem 縮小 */
+    height: 32px;
+    /* 與導覽列高度一致 */
+    line-height: 32px;
+  }
+
+  /* 繪畫頁面：照片放大30%（整個容器） */
+  #painting .painting-item {
+    height: 43.68vh;
+    /* 放大30%: 33.6vh * 1.3 = 43.68vh */
+  }
+
+  #painting .painting-item.small-size {
+    height: 26.208vh;
+    /* 放大30%: 20.16vh * 1.3 = 26.208vh */
+  }
+
+  #painting .caption {
+    font-size: 0.54rem;
+    /* 手機版調整為 0.54rem */
+    bottom: -35px;
+    /* 確保照片與文字距離保持一致 */
+  }
+
+  .main-content {
+    padding-top: 0;
+    /* 移除 padding-top，讓內容可以延伸到頂部，襯在 Navbar 下方 */
+  }
+
+  .page-container {
+    padding: 2rem 1rem;
+    padding-top: 6.25rem;
+    /* 100px = 6.25rem */
+    /* 手機版增加頂部間距，避免被導覽列遮擋 */
+  }
+
+  .page-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .page-content {
+    width: 100%;
+    /* 確保手機版內容寬度100% */
+  }
+
+  /* Bio 頁面：照片置中，圖文縮小30% */
+  .bio-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    margin-top: 9.375rem;
+    /* 150px = 9.375rem */
+    /* 往下移動 150px，避免被導覽列遮擋 */
+  }
+
+  #bio .bio-image-wrapper {
+    width: 13.23rem;
+    /* 211.68px = 13.23rem */
+    height: 13.23rem;
+    /* 211.68px = 13.23rem */
+    margin: 0 auto;
+    /* 置中 */
+  }
+
+  #bio .bio-text {
+    width: 91%;
+    /* 調寬30%: 70% * 1.3 = 91% */
+    margin: 0 auto;
+    /* 置中 */
+    font-size: 0.77rem;
+    /* 縮小30%: 1.1rem * 0.7 = 0.77rem */
+    margin-bottom: 2.8rem;
+    /* 增加底部文字與版權說明的空間，增大40%：2rem * 1.4 = 2.8rem */
+  }
+
+  #bio .bio-text p {
+    font-size: 0.77rem;
+    /* 縮小30% */
+    line-height: 1.8;
+  }
+
+  #bio .bio-text ul {
+    font-size: 0.77rem;
+    /* 縮小30% */
+  }
+
+  .bio-image-placeholder {
+    max-width: 13.125rem;
+    /* 210px = 13.125rem */
+    margin: 0 auto;
+  }
+
+  .artwork-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .copyright {
+    font-size: 0.583rem;
+    /* 7pt = 0.583rem */
+    bottom: 15px;
+    right: 15px;
+  }
 }
 
 /* 強制在所有尺寸、所有裝置、所有寬度下隱藏原生鼠標 */
 @media all {
-
-    body.cursor-ready,
-    body.cursor-ready *,
-    body.cursor-ready *::before,
-    body.cursor-ready *::after,
-    body.cursor-ready a,
-    body.cursor-ready button,
-    body.cursor-ready video,
-    body.cursor-ready iframe {
-        cursor: none !important;
-    }
+  body.cursor-ready,
+  body.cursor-ready *,
+  body.cursor-ready *::before,
+  body.cursor-ready *::after,
+  body.cursor-ready a,
+  body.cursor-ready button,
+  body.cursor-ready video,
+  body.cursor-ready iframe {
+    cursor: none !important;
+  }
 }
 
 /* =========================================
@@ -2176,23 +2186,24 @@ img {
    ========================================= */
 body.cursor-ready,
 body.cursor-ready * {
-    cursor: none !important;
+  cursor: none !important;
 }
 
 /* =========================================
    針對大螢幕 (Desktop) 的終極強制隱藏
    ========================================= */
 @media screen and (min-width: 992px) {
-
-    body.cursor-ready,
-    body.cursor-ready *,
-    body.cursor-ready *::before,
-    body.cursor-ready *::after,
-    body.cursor-ready a,
-    body.cursor-ready button,
-    body.cursor-ready img {
-        cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC'), none !important;
-    }
+  body.cursor-ready,
+  body.cursor-ready *,
+  body.cursor-ready *::before,
+  body.cursor-ready *::after,
+  body.cursor-ready a,
+  body.cursor-ready button,
+  body.cursor-ready img {
+    cursor:
+      url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC"),
+      none !important;
+  }
 }
 
 /* =========================================
@@ -2200,25 +2211,27 @@ body.cursor-ready * {
    ========================================= */
 body.cursor-ready,
 body.cursor-ready * {
-    cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC'), none !important;
+  cursor:
+    url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAAtJREFUGFdjYAACAAAFAAGq1chRAAAAAElFTkSuQmCC"),
+    none !important;
 }
 
 /* =========================================
    展演頁面樣式 (Exhibition Page Styles)
    ========================================= */
 #main-content.exhibition-locked {
-    opacity: 0;
-    transform: translateY(50px);
+  opacity: 0;
+  transform: translateY(50px);
 }
 
 /* The Unfurling Scroll Styles */
 .timeline-container {
-    position: relative;
-    min-height: 0;
-    padding: 6.25rem 0 0;
-    /* 100px = 6.25rem */
-    background: transparent;
-    overflow: visible;
+  position: relative;
+  min-height: 0;
+  padding: 6.25rem 0 0;
+  /* 100px = 6.25rem */
+  background: transparent;
+  overflow: visible;
 }
 
 /* REMOVED: Static central spine - 刪除靜態中軸線 */
@@ -2226,294 +2239,292 @@ body.cursor-ready * {
 
 /* The Origin Dot - 時間軸起點 (SVG Circle) */
 #timeline-origin-dot {
-    fill: #a32424;
-    filter: drop-shadow(0 0 6px rgba(163, 36, 36, 0.45));
-    transform: translateZ(0);
-    will-change: transform;
-    z-index: 2;
+  fill: #a32424;
+  filter: drop-shadow(0 0 6px rgba(163, 36, 36, 0.45));
+  transform: translateZ(0);
+  will-change: transform;
+  z-index: 2;
 }
 
 /* The Vertical Line - 垂直敘事線條 (SVG) */
 #hero-path {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    /* Line BELOW dot - 線條在圓點下方 */
-    will-change: transform;
-    transform: translateZ(0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  /* Line BELOW dot - 線條在圓點下方 */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 #hero-path path {
-    fill: none;
-    stroke: #a32424;
-    stroke-width: 1.26;
-    /* 變細10%: 1.4px * 0.9 = 1.26px */
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0.7;
-    /* 隱約視覺效果 */
-    filter: drop-shadow(0 0 4px rgba(163, 36, 36, 0.3));
-    will-change: transform, stroke-dashoffset;
-    transform: translateZ(0);
+  fill: none;
+  stroke: #a32424;
+  stroke-width: 1.26;
+  /* 變細10%: 1.4px * 0.9 = 1.26px */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.7;
+  /* 隱約視覺效果 */
+  filter: drop-shadow(0 0 4px rgba(163, 36, 36, 0.3));
+  will-change: transform, stroke-dashoffset;
+  transform: translateZ(0);
 }
 
 #hero-path .timeline-branch {
-    stroke-width: 0.665;
-    /* 變細5%: 0.7px * 0.95 = 0.665px */
-    opacity: 0;
-    will-change: transform, stroke-dashoffset;
-    transform: translateZ(0);
+  stroke-width: 0.665;
+  /* 變細5%: 0.7px * 0.95 = 0.665px */
+  opacity: 0;
+  will-change: transform, stroke-dashoffset;
+  transform: translateZ(0);
 }
-
 
 /* Exhibition Section Styling */
 .exhibition-section {
-    position: relative;
-    margin: 18.75rem 0;
-    /* 300px = 18.75rem */
-    opacity: 1;
+  position: relative;
+  margin: 18.75rem 0;
+  /* 300px = 18.75rem */
+  opacity: 1;
 }
 
 .exhibition-section:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 .exhibition-section.hidden {
-    opacity: 0;
+  opacity: 0;
 }
 
 .timeline-year {
-    position: relative;
-    padding: 12.5rem 0;
-    /* 200px = 12.5rem */
-    max-width: 75rem;
-    /* 1200px = 75rem */
-    margin: 0 auto;
-    z-index: 2;
+  position: relative;
+  padding: 12.5rem 0;
+  /* 200px = 12.5rem */
+  max-width: 75rem;
+  /* 1200px = 75rem */
+  margin: 0 auto;
+  z-index: 2;
 }
 
 .year-title {
-    position: absolute;
-    left: calc(50% - 9.375rem);
-    /* 150px = 9.375rem */
-    top: 9.375rem;
-    /* 150px = 9.375rem */
-    transform: translateX(-50%);
-    font-size: 1.37rem;
-    /* 再放大 50%: 0.91rem * 1.5 ≈ 1.37rem */
-    color: rgba(180, 180, 180, 0.9);
-    font-family: "Playfair Display", serif;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    opacity: 0;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    z-index: 3;
+  position: absolute;
+  left: calc(50% - 9.375rem);
+  /* 150px = 9.375rem */
+  top: 9.375rem;
+  /* 150px = 9.375rem */
+  transform: translateX(-50%);
+  font-size: 1.37rem;
+  /* 再放大 50%: 0.91rem * 1.5 ≈ 1.37rem */
+  color: rgba(180, 180, 180, 0.9);
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  z-index: 3;
 }
 
 .timeline-works {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4.375rem;
-    /* 70px = 4.375rem */
-    padding: 0 3.125rem;
-    /* 50px = 3.125rem */
-    margin-top: 6.25rem;
-    /* 100px = 6.25rem */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4.375rem;
+  /* 70px = 4.375rem */
+  padding: 0 3.125rem;
+  /* 50px = 3.125rem */
+  margin-top: 6.25rem;
+  /* 100px = 6.25rem */
 }
 
 .works-left,
 .works-right {
-    display: flex;
-    flex-direction: column;
-    gap: 3.5rem;
-    /* 56px = 3.5rem */
-    flex: 1;
-    /* 確保左右均分空間 */
-    min-width: 0;
-    /* 防止 flex 子元素溢出 */
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+  /* 56px = 3.5rem */
+  flex: 1;
+  /* 確保左右均分空間 */
+  min-width: 0;
+  /* 防止 flex 子元素溢出 */
 }
 
 .works-left {
-    align-items: flex-end;
-    padding-right: 3.125rem;
-    /* 50px = 3.125rem */
+  align-items: flex-end;
+  padding-right: 3.125rem;
+  /* 50px = 3.125rem */
 }
 
 .works-right {
-    align-items: flex-start;
-    padding-left: 3.125rem;
-    /* 50px = 3.125rem */
+  align-items: flex-start;
+  padding-left: 3.125rem;
+  /* 50px = 3.125rem */
 }
 
 .work-item {
-    max-width: 40rem;
-    /* 640px = 40rem */
-    width: 40rem;
-    /* 640px = 40rem */
-    /* 強制固定寬度確保對稱 */
-    opacity: 0;
-    clip-path: inset(0 0 100% 0);
-    /* 修正：從上往下展開 */
-    position: relative;
-    will-change: clip-path, transform, opacity;
-    transform: translateZ(0);
+  max-width: 40rem;
+  /* 640px = 40rem */
+  width: 40rem;
+  /* 640px = 40rem */
+  /* 強制固定寬度確保對稱 */
+  opacity: 0;
+  clip-path: inset(0 0 100% 0);
+  /* 修正：從上往下展開 */
+  position: relative;
+  will-change: clip-path, transform, opacity;
+  transform: translateZ(0);
 }
 
 /* Carousel Container - Sharp Corners + Fixed Aspect Ratio */
 .work-carousel {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    /* 固定寬高比 4:3 */
-    overflow: hidden;
-    border-radius: 0 !important;
-    /* Sharp edges only - 強制 */
-    box-shadow: none;
-    will-change: transform;
-    transform: translateZ(0);
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  /* 固定寬高比 4:3 */
+  overflow: hidden;
+  border-radius: 0 !important;
+  /* Sharp edges only - 強制 */
+  box-shadow: none;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .carousel-track {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .carousel-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.8s ease;
-    will-change: opacity, transform;
-    transform: translateZ(0);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  will-change: opacity, transform;
+  transform: translateZ(0);
 }
 
 .carousel-slide.active {
-    opacity: 1;
+  opacity: 1;
 }
 
 .carousel-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* 填滿框架，裁切溢出部分 */
-    border-radius: 0 !important;
-    /* Sharp edges only - 強制 */
-    transform: translateZ(0);
-    will-change: transform;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 填滿框架，裁切溢出部分 */
+  border-radius: 0 !important;
+  /* Sharp edges only - 強制 */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .work-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* 填滿框架，裁切溢出部分 */
-    border-radius: 0 !important;
-    /* Sharp edges only - 強制 */
-    box-shadow: none;
-    transform: translateZ(0);
-    will-change: transform;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 填滿框架，裁切溢出部分 */
+  border-radius: 0 !important;
+  /* Sharp edges only - 強制 */
+  box-shadow: none;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .work-caption {
-    margin-top: 15px;
-    /* 小間距保持 px */
-    font-size: 0.9rem;
-    color: rgba(180, 180, 180, 0.8);
-    text-align: center;
-    font-family: 'Times New Roman', serif;
-    letter-spacing: 0.05em;
+  margin-top: 15px;
+  /* 小間距保持 px */
+  font-size: 0.9rem;
+  color: rgba(180, 180, 180, 0.8);
+  text-align: center;
+  font-family: "Times New Roman", serif;
+  letter-spacing: 0.05em;
 }
 
 /* Carousel indicators */
 .carousel-indicators {
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 8px;
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
 }
 
 .carousel-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(180, 180, 180, 0.3);
-    transition: background 0.3s ease;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(180, 180, 180, 0.3);
+  transition: background 0.3s ease;
 }
 
 .carousel-dot.active {
-    background: rgba(180, 180, 180, 0.8);
+  background: rgba(180, 180, 180, 0.8);
 }
 
 @media (max-width: 1024px) {
+  /* 展演頁面：紅圓點與紅線縮小20%，往右邊移動貼齊照片的右側邊緣 */
+  #hero-path path {
+    stroke-width: 1.08;
+    /* 變細10%: 1.2px * 0.9 = 1.08px */
+  }
 
-    /* 展演頁面：紅圓點與紅線縮小20%，往右邊移動貼齊照片的右側邊緣 */
-    #hero-path path {
-        stroke-width: 1.08;
-        /* 變細10%: 1.2px * 0.9 = 1.08px */
-    }
+  #timeline-origin-dot {
+    r: 2.88;
+    /* 縮小20%: 3.6px * 0.8 = 2.88px */
+  }
 
-    #timeline-origin-dot {
-        r: 2.88;
-        /* 縮小20%: 3.6px * 0.8 = 2.88px */
-    }
+  .timeline-works {
+    grid-template-columns: 1fr;
+    gap: 1.4rem;
+    /* 22.4px = 1.4rem */
+    padding: 0 1.25rem;
+    /* 20px = 1.25rem */
+  }
 
-    .timeline-works {
-        grid-template-columns: 1fr;
-        gap: 1.4rem;
-        /* 22.4px = 1.4rem */
-        padding: 0 1.25rem;
-        /* 20px = 1.25rem */
-    }
+  .works-left,
+  .works-right {
+    align-items: center;
+    padding: 0;
+    gap: 1.4rem;
+    /* 22.4px = 1.4rem */
+  }
 
-    .works-left,
-    .works-right {
-        align-items: center;
-        padding: 0;
-        gap: 1.4rem;
-        /* 22.4px = 1.4rem */
-    }
+  /* 展演照片縮小30%，變成長方形 */
+  #exhibition .work-item {
+    max-width: 28rem;
+    /* 448px = 28rem */
+    width: 28rem;
+    /* 448px = 28rem */
+  }
 
-    /* 展演照片縮小30%，變成長方形 */
-    #exhibition .work-item {
-        max-width: 28rem;
-        /* 448px = 28rem */
-        width: 28rem;
-        /* 448px = 28rem */
-    }
+  #exhibition .work-carousel {
+    aspect-ratio: 3 / 2;
+    /* 變成長方形 (從 4:3 改為 3:2) */
+  }
 
-    #exhibition .work-carousel {
-        aspect-ratio: 3 / 2;
-        /* 變成長方形 (從 4:3 改為 3:2) */
-    }
+  .year-title {
+    font-size: 0.959rem;
+    /* 縮小30%: 1.37rem * 0.7 = 0.959rem */
+    left: calc(50% - 5rem);
+    /* 80px = 5rem */
+  }
 
-    .year-title {
-        font-size: 0.959rem;
-        /* 縮小30%: 1.37rem * 0.7 = 0.959rem */
-        left: calc(50% - 5rem);
-        /* 80px = 5rem */
-    }
+  /* 展演頁面：每個年代之間的距離 */
+  .exhibition-section {
+    margin: 8.5rem 0;
+    /* 136px = 8.5rem */
+  }
 
-    /* 展演頁面：每個年代之間的距離 */
-    .exhibition-section {
-        margin: 8.5rem 0;
-        /* 136px = 8.5rem */
-    }
-
-    .timeline-year {
-        padding: 6rem 0;
-        /* 96px = 6rem */
-    }
+  .timeline-year {
+    padding: 6rem 0;
+    /* 96px = 6rem */
+  }
 }
 
 /* =========================================
@@ -2522,169 +2533,169 @@ body.cursor-ready * {
 
 /* --- 3D Cube 場景設定 --- */
 .scene-container {
-    width: 100%;
-    height: 70vh;
-    /* 展示區高度 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    perspective: 1200px;
-    /* 透視感，數字越小越誇張，1200是標準 */
-    -webkit-perspective: 1200px;
-    /* Safari 3D 透視支持 */
-    perspective-origin: center center;
-    /* 確保透視原點在中心 */
-    position: relative;
-    z-index: 10;
-    /* 確保骰子在頁面 xy 軸正中央 */
-    margin: 0 auto;
-    transform-style: preserve-3d;
-    /* 確保 3D 空間保留 */
+  width: 100%;
+  height: 70vh;
+  /* 展示區高度 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+  /* 透視感，數字越小越誇張，1200是標準 */
+  -webkit-perspective: 1200px;
+  /* Safari 3D 透視支持 */
+  perspective-origin: center center;
+  /* 確保透視原點在中心 */
+  position: relative;
+  z-index: 10;
+  /* 確保骰子在頁面 xy 軸正中央 */
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  /* 確保 3D 空間保留 */
 }
 
 /* Click 文字 */
 .cube-click-text {
-    position: absolute;
-    top: 5rem;
-    /* 80px = 5rem */
-    /* 從 scene-container 頂部往下 80px */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.75rem;
-    /* 12px = 0.75rem */
-    font-family: 'Times New Roman', Times, serif;
-    color: #868687;
-    z-index: 1;
-    /* 低於骰子的 z-index，不擋到骰子 */
-    pointer-events: none;
-    /* 不阻擋點擊事件 */
-    white-space: nowrap;
+  position: absolute;
+  top: 5rem;
+  /* 80px = 5rem */
+  /* 從 scene-container 頂部往下 80px */
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  /* 12px = 0.75rem */
+  font-family: "Times New Roman", Times, serif;
+  color: #868687;
+  z-index: 1;
+  /* 低於骰子的 z-index，不擋到骰子 */
+  pointer-events: none;
+  /* 不阻擋點擊事件 */
+  white-space: nowrap;
 }
 
 /* 立方體本體 */
 .cube {
-    width: 11.25rem;
-    /* 180px = 11.25rem */
-    height: 11.25rem;
-    /* 180px = 11.25rem */
-    position: relative;
-    transform-style: preserve-3d;
-    /* 關鍵：保留 3D 空間 */
-    transform: rotateX(-20deg) rotateY(-20deg) translateZ(0);
-    /* 初始角度 + 硬體加速 */
-    cursor: grab;
-    /* 提示可拖曳 */
-    /* 允許 GSAP 覆蓋 transform */
-    will-change: transform;
-    /* 確保骰子在頁面正中央 */
-    margin: 0 auto;
-    z-index: 2;
-    /* 確保骰子在文字上方 */
+  width: 11.25rem;
+  /* 180px = 11.25rem */
+  height: 11.25rem;
+  /* 180px = 11.25rem */
+  position: relative;
+  transform-style: preserve-3d;
+  /* 關鍵：保留 3D 空間 */
+  transform: rotateX(-20deg) rotateY(-20deg) translateZ(0);
+  /* 初始角度 + 硬體加速 */
+  cursor: grab;
+  /* 提示可拖曳 */
+  /* 允許 GSAP 覆蓋 transform */
+  will-change: transform;
+  /* 確保骰子在頁面正中央 */
+  margin: 0 auto;
+  z-index: 2;
+  /* 確保骰子在文字上方 */
 
-    /* 性能優化 */
-    -webkit-transform-style: preserve-3d;
-    /* Safari 3D 支持 */
+  /* 性能優化 */
+  -webkit-transform-style: preserve-3d;
+  /* Safari 3D 支持 */
 }
 
 .cube:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 /* 每一面的通用樣式 - 修改版 */
 .cube-face {
-    position: absolute;
-    width: 11.25rem;
-    /* 180px = 11.25rem */
-    height: 11.25rem;
-    /* 180px = 11.25rem */
-    background-color: #fffaf2;
-    /* 米白色背景 */
-    /* border: 1px solid #eee; <-- 移除這個舊邊框，讓光影來定義邊界 */
-    border-radius: 3px;
-    /* 圓角 */
-    background-size: 90%;
-    /* 照片顯示為 90% 大小 */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-blend-mode: normal;
-    /* 確保背景色和圖片正常混合 */
-    /* opacity: 0.95; <-- 移除這個整體透明度，改用疊加層控制 */
-    /* box-shadow: inset... <-- 移除舊的內陰影 */
+  position: absolute;
+  width: 11.25rem;
+  /* 180px = 11.25rem */
+  height: 11.25rem;
+  /* 180px = 11.25rem */
+  background-color: #fffaf2;
+  /* 米白色背景 */
+  /* border: 1px solid #eee; <-- 移除這個舊邊框，讓光影來定義邊界 */
+  border-radius: 3px;
+  /* 圓角 */
+  background-size: 90%;
+  /* 照片顯示為 90% 大小 */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: normal;
+  /* 確保背景色和圖片正常混合 */
+  /* opacity: 0.95; <-- 移除這個整體透明度，改用疊加層控制 */
+  /* box-shadow: inset... <-- 移除舊的內陰影 */
 
-    /* 關鍵：確保子元素(疊加層)不會超出範圍，且能維持 3D 效果 */
-    transform-style: preserve-3d;
-    backface-visibility: visible;
-    /* 改為 visible，確保所有面都能看到 */
-    -webkit-backface-visibility: visible;
-    /* Safari 優化 */
+  /* 關鍵：確保子元素(疊加層)不會超出範圍，且能維持 3D 效果 */
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+  /* 改為 visible，確保所有面都能看到 */
+  -webkit-backface-visibility: visible;
+  /* Safari 優化 */
 
-    /* 性能優化 */
-    will-change: transform;
-    /* 提示瀏覽器優化 transform */
+  /* 性能優化 */
+  will-change: transform;
+  /* 提示瀏覽器優化 transform */
 }
 
 /* --- 3D 建構邏輯 (Transform) --- */
 /* TranslateZ 的數值必須是寬度的一半 (180px / 2 = 90px) */
 .face-front {
-    transform: rotateY(0deg) translateZ(5.625rem);
-    /* 90px = 5.625rem */
-    background-image: url('images/seal carving/seal carving_01.jpg');
-    /* 性能優化：使用 fetchpriority 提示 */
+  transform: rotateY(0deg) translateZ(5.625rem);
+  /* 90px = 5.625rem */
+  background-image: url("images/seal carving/seal carving_01.webp");
+  /* 性能優化：使用 fetchpriority 提示 */
 }
 
 .face-back {
-    transform: rotateY(180deg) translateZ(5.625rem);
-    /* 90px = 5.625rem */
-    background-image: url('images/seal carving/seal carving_02.jpg');
+  transform: rotateY(180deg) translateZ(5.625rem);
+  /* 90px = 5.625rem */
+  background-image: url("images/seal carving/seal carving_02.webp");
 }
 
 .face-right {
-    transform: rotateY(90deg) translateZ(5.625rem);
-    /* 90px = 5.625rem */
-    background-image: url('images/seal carving/seal carving_03.jpg');
+  transform: rotateY(90deg) translateZ(5.625rem);
+  /* 90px = 5.625rem */
+  background-image: url("images/seal carving/seal carving_03.webp");
 }
 
 .face-left {
-    transform: rotateY(-90deg) translateZ(5.625rem);
-    /* 90px = 5.625rem */
-    background-image: url('images/seal carving/seal carving_04.jpg');
+  transform: rotateY(-90deg) translateZ(5.625rem);
+  /* 90px = 5.625rem */
+  background-image: url("images/seal carving/seal carving_04.webp");
 }
 
 .face-top {
-    transform: rotateX(90deg) translateZ(5.625rem);
-    /* 90px = 5.625rem */
-    background-image: url('images/seal carving/seal carving_05.jpg');
+  transform: rotateX(90deg) translateZ(5.625rem);
+  /* 90px = 5.625rem */
+  background-image: url("images/seal carving/seal carving_05.webp");
 }
 
 .face-bottom {
-    transform: rotateX(-90deg) translateZ(5.625rem);
-    /* 90px = 5.625rem */
-    background-image: url('images/seal carving/seal carving_06.jpg');
+  transform: rotateX(-90deg) translateZ(5.625rem);
+  /* 90px = 5.625rem */
+  background-image: url("images/seal carving/seal carving_06.webp");
 }
 
 /* --- 動態光影系統 (Dynamic Lighting System) --- */
 
 /* 所有面的通用疊加層 */
 .cube-face::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    /* 讓點擊穿透 */
-    z-index: 2;
-    border-radius: 3px;
-    /* 繼承父元素的圓角 */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  /* 讓點擊穿透 */
+  z-index: 2;
+  border-radius: 3px;
+  /* 繼承父元素的圓角 */
 
-    /* 核心修改：背景色改用黑色，透明度由 JS 計算的變數控制 */
-    background-color: #000;
-    opacity: var(--shade, 0);
-    /* 預設為 0 (全亮) */
+  /* 核心修改：背景色改用黑色，透明度由 JS 計算的變數控制 */
+  background-color: #000;
+  opacity: var(--shade, 0);
+  /* 預設為 0 (全亮) */
 
-    /* 讓光影變化跟隨動畫一樣絲滑，稍快於骰子轉動 */
-    transition: opacity 0.1s linear;
+  /* 讓光影變化跟隨動畫一樣絲滑，稍快於骰子轉動 */
+  transition: opacity 0.1s linear;
 }
 
 /* 移除原本個別面的固定光影設定 */
@@ -2696,448 +2707,446 @@ body.cursor-ready * {
 
 /* 陰影 */
 .cube-shadow {
-    width: 12.5rem;
-    /* 200px = 12.5rem */
-    height: 2.5rem;
-    /* 40px = 2.5rem */
-    background: #bbbdbf;
-    border-radius: 50%;
-    filter: blur(20px);
-    position: absolute;
-    bottom: 15%;
-    /* 在立方體下方 */
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.5;
-    z-index: 1;
-    animation: breathe 4s ease-in-out infinite;
+  width: 12.5rem;
+  /* 200px = 12.5rem */
+  height: 2.5rem;
+  /* 40px = 2.5rem */
+  background: #bbbdbf;
+  border-radius: 50%;
+  filter: blur(20px);
+  position: absolute;
+  bottom: 15%;
+  /* 在立方體下方 */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.5;
+  z-index: 1;
+  animation: breathe 4s ease-in-out infinite;
 }
 
 /* 呼吸動畫 */
 @keyframes breathe {
+  0%,
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 0.5;
+  }
 
-    0%,
-    100% {
-        transform: translateX(-50%) scale(1);
-        opacity: 0.5;
-    }
-
-    50% {
-        transform: translateX(-50%) scale(0.85);
-        opacity: 0.3;
-    }
+  50% {
+    transform: translateX(-50%) scale(0.85);
+    opacity: 0.3;
+  }
 }
-
 
 /* Lightbox 樣式 */
 #lightbox {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 99999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
 }
 
 #lightbox.hidden {
-    display: none;
+  display: none;
 }
 
 #lightbox.active {
-    opacity: 1;
-    pointer-events: auto;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 #lightbox .lightbox-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.95);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
 }
 
 #lightbox-img {
-    max-width: 80%;
-    max-height: 80%;
-    z-index: 2;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  max-width: 80%;
+  max-height: 80%;
+  z-index: 2;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
 #close-lightbox {
-    position: absolute;
-    top: 1.875rem;
-    /* 30px = 1.875rem */
-    right: 1.875rem;
-    /* 30px = 1.875rem */
-    font-size: 2rem;
-    border: none;
-    background: none;
-    cursor: pointer;
-    z-index: 3;
-    color: #333;
+  position: absolute;
+  top: 1.875rem;
+  /* 30px = 1.875rem */
+  right: 1.875rem;
+  /* 30px = 1.875rem */
+  font-size: 2rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: 3;
+  color: #333;
 }
 
 /* 篆刻頁面：關閉按鈕 hover 效果 */
 #close-lightbox:hover {
-    color: #24190b;
-    opacity: 0.8;
+  color: #24190b;
+  opacity: 0.8;
 }
 
 /* =========================================
    篆刻頁面：新頁面樣式（從右邊滑入）
    ========================================= */
 .seal-detail-view {
-    width: 100%;
-    min-height: 70vh;
-    display: none;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 7.5rem 0 8rem 0;
-    /* 120px = 7.5rem */
-    position: relative;
-    overflow: visible;
-    will-change: transform, opacity;
-    margin-bottom: 0;
+  width: 100%;
+  min-height: 70vh;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 7.5rem 0 8rem 0;
+  /* 120px = 7.5rem */
+  position: relative;
+  overflow: visible;
+  will-change: transform, opacity;
+  margin-bottom: 0;
 }
 
 .seal-detail-view.hidden {
-    display: none !important;
+  display: none !important;
 }
 
 .seal-detail-container {
-    max-width: 75rem;
-    /* 1200px = 75rem */
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 6rem;
-    align-items: start;
-    /* 確保照片和文字從頂部對齊 */
-    padding: 0 2rem 3rem 2rem;
-    overflow: visible;
-    margin-bottom: 2rem;
+  max-width: 75rem;
+  /* 1200px = 75rem */
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+  /* 確保照片和文字從頂部對齊 */
+  padding: 0 2rem 3rem 2rem;
+  overflow: visible;
+  margin-bottom: 2rem;
 }
 
 .seal-detail-image-wrapper {
-    width: 100%;
-    aspect-ratio: 1;
-    overflow: visible;
-    background: transparent;
-    display: flex;
-    align-items: flex-start;
-    /* 從頂部對齊 */
-    justify-content: center;
-    transform: scale(1.8);
-    transform-origin: top center;
-    /* 從頂部中心點縮放，確保與文字頂部對齊 */
-    position: relative;
-    z-index: 1;
-    align-self: start;
-    /* 確保 grid 項目從頂部對齊 */
-    margin-top: 0;
-    padding-top: 0;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: visible;
+  background: transparent;
+  display: flex;
+  align-items: flex-start;
+  /* 從頂部對齊 */
+  justify-content: center;
+  transform: scale(1.8);
+  transform-origin: top center;
+  /* 從頂部中心點縮放，確保與文字頂部對齊 */
+  position: relative;
+  z-index: 1;
+  align-self: start;
+  /* 確保 grid 項目從頂部對齊 */
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .seal-detail-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 0;
-    transform: scale(1);
-    transform-origin: center;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0;
+  transform: scale(1);
+  transform-origin: center;
 }
 
 .seal-detail-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    color: #24190b;
-    position: relative;
-    z-index: 2;
-    align-self: start;
-    /* 確保與照片頂部對齊 */
-    margin-top: 0;
-    padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: #24190b;
+  position: relative;
+  z-index: 2;
+  align-self: start;
+  /* 確保與照片頂部對齊 */
+  margin-top: 0;
+  padding-top: 0;
 }
 
 .seal-detail-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0;
-    padding: 0;
-    line-height: 1.2;
-    /* 減少 line-height，確保與圖片頂部對齊 */
-    color: #24190b;
-    font-family: 'Times New Roman', Times, serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+  /* 減少 line-height，確保與圖片頂部對齊 */
+  color: #24190b;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .seal-detail-meta {
-    font-size: 0.88rem;
-    color: #24190b;
-    opacity: 0.8;
-    margin: 0;
-    font-family: 'Times New Roman', Times, serif;
+  font-size: 0.88rem;
+  color: #24190b;
+  opacity: 0.8;
+  margin: 0;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .seal-detail-description {
-    font-size: 0.88rem;
-    line-height: 1.8;
-    color: #24190b;
-    margin: 0;
-    font-family: 'Times New Roman', Times, serif;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: #24190b;
+  margin: 0;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .seal-detail-description p {
-    margin: 0 0 3em 0;
-    font-size: 0.88rem;
-    line-height: 1.8;
-    color: #24190b;
-    font-family: 'Times New Roman', Times, serif;
+  margin: 0 0 3em 0;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: #24190b;
+  font-family: "Times New Roman", Times, serif;
 }
 
 .seal-detail-description p:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* 響應式設計：手機版與平板版調整 */
 @media (max-width: 1024px) {
-    .scene-container {
-        height: 60vh;
-        /* 手機版稍微降低高度 */
-        perspective: 800px;
-        /* 手機版調整透視感 */
-    }
+  .scene-container {
+    height: 60vh;
+    /* 手機版稍微降低高度 */
+    perspective: 800px;
+    /* 手機版調整透視感 */
+  }
 
-    .cube-click-text {
-        top: 6.25rem;
-        /* 100px = 6.25rem */
-        /* 從導覽列往下 100px（相對於 scene-container） */
-        font-size: 0.6rem;
-        /* 縮小20%：12px * 0.8 = 9.6px */
-    }
+  .cube-click-text {
+    top: 6.25rem;
+    /* 100px = 6.25rem */
+    /* 從導覽列往下 100px（相對於 scene-container） */
+    font-size: 0.6rem;
+    /* 縮小20%：12px * 0.8 = 9.6px */
+  }
 
-    .cube {
-        width: 6.5rem;
-        /* 104px = 6.5rem */
-        height: 6.5rem;
-        /* 104px = 6.5rem */
-        margin-top: 8.75rem;
-        /* 140px = 8.75rem */
-    }
+  .cube {
+    width: 6.5rem;
+    /* 104px = 6.5rem */
+    height: 6.5rem;
+    /* 104px = 6.5rem */
+    margin-top: 8.75rem;
+    /* 140px = 8.75rem */
+  }
 
-    .cube-face {
-        width: 6.5rem;
-        /* 104px = 6.5rem */
-        height: 6.5rem;
-        /* 104px = 6.5rem */
-        /* 等比例縮小：130px * 0.8 = 104px */
-        border-radius: 3px;
-        /* 保持圓角 */
-        background-size: 90%;
-        /* 照片顯示為 90% 大小 */
-        background-color: #fffaf2;
-        /* 手機版米白色背景 */
-    }
+  .cube-face {
+    width: 6.5rem;
+    /* 104px = 6.5rem */
+    height: 6.5rem;
+    /* 104px = 6.5rem */
+    /* 等比例縮小：130px * 0.8 = 104px */
+    border-radius: 3px;
+    /* 保持圓角 */
+    background-size: 90%;
+    /* 照片顯示為 90% 大小 */
+    background-color: #fffaf2;
+    /* 手機版米白色背景 */
+  }
 
-    /* 調整立方體各面的 translateZ 值 (寬度的一半) */
-    .face-front {
-        transform: rotateY(0deg) translateZ(3.25rem);
-        /* 52px = 3.25rem */
-    }
+  /* 調整立方體各面的 translateZ 值 (寬度的一半) */
+  .face-front {
+    transform: rotateY(0deg) translateZ(3.25rem);
+    /* 52px = 3.25rem */
+  }
 
-    .face-back {
-        transform: rotateY(180deg) translateZ(3.25rem);
-        /* 52px = 3.25rem */
-    }
+  .face-back {
+    transform: rotateY(180deg) translateZ(3.25rem);
+    /* 52px = 3.25rem */
+  }
 
-    .face-right {
-        transform: rotateY(90deg) translateZ(3.25rem);
-        /* 52px = 3.25rem */
-    }
+  .face-right {
+    transform: rotateY(90deg) translateZ(3.25rem);
+    /* 52px = 3.25rem */
+  }
 
-    .face-left {
-        transform: rotateY(-90deg) translateZ(3.25rem);
-        /* 52px = 3.25rem */
-    }
+  .face-left {
+    transform: rotateY(-90deg) translateZ(3.25rem);
+    /* 52px = 3.25rem */
+  }
 
-    .face-top {
-        transform: rotateX(90deg) translateZ(3.25rem);
-        /* 52px = 3.25rem */
-    }
+  .face-top {
+    transform: rotateX(90deg) translateZ(3.25rem);
+    /* 52px = 3.25rem */
+  }
 
-    .face-bottom {
-        transform: rotateX(-90deg) translateZ(3.25rem);
-        /* 52px = 3.25rem */
-    }
+  .face-bottom {
+    transform: rotateX(-90deg) translateZ(3.25rem);
+    /* 52px = 3.25rem */
+  }
 
-    .cube-shadow {
-        width: 6.25rem;
-        /* 100px = 6.25rem */
-        height: 1.25rem;
-        /* 20px = 1.25rem */
-        bottom: 10%;
-    }
+  .cube-shadow {
+    width: 6.25rem;
+    /* 100px = 6.25rem */
+    height: 1.25rem;
+    /* 20px = 1.25rem */
+    bottom: 10%;
+  }
 
-    #close-lightbox {
-        top: 15px;
-        right: 15px;
-        font-size: 1.5rem;
-        /* 保持 rem */
-    }
+  #close-lightbox {
+    top: 15px;
+    right: 15px;
+    font-size: 1.5rem;
+    /* 保持 rem */
+  }
 
-    /* 手機版：新頁面改為垂直堆疊 */
-    .seal-detail-view {
-        padding: 3.75rem 0 2.6rem 0;
-        /* 60px = 3.75rem */
-    }
+  /* 手機版：新頁面改為垂直堆疊 */
+  .seal-detail-view {
+    padding: 3.75rem 0 2.6rem 0;
+    /* 60px = 3.75rem */
+  }
 
-    .seal-detail-container {
-        grid-template-columns: 1fr;
-        gap: calc(3rem + 1.875rem);
-        /* 30px = 1.875rem */
-        padding: 0 1rem 2rem 1rem;
-        margin-bottom: 1.5rem;
-    }
+  .seal-detail-container {
+    grid-template-columns: 1fr;
+    gap: calc(3rem + 1.875rem);
+    /* 30px = 1.875rem */
+    padding: 0 1rem 2rem 1rem;
+    margin-bottom: 1.5rem;
+  }
 
-    /* 手機版：作品說明往下移動，避免與照片重疊 */
-    .seal-detail-info {
-        margin-top: 100vw;
-    }
+  /* 手機版：作品說明往下移動，避免與照片重疊 */
+  .seal-detail-info {
+    margin-top: 100vw;
+  }
 
-    .seal-detail-image-wrapper {
-        aspect-ratio: 1;
-        transform: scale(2.34) !important;
-        /* 手機版放大：桌面版 1.8 * 1.3 = 2.34（在桌面版基礎上再放大30%），使用 !important 確保覆蓋桌面版 */
-        transform-origin: top center !important;
-        /* 從頂部中心點縮放，確保與文字頂部對齊 */
-    }
+  .seal-detail-image-wrapper {
+    aspect-ratio: 1;
+    transform: scale(2.34) !important;
+    /* 手機版放大：桌面版 1.8 * 1.3 = 2.34（在桌面版基礎上再放大30%），使用 !important 確保覆蓋桌面版 */
+    transform-origin: top center !important;
+    /* 從頂部中心點縮放，確保與文字頂部對齊 */
+  }
 
-    .seal-detail-title {
-        font-size: 0.9rem;
-    }
+  .seal-detail-title {
+    font-size: 0.9rem;
+  }
 
-    .seal-detail-meta {
-        font-size: 0.65rem;
-        /* 10.4px = 0.65rem */
-    }
+  .seal-detail-meta {
+    font-size: 0.65rem;
+    /* 10.4px = 0.65rem */
+  }
 
-    .seal-detail-description {
-        font-size: 0.65rem;
-        /* 縮小20%：13px * 0.8 = 10.4px */
-    }
+  .seal-detail-description {
+    font-size: 0.65rem;
+    /* 縮小20%：13px * 0.8 = 10.4px */
+  }
 
-    .seal-detail-description p {
-        font-size: 0.65rem;
-        /* 縮小20%：13px * 0.8 = 10.4px */
-        margin: 0 0 3em 0;
-        /* 保持間距不變，確保照片與文字距離與版權說明保持一致 */
-    }
+  .seal-detail-description p {
+    font-size: 0.65rem;
+    /* 縮小20%：13px * 0.8 = 10.4px */
+    margin: 0 0 3em 0;
+    /* 保持間距不變，確保照片與文字距離與版權說明保持一致 */
+  }
 
-    /* 手機版：書法作品照片淡入（1秒） */
-    #calligraphy .image-gallery {
-        opacity: 0;
-        transition: opacity 1s ease;
-    }
+  /* 手機版：書法作品照片淡入（1秒） */
+  #calligraphy .image-gallery {
+    opacity: 0;
+    transition: opacity 1s ease;
+  }
 
-    #calligraphy .image-gallery.calligraphy-visible {
-        opacity: 1;
-    }
+  #calligraphy .image-gallery.calligraphy-visible {
+    opacity: 1;
+  }
 
-    #calligraphy .gallery-image {
-        clip-path: inset(0 0 0% 0);
-        transition: opacity 1s ease;
-    }
+  #calligraphy .gallery-image {
+    clip-path: inset(0 0 0% 0);
+    transition: opacity 1s ease;
+  }
 
-    /* 手機版：書法作品說明文字（釋文） */
-    #calligraphy .artwork-description,
-    #calligraphy .artwork-main-info .artwork-description,
-    .calligraphy-scope-wrapper .artwork-description,
-    .calligraphy-scope-wrapper .artwork-main-info .artwork-description {
-        font-size: 0.8rem !important;
-        /* 手機版調整為 0.8rem */
-        line-height: 1.6 !important;
-        margin-bottom: 0 !important;
-        margin-top: 1rem !important;
-        /* 確保間距保持一致 */
-        display: block !important;
-        position: relative !important;
-        height: auto !important;
-        opacity: 1 !important;
-        width: 100% !important;
-    }
+  /* 手機版：書法作品說明文字（釋文） */
+  #calligraphy .artwork-description,
+  #calligraphy .artwork-main-info .artwork-description,
+  .calligraphy-scope-wrapper .artwork-description,
+  .calligraphy-scope-wrapper .artwork-main-info .artwork-description {
+    font-size: 0.8rem !important;
+    /* 手機版調整為 0.8rem */
+    line-height: 1.6 !important;
+    margin-bottom: 0 !important;
+    margin-top: 1rem !important;
+    /* 確保間距保持一致 */
+    display: block !important;
+    position: relative !important;
+    height: auto !important;
+    opacity: 1 !important;
+    width: 100% !important;
+  }
 
-    /* 確保所有頁面的版權資訊在手機版都有適當的樣式 */
-    #bio .page-container .copyright,
-    #calligraphy .page-container .copyright,
-    #sealcarving .page-container .copyright,
-    #painting .page-container .copyright,
-    #exhibition .page-container .copyright {
-        font-size: 0.583rem;
-        /* 7pt = 0.583rem */
-        bottom: 15px;
-        right: 15px;
-    }
+  /* 確保所有頁面的版權資訊在手機版都有適當的樣式 */
+  #bio .page-container .copyright,
+  #calligraphy .page-container .copyright,
+  #sealcarving .page-container .copyright,
+  #painting .page-container .copyright,
+  #exhibition .page-container .copyright {
+    font-size: 0.583rem;
+    /* 7pt = 0.583rem */
+    bottom: 15px;
+    right: 15px;
+  }
 
-    /* 確保首頁在手機版正常顯示 */
-    .hero,
-    .hero-slideshow {
-        width: 100vw !important;
-        height: 100vh !important;
-    }
+  /* 確保首頁在手機版正常顯示 */
+  .hero,
+  .hero-slideshow {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
 
-    /* 確保所有頁面容器在手機版都有適當的間距和寬度 */
-    #bio .page-container,
-    #calligraphy .page-container,
-    #sealcarving .page-container,
-    #painting .page-container,
-    #exhibition .page-container {
-        padding: 2rem 1rem;
-        padding-top: 100px;
-        /* 手機版統一增加頂部間距 */
-        max-width: 100%;
-        /* 確保不會超出螢幕寬度 */
-    }
+  /* 確保所有頁面容器在手機版都有適當的間距和寬度 */
+  #bio .page-container,
+  #calligraphy .page-container,
+  #sealcarving .page-container,
+  #painting .page-container,
+  #exhibition .page-container {
+    padding: 2rem 1rem;
+    padding-top: 100px;
+    /* 手機版統一增加頂部間距 */
+    max-width: 100%;
+    /* 確保不會超出螢幕寬度 */
+  }
 
-    /* 手機版：篆刻頁面骰子與版權說明之間的距離增加50px */
-    #sealcarving .scene-container {
-        margin-bottom: calc(3rem + 100px);
-        /* 原本3rem + 50px，再增加50px = 3rem + 100px */
-    }
+  /* 手機版：篆刻頁面骰子與版權說明之間的距離增加50px */
+  #sealcarving .scene-container {
+    margin-bottom: calc(3rem + 100px);
+    /* 原本3rem + 50px，再增加50px = 3rem + 100px */
+  }
 
-    /* 確保繪畫頁面在手機版正常顯示 */
-    #painting .painting-viewport {
-        height: 100vh;
-        /* 保持全螢幕高度 */
-    }
+  /* 確保繪畫頁面在手機版正常顯示 */
+  #painting .painting-viewport {
+    height: 100vh;
+    /* 保持全螢幕高度 */
+  }
 
-    #painting .painting-track {
-        gap: 28vw;
-        /* 手機版增加40%間距：20vw * 1.4 = 28vw */
-        padding-left: 8vw;
-        /* 手機版左右留白改成 8vw */
-        padding-right: 8vw;
-        /* 手機版左右留白改成 8vw */
-    }
+  #painting .painting-track {
+    gap: 28vw;
+    /* 手機版增加40%間距：20vw * 1.4 = 28vw */
+    padding-left: 8vw;
+    /* 手機版左右留白改成 8vw */
+    padding-right: 8vw;
+    /* 手機版左右留白改成 8vw */
+  }
 
-    /* 確保所有圖片在手機版都能正常顯示 */
-    img {
-        max-width: 100%;
-        height: auto;
-        /* 響應式圖片 */
-    }
+  /* 確保所有圖片在手機版都能正常顯示 */
+  img {
+    max-width: 100%;
+    height: auto;
+    /* 響應式圖片 */
+  }
 
-    /* 確保所有按鈕和連結在手機版都有適當的觸控區域 */
-    button,
-    a,
-    .gallery-nav {
-        min-height: 2.75rem;
-        /* 44px = 2.75rem */
-        min-width: 2.75rem;
-        /* 44px = 2.75rem */
-    }
+  /* 確保所有按鈕和連結在手機版都有適當的觸控區域 */
+  button,
+  a,
+  .gallery-nav {
+    min-height: 2.75rem;
+    /* 44px = 2.75rem */
+    min-width: 2.75rem;
+    /* 44px = 2.75rem */
+  }
 }
