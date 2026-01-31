@@ -122,23 +122,37 @@ body.page-light #custom-cursor.hovered {
   #custom-cursor.hovered,
   #custom-cursor.clicked {
     width: 45px !important;
-    /* 50px * 0.9 = 45px */
+    /* 手機版統一大小：45px */
     height: 45px !important;
     background-color: transparent !important;
     border: 1px solid white;
     opacity: 1;
     transform: translate(-50%, -50%);
     pointer-events: none !important;
-    transition: width 0.2s ease, height 0.2s ease, opacity 0.15s ease;
+    transition: 
+      width 0.2s ease, 
+      height 0.2s ease, 
+      opacity 0.15s ease,
+      left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* 0.4秒過渡，優雅且不拖沓 */
   }
 
-  /* page-light 頁面：點擊時的大圓形也縮小10% */
+  /* page-light 頁面：點擊時的大圓形保持相同大小 */
   body.page-light #custom-cursor.hovered,
   body.page-light #custom-cursor.clicked {
-    width: 31.5px !important;
-    /* 35px * 0.9 = 31.5px */
-    height: 31.5px !important;
+    width: 45px !important;
+    /* 統一大小：45px（與首頁相同） */
+    height: 45px !important;
     border-color: #24190b;
+    background-color: transparent !important;
+    transition: 
+      width 0.2s ease, 
+      height 0.2s ease, 
+      opacity 0.15s ease,
+      left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* 0.4秒過渡 */
   }
 }
 

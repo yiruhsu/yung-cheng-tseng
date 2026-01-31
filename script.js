@@ -1062,6 +1062,19 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // 手機版觸控支援：大圓形跟隨手指移動，點擊後持續停留直到頁面跳轉
     let isTouchingInteractive = false;
+    let menuIsOpen = false; // 追蹤選單是否打開
+    
+    // 監聽選單開關狀態
+    document.addEventListener('click', (e) => {
+      const menuToggle = e.target.closest('.mobile-menu-toggle');
+      if (menuToggle) {
+        // 延遲檢查，確保選單狀態已更新
+        setTimeout(() => {
+          const overlay = document.querySelector('.mobile-menu-overlay');
+          menuIsOpen = overlay && overlay.classList.contains('active');
+        }, 50);
+      }
+    });
     
     document.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
@@ -1101,16 +1114,32 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }, { passive: true });
     
-    // 手指移動時，大圓形跟隨移動（只在觸控互動元素時）
+    // 手指移動時，大圓形跟隨移動
     document.addEventListener("touchmove", (e) => {
-      if (isTouchingInteractive && e.touches.length === 1) {
+      if (e.touches.length === 1) {
         const touch = e.touches[0];
-        mouseX = touch.clientX;
-        mouseY = touch.clientY;
-        cursorX = touch.clientX;
-        cursorY = touch.clientY;
-        cursor.style.left = cursorX + "px";
-        cursor.style.top = cursorY + "px";
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        
+        // 如果選單打開，或正在觸控互動元素，大圓形跟隨
+        const isOverInteractive = target && (
+          target.closest(".mobile-nav-link") ||
+          target.closest(".mobile-menu-overlay.active")
+        );
+        
+        if (isTouchingInteractive || (menuIsOpen && isOverInteractive)) {
+          mouseX = touch.clientX;
+          mouseY = touch.clientY;
+          cursorX = touch.clientX;
+          cursorY = touch.clientY;
+          cursor.style.left = cursorX + "px";
+          cursor.style.top = cursorY + "px";
+          
+          // 如果在選單中且大圓形還沒顯示，顯示它
+          if (menuIsOpen && isOverInteractive && !cursor.classList.contains("clicked")) {
+            cursor.classList.add("hovered");
+            cursor.classList.add("clicked");
+          }
+        }
       }
     }, { passive: true });
     
