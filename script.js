@@ -1060,18 +1060,41 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("mousedown", addClickedClass);
     document.addEventListener("mouseup", removeClickedClass);
     
-    // 手機版觸控支援：點擊時顯示大圓形
+    // 手機版觸控支援：只在點擊可互動元素時顯示大圓形
     document.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
         const touch = e.touches[0];
-        mouseX = touch.clientX;
-        mouseY = touch.clientY;
-        cursorX = touch.clientX;
-        cursorY = touch.clientY;
-        cursor.style.left = cursorX + "px";
-        cursor.style.top = cursorY + "px";
-        cursor.classList.add("hovered");
-        cursor.classList.add("clicked");
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        
+        // 檢查是否點擊在可互動元素上（按鈕、連結、可點擊元素）
+        const isInteractive = target && (
+          target.tagName === "BUTTON" ||
+          target.tagName === "A" ||
+          target.closest("button") ||
+          target.closest("a") ||
+          target.classList.contains("clickable") ||
+          target.closest(".clickable") ||
+          target.classList.contains("mobile-menu-toggle") ||
+          target.closest(".mobile-menu-toggle") ||
+          target.classList.contains("lang-btn") ||
+          target.closest(".lang-btn") ||
+          target.classList.contains("nav-link") ||
+          target.closest(".nav-link") ||
+          target.classList.contains("mobile-nav-link") ||
+          target.closest(".mobile-nav-link")
+        );
+        
+        // 只在點擊互動元素時顯示大圓形
+        if (isInteractive) {
+          mouseX = touch.clientX;
+          mouseY = touch.clientY;
+          cursorX = touch.clientX;
+          cursorY = touch.clientY;
+          cursor.style.left = cursorX + "px";
+          cursor.style.top = cursorY + "px";
+          cursor.classList.add("hovered");
+          cursor.classList.add("clicked");
+        }
       }
     }, { passive: true });
     
@@ -1079,7 +1102,7 @@ document.addEventListener("DOMContentLoaded", function () {
       setTimeout(() => {
         cursor.classList.remove("hovered");
         cursor.classList.remove("clicked");
-      }, 150); // 短暫延遲讓使用者看到反饋
+      }, 300); // 溫和輕柔的 0.3 秒回饋時間
     }, { passive: true });
     
     document.addEventListener("touchcancel", () => {

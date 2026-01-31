@@ -1583,10 +1583,11 @@ img {
     /* 確保與其他元素垂直對齊 */
   }
 
-  /* 手機版：語言切換器（MENU 左側） */
+  /* 手機版：語言切換器（MENU 左側） - 確保與 Logo 和 MENU 在同一水平軸線 */
   .mobile-language-switcher {
     display: flex !important;
     align-items: center;
+    /* 垂直居中對齊 */
     gap: 0.4rem;
     margin-right: 4px;
     /* MENU 按鈕左側的間距 4px（小間距保持 px） */
@@ -1596,6 +1597,8 @@ img {
     /* 防止被壓縮 */
     height: 3.125rem;
     /* 與 nav-container 高度一致，確保垂直對齊 */
+    line-height: 3.125rem;
+    /* 與其他元素在同一水平軸線 */
   }
 
   /* 漢堡選單按鈕 */
@@ -2003,13 +2006,16 @@ img {
 
   /* 手機版導覽列中的語言切換按鈕（MENU 左側） */
   .mobile-language-switcher .lang-btn {
-    font-size: 0.441rem;
-    /* 放大20%：0.3675rem * 1.2 = 0.441rem */
+    font-size: 0.52rem;
+    /* 手機/平板版語言切換按鈕字體大小 */
     color: #523b1d;
     /* 與其他選單項目顏色一致 */
     padding: 0.2rem 0.4rem;
     height: auto;
     line-height: 1.2;
+    display: flex;
+    align-items: center;
+    /* 確保文字垂直居中 */
   }
 
   .mobile-language-switcher .lang-btn.active {
@@ -2018,10 +2024,14 @@ img {
   }
 
   .mobile-language-switcher .lang-separator {
-    font-size: 0.441rem;
-    /* 放大20%：與按鈕字型一致 */
+    font-size: 0.52rem;
+    /* 與按鈕字型一致 */
     color: #523b1d;
     /* 與其他選單項目顏色一致 */
+    display: flex;
+    align-items: center;
+    /* 確保分隔符號垂直居中 */
+    line-height: 1.2;
   }
 
   /* 首頁的語言切換按鈕顏色 */
