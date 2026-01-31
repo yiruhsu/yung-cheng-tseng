@@ -165,7 +165,7 @@ body.page-light #custom-cursor.hovered {
     /* 只在選單打開時才有 0.4 秒的平滑移動 */
   }
 
-  /* 篆刻頁面：完全隱藏大圓形（手機/平板版） */
+  /* 【手機平板版】篆刻頁面：完全隱藏大圓形 */
   #sealcarving #custom-cursor,
   #sealcarving #custom-cursor.hovered,
   #sealcarving #custom-cursor.clicked {
