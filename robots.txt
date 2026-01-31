@@ -1,0 +1,26 @@
+# robots.txt for Yung-Cheng Tseng Artist Portfolio
+# 曾詠振藝術作品網站
+
+User-agent: *
+Allow: /
+
+# 允許所有搜尋引擎索引所有頁面和圖片
+Allow: /images/
+Allow: /index.html
+Allow: /styles.css
+Allow: /script.js
+
+# Sitemap 位置
+Sitemap: https://yiruhsu.github.io/yung-cheng-tseng/sitemap.xml
+
+# 爬取速度建議（避免過度負載）
+Crawl-delay: 1
+
+# 特別針對 Google 圖片搜尋優化
+User-agent: Googlebot-Image
+Allow: /images/
+
+# 百度爬蟲（中文搜尋市場）
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2

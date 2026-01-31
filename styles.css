@@ -115,6 +115,7 @@ body.page-light #custom-cursor.hovered {
     height: 0 !important;
     background-color: transparent !important;
     opacity: 0;
+    pointer-events: none !important;
   }
 
   /* 點擊或懸停時顯示大圓形，縮小10% */
@@ -127,6 +128,8 @@ body.page-light #custom-cursor.hovered {
     border: 1px solid white;
     opacity: 1;
     transform: translate(-50%, -50%);
+    pointer-events: none !important;
+    transition: width 0.2s ease, height 0.2s ease, opacity 0.15s ease;
   }
 
   /* page-light 頁面：點擊時的大圓形也縮小10% */

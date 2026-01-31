@@ -96,6 +96,9 @@ function showPage(pageId) {
     cursor.style.backgroundColor = "";
     cursor.style.border = "";
     cursor.style.transform = "";
+    
+    // 強制觸發重繪，避免游標卡住
+    void cursor.offsetHeight;
   }
 
   // 隱藏所有頁面
@@ -949,12 +952,26 @@ document.addEventListener("DOMContentLoaded", function () {
     let cursorX = 0;
     let cursorY = 0;
     let rafId = null;
+    let isAnimating = false;
 
     // 使用 requestAnimationFrame 平滑更新游標位置
     function updateCursor() {
+      if (!isAnimating) return;
+
       // 使用緩動效果讓游標跟隨更順暢
-      cursorX += (mouseX - cursorX) * 0.15;
-      cursorY += (mouseY - cursorY) * 0.15;
+      const dx = mouseX - cursorX;
+      const dy = mouseY - cursorY;
+      
+      // 計算距離，如果太小就直接設定位置
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      if (distance < 0.5) {
+        cursorX = mouseX;
+        cursorY = mouseY;
+      } else {
+        cursorX += dx * 0.2;
+        cursorY += dy * 0.2;
+      }
 
       cursor.style.left = cursorX + "px";
       cursor.style.top = cursorY + "px";
@@ -963,15 +980,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 啟動動畫循環
+    isAnimating = true;
     updateCursor();
 
     // 清理：當頁面卸載時取消動畫循環
     window.addEventListener("beforeunload", () => {
+      isAnimating = false;
       if (rafId) {
         cancelAnimationFrame(rafId);
       }
     });
 
+    // 確保游標始終跟隨滑鼠
     window.addEventListener(
       "mousemove",
       (e) => {
@@ -981,6 +1001,12 @@ document.addEventListener("DOMContentLoaded", function () {
         // 更新目標位置
         mouseX = e.clientX;
         mouseY = e.clientY;
+        
+        // 如果動畫停止了，重新啟動
+        if (!isAnimating) {
+          isAnimating = true;
+          updateCursor();
+        }
       },
       { passive: true },
     );
@@ -1027,13 +1053,65 @@ document.addEventListener("DOMContentLoaded", function () {
       { passive: true },
     );
 
-    // 3. 點擊回饋 (MouseDown/Up)
-    document.addEventListener("mousedown", () =>
-      cursor.classList.add("clicked"),
-    );
-    document.addEventListener("mouseup", () =>
-      cursor.classList.remove("clicked"),
-    );
+    // 3. 點擊回饋 (MouseDown/Up) + 觸控支援
+    const addClickedClass = () => cursor.classList.add("clicked");
+    const removeClickedClass = () => cursor.classList.remove("clicked");
+    
+    document.addEventListener("mousedown", addClickedClass);
+    document.addEventListener("mouseup", removeClickedClass);
+    
+    // 手機版觸控支援：點擊時顯示大圓形
+    document.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        mouseX = touch.clientX;
+        mouseY = touch.clientY;
+        cursorX = touch.clientX;
+        cursorY = touch.clientY;
+        cursor.style.left = cursorX + "px";
+        cursor.style.top = cursorY + "px";
+        cursor.classList.add("hovered");
+        cursor.classList.add("clicked");
+      }
+    }, { passive: true });
+    
+    document.addEventListener("touchend", () => {
+      setTimeout(() => {
+        cursor.classList.remove("hovered");
+        cursor.classList.remove("clicked");
+      }, 150); // 短暫延遲讓使用者看到反饋
+    }, { passive: true });
+    
+    document.addEventListener("touchcancel", () => {
+      cursor.classList.remove("hovered");
+      cursor.classList.remove("clicked");
+    }, { passive: true });
+    
+    // 視窗失焦或頁面隱藏時重置游標
+    window.addEventListener("blur", () => {
+      cursor.classList.remove("hovered");
+      cursor.classList.remove("clicked");
+    });
+    
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        cursor.classList.remove("hovered");
+        cursor.classList.remove("clicked");
+      }
+    });
+    
+    // 頁面滾動時確保游標動畫正常運作
+    let scrollTimeout;
+    window.addEventListener("scroll", () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        // 滾動停止後檢查動畫是否還在運行
+        if (!isAnimating && cursor.style.opacity !== "0") {
+          isAnimating = true;
+          updateCursor();
+        }
+      }, 100);
+    }, { passive: true });
   }
 });
 // 圖片輪播功能

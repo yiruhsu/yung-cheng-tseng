@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- 首頁 / Home -->
+  <url>
+    <loc>https://yiruhsu.github.io/yung-cheng-tseng/</loc>
+    <lastmod>2026-01-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/hero/hero-1.webp</image:loc>
+      <image:title>Yung-Cheng Tseng Artist Portfolio</image:title>
+      <image:caption>曾詠振藝術作品集</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/hero/hero-2.webp</image:loc>
+      <image:title>Yung-Cheng Tseng Artwork</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/hero/hero-3.webp</image:loc>
+      <image:title>Yung-Cheng Tseng Artwork</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/hero/hero-4.webp</image:loc>
+      <image:title>Yung-Cheng Tseng Artwork</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/hero/hero-5.webp</image:loc>
+      <image:title>Yung-Cheng Tseng Artwork</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/hero/hero-6.webp</image:loc>
+      <image:title>Yung-Cheng Tseng Artwork</image:title>
+    </image:image>
+  </url>
+
+  <!-- BIO 頁面 -->
+  <url>
+    <loc>https://yiruhsu.github.io/yung-cheng-tseng/#bio</loc>
+    <lastmod>2026-01-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/bio/bio-1.webp</image:loc>
+      <image:title>曾詠振 Yung-Cheng Tseng Artist Profile</image:title>
+      <image:caption>藝術家曾詠振，書法家、篆刻家、畫家</image:caption>
+    </image:image>
+  </url>
+
+  <!-- 書法頁面 / Calligraphy -->
+  <url>
+    <loc>https://yiruhsu.github.io/yung-cheng-tseng/#calligraphy</loc>
+    <lastmod>2026-01-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+    
+    <!-- 書法作品 1 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-01-full.webp</image:loc>
+      <image:title>書法作品 Calligraphy Work 01</image:title>
+      <image:caption>曾詠振書法作品，現代書法創作</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-01-detail-1.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 01-1</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-01-detail-2.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 01-2</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-01-detail-3.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 01-3</image:title>
+    </image:image>
+    
+    <!-- 書法作品 2 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-02-full.webp</image:loc>
+      <image:title>書法作品 Calligraphy Work 02</image:title>
+      <image:caption>曾詠振書法作品，當代東方美學</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-02-detail-1.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 02-1</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-02-detail-2.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 02-2</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-02-detail-3.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 02-3</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-02-detail-4.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 02-4</image:title>
+    </image:image>
+    
+    <!-- 書法作品 3 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-03-full.webp</image:loc>
+      <image:title>書法作品 Calligraphy Work 03</image:title>
+      <image:caption>曾詠振書法藝術，傳統與現代的對話</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-03-detail-1.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 03-1</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/calligraphy/calligraphy-03-detail-2.webp</image:loc>
+      <image:title>書法作品細節 Calligraphy Detail 03-2</image:title>
+    </image:image>
+  </url>
+
+  <!-- 篆刻頁面 / Seal Carving -->
+  <url>
+    <loc>https://yiruhsu.github.io/yung-cheng-tseng/#sealcarving</loc>
+    <lastmod>2026-01-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+    
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_full.webp</image:loc>
+      <image:title>篆刻作品全覽 Seal Carving Collection</image:title>
+      <image:caption>曾詠振篆刻藝術作品集</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_01.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 01</image:title>
+      <image:caption>印章藝術，方寸之間的美學</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_02.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 02</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_03.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 03</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_04.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 04</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_05.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 05</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_06.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 06</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_07.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 07</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/seal%20carving/seal%20carving_08.webp</image:loc>
+      <image:title>篆刻作品 Seal Carving 08</image:title>
+    </image:image>
+  </url>
+
+  <!-- 繪畫頁面 / Painting -->
+  <url>
+    <loc>https://yiruhsu.github.io/yung-cheng-tseng/#painting</loc>
+    <lastmod>2026-01-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+    
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/painting/painting-01-full.webp</image:loc>
+      <image:title>繪畫作品 Painting Work 01</image:title>
+      <image:caption>曾詠振繪畫作品，水墨與當代藝術</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/painting/painting-01-detail-1.webp</image:loc>
+      <image:title>繪畫作品細節 Painting Detail 01-1</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/painting/painting-01-detail-2.webp</image:loc>
+      <image:title>繪畫作品細節 Painting Detail 01-2</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/painting/painting-01-detail-3.webp</image:loc>
+      <image:title>繪畫作品細節 Painting Detail 01-3</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/painting/painting-01-detail-4.webp</image:loc>
+      <image:title>繪畫作品細節 Painting Detail 01-4</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/painting/painting-01-detail-5.webp</image:loc>
+      <image:title>繪畫作品細節 Painting Detail 01-5</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/painting/painting-01-detail-6.webp</image:loc>
+      <image:title>繪畫作品細節 Painting Detail 01-6</image:title>
+    </image:image>
+  </url>
+
+  <!-- 展演頁面 / Exhibition -->
+  <url>
+    <loc>https://yiruhsu.github.io/yung-cheng-tseng/#exhibition</loc>
+    <lastmod>2026-01-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    
+    <!-- 2023 展覽 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/left-01.webp</image:loc>
+      <image:title>2023 一個象徵式的輕觸 Exhibition</image:title>
+      <image:caption>2023年藝術展覽，北側藝術聚落</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/left-02.webp</image:loc>
+      <image:title>窮鄉兒女造像 Portrait Exhibition</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/left-03.webp</image:loc>
+      <image:title>陳鴻壽泡茶 Tea Ceremony Art</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/left-04.webp</image:loc>
+      <image:title>凝視 Gaze Artwork</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/left-05.webp</image:loc>
+      <image:title>2023 Exhibition Artwork</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/right-01.webp</image:loc>
+      <image:title>展演日側拍 Exhibition Day 2023</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/right-02.webp</image:loc>
+      <image:title>2023 Exhibition Behind the Scenes</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/right-03.webp</image:loc>
+      <image:title>2023 Exhibition Scene</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/right-04.webp</image:loc>
+      <image:title>2023 Exhibition Documentation</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/right-05.webp</image:loc>
+      <image:title>2023 Exhibition Gallery</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/right-06.webp</image:loc>
+      <image:title>2023 Art Show</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2023%EF%BC%8C%E4%B8%80%E5%80%8B%E8%B1%A1%E5%BE%B5%E5%BC%8F%E7%9A%84%E8%BC%95%E8%A7%B8/right-07.webp</image:loc>
+      <image:title>2023 Contemporary Art Exhibition</image:title>
+    </image:image>
+    
+    <!-- 2019 限時動態展 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E9%99%90%E6%99%82%E5%8B%95%E6%85%8B%E2%80%94%E2%80%94%E8%B6%85%E9%A0%98%E5%9F%9F%E5%9C%8B%E9%9A%9B%E5%B1%95/left-01.webp</image:loc>
+      <image:title>2019 ERR 限時動態—超領域國際展</image:title>
+      <image:caption>2019年當代藝術展覽，有章藝術博物館</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E9%99%90%E6%99%82%E5%8B%95%E6%85%8B%E2%80%94%E2%80%94%E8%B6%85%E9%A0%98%E5%9F%9F%E5%9C%8B%E9%9A%9B%E5%B1%95/left-02.webp</image:loc>
+      <image:title>2019 Stories Transdisciplinary Exhibition</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E9%99%90%E6%99%82%E5%8B%95%E6%85%8B%E2%80%94%E2%80%94%E8%B6%85%E9%A0%98%E5%9F%9F%E5%9C%8B%E9%9A%9B%E5%B1%95/left-03.webp</image:loc>
+      <image:title>2019 International Art Exhibition</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E9%99%90%E6%99%82%E5%8B%95%E6%85%8B%E2%80%94%E2%80%94%E8%B6%85%E9%A0%98%E5%9F%9F%E5%9C%8B%E9%9A%9B%E5%B1%95/left-04.webp</image:loc>
+      <image:title>2019 Contemporary Art Installation</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E9%99%90%E6%99%82%E5%8B%95%E6%85%8B%E2%80%94%E2%80%94%E8%B6%85%E9%A0%98%E5%9F%9F%E5%9C%8B%E9%9A%9B%E5%B1%95/right-01.webp</image:loc>
+      <image:title>佈展側拍 Installation Process 2019</image:title>
+    </image:image>
+    
+    <!-- 2019 我在這展 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E6%88%91%E5%9C%A8%E9%80%99/left-01.webp</image:loc>
+      <image:title>2019 我在這 建築體局部投影</image:title>
+      <image:caption>2019年我在這展覽，北側藝術聚落</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E6%88%91%E5%9C%A8%E9%80%99/left-02.webp</image:loc>
+      <image:title>2019 I Am Here Exhibition</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E6%88%91%E5%9C%A8%E9%80%99/left-03.webp</image:loc>
+      <image:title>建築投影藝術 Projection Art</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2019%EF%BC%8C%E6%88%91%E5%9C%A8%E9%80%99/left-04.webp</image:loc>
+      <image:title>2019 Site-Specific Installation</image:title>
+    </image:image>
+    
+    <!-- 2018 人因風景展 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2018%EF%BC%8C%E4%BA%BA%E5%9B%A0%E9%A2%A8%E6%99%AF/left-01.webp</image:loc>
+      <image:title>2018 人因風景 屍袋燈管</image:title>
+      <image:caption>2018年人因風景展，有章藝術博物館</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2018%EF%BC%8C%E4%BA%BA%E5%9B%A0%E9%A2%A8%E6%99%AF/left-02.webp</image:loc>
+      <image:title>2018 Human Landscape Exhibition</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2018%EF%BC%8C%E4%BA%BA%E5%9B%A0%E9%A2%A8%E6%99%AF/left-03.webp</image:loc>
+      <image:title>2018 Installation Art</image:title>
+    </image:image>
+    
+    <!-- 2017 實到0空間展 -->
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2017%EF%BC%8C%E5%AF%A6%E5%88%B00%E7%A9%BA%E9%96%93%E9%80%B2%E8%A1%8C%E5%BC%8F/left-01.webp</image:loc>
+      <image:title>2017 實到0空間進行式 氣泡紙</image:title>
+      <image:caption>2017年實到0空間進行式展，臺灣藝術大學</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2017%EF%BC%8C%E5%AF%A6%E5%88%B00%E7%A9%BA%E9%96%93%E9%80%B2%E8%A1%8C%E5%BC%8F/left-02.webp</image:loc>
+      <image:title>2017 Reality to Zero Space Exhibition</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://yiruhsu.github.io/yung-cheng-tseng/images/exhibition/2017%EF%BC%8C%E5%AF%A6%E5%88%B00%E7%A9%BA%E9%96%93%E9%80%B2%E8%A1%8C%E5%BC%8F/left-03.webp</image:loc>
+      <image:title>2017 Bubble Wrap Art Installation</image:title>
+    </image:image>
+  </url>
+
+</urlset>
