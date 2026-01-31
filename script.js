@@ -1060,7 +1060,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("mousedown", addClickedClass);
     document.addEventListener("mouseup", removeClickedClass);
     
-    // 手機版觸控支援：只在點擊可互動元素時顯示大圓形
+    // 手機版觸控支援：大圓形跟隨手指移動，點擊後持續停留直到頁面跳轉
+    let isTouchingInteractive = false;
+    
     document.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
         const touch = e.touches[0];
@@ -1086,6 +1088,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // 只在點擊互動元素時顯示大圓形
         if (isInteractive) {
+          isTouchingInteractive = true;
           mouseX = touch.clientX;
           mouseY = touch.clientY;
           cursorX = touch.clientX;
@@ -1098,16 +1101,31 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }, { passive: true });
     
+    // 手指移動時，大圓形跟隨移動（只在觸控互動元素時）
+    document.addEventListener("touchmove", (e) => {
+      if (isTouchingInteractive && e.touches.length === 1) {
+        const touch = e.touches[0];
+        mouseX = touch.clientX;
+        mouseY = touch.clientY;
+        cursorX = touch.clientX;
+        cursorY = touch.clientY;
+        cursor.style.left = cursorX + "px";
+        cursor.style.top = cursorY + "px";
+      }
+    }, { passive: true });
+    
+    // 手指離開時，大圓形持續停留在最後位置（不消失，讓頁面跳轉自然帶走）
     document.addEventListener("touchend", () => {
-      setTimeout(() => {
-        cursor.classList.remove("hovered");
-        cursor.classList.remove("clicked");
-      }, 300); // 溫和輕柔的 0.3 秒回饋時間
+      // 不移除 hovered 和 clicked，讓大圓形持續停留
+      // 等待頁面跳轉時自然消失
+      isTouchingInteractive = false;
     }, { passive: true });
     
     document.addEventListener("touchcancel", () => {
+      // touchcancel 時才移除（異常情況）
       cursor.classList.remove("hovered");
       cursor.classList.remove("clicked");
+      isTouchingInteractive = false;
     }, { passive: true });
     
     // 視窗失焦或頁面隱藏時重置游標
