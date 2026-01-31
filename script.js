@@ -150,6 +150,21 @@ function showPage(pageId) {
 
       if (pageId === "sealcarving") {
         initSealCarvingDice();
+        // 【篆刻頁面】強制移除大圓形，避免殘影
+        const customCursor = document.getElementById("custom-cursor");
+        if (customCursor) {
+          customCursor.classList.remove("hovered");
+          customCursor.classList.remove("clicked");
+          customCursor.style.opacity = "0";
+          customCursor.style.display = "none";
+        }
+      } else {
+        // 【其他頁面】恢復大圓形正常顯示
+        const customCursor = document.getElementById("custom-cursor");
+        if (customCursor && customCursor.style.display === "none") {
+          customCursor.style.display = "";
+          customCursor.style.opacity = "";
+        }
       }
     }, 150);
   } else {
@@ -1077,6 +1092,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     
     document.addEventListener("touchstart", (e) => {
+      // 【篆刻頁面】完全跳過大圓形邏輯
+      const currentPage = document.querySelector('.page.active');
+      if (currentPage && currentPage.id === 'sealcarving') {
+        return;
+      }
+      
       if (e.touches.length === 1) {
         const touch = e.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -1116,6 +1137,12 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // 手指移動時，大圓形跟隨移動
     document.addEventListener("touchmove", (e) => {
+      // 【篆刻頁面】完全跳過大圓形邏輯
+      const currentPage = document.querySelector('.page.active');
+      if (currentPage && currentPage.id === 'sealcarving') {
+        return;
+      }
+      
       if (e.touches.length === 1) {
         const touch = e.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -3343,6 +3370,13 @@ function initSealCarvingDice() {
         return;
       }
 
+      // 【新增】立即移除大圓形，避免擋到作品照片與文字
+      const customCursor = document.getElementById("custom-cursor");
+      if (customCursor) {
+        customCursor.classList.remove("hovered");
+        customCursor.classList.remove("clicked");
+      }
+
       // 確保骰子容器是顯示的且可點擊
       if (sealCarvingSection.style.display === "none") {
         sealCarvingSection.style.display = "block";
@@ -3425,6 +3459,13 @@ function initSealCarvingDice() {
       // 如果新頁面已經隱藏，不重複觸發
       if (detailView.classList.contains("hidden")) {
         return;
+      }
+
+      // 【新增】立即移除大圓形，返回骰子時保持乾淨
+      const customCursor = document.getElementById("custom-cursor");
+      if (customCursor) {
+        customCursor.classList.remove("hovered");
+        customCursor.classList.remove("clicked");
       }
 
       // 創建動畫時間軸

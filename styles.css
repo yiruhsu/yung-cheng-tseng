@@ -132,10 +132,8 @@ body.page-light #custom-cursor.hovered {
     transition: 
       width 0.2s ease, 
       height 0.2s ease, 
-      opacity 0.15s ease,
-      left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-      top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    /* 0.4秒過渡，優雅且不拖沓 */
+      opacity 0.15s ease;
+    /* 移除 left/top 過渡，只在選單內部使用 */
   }
 
   /* page-light 頁面：點擊時的大圓形保持相同大小 */
@@ -149,10 +147,34 @@ body.page-light #custom-cursor.hovered {
     transition: 
       width 0.2s ease, 
       height 0.2s ease, 
+      opacity 0.15s ease;
+    /* 移除 left/top 過渡 */
+  }
+
+  /* 選單打開時：大圓形添加移動過渡動畫（0.4秒） */
+  .mobile-menu-overlay.active ~ * #custom-cursor.hovered,
+  .mobile-menu-overlay.active ~ * #custom-cursor.clicked,
+  body:has(.mobile-menu-overlay.active) #custom-cursor.hovered,
+  body:has(.mobile-menu-overlay.active) #custom-cursor.clicked {
+    transition: 
+      width 0.2s ease, 
+      height 0.2s ease, 
       opacity 0.15s ease,
       left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
       top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    /* 0.4秒過渡 */
+    /* 只在選單打開時才有 0.4 秒的平滑移動 */
+  }
+
+  /* 篆刻頁面：完全隱藏大圓形（手機/平板版） */
+  #sealcarving #custom-cursor,
+  #sealcarving #custom-cursor.hovered,
+  #sealcarving #custom-cursor.clicked {
+    display: none !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
   }
 }
 
